@@ -1,0 +1,15 @@
+{
+  "originHash" : "6ddfea8059ff81dda77efb78bafb80c274adebeef7e51169bcb839f99ca89630",
+  "pins" : [
+    {
+      "identity" : "projectmultinav",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Hariprasath88/ProjectMultiNav",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fc41322db3c8f5fe32554fbd26e70ff829ca8d8d"
+      }
+    }
+  ],
+  "version" : 3
+}

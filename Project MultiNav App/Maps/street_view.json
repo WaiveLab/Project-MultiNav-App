@@ -1,0 +1,74 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "street_view",
+        "buildingName": "",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "TactileMapKit Demo",
+        "created": "2026-05-16"
+    },
+    "bounds": {
+        "width": 1400,
+        "height": 1400
+    },
+    "features": [
+        {
+            "id": "st",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [700,1800]},
+            "properties": { "name": "Deniel and Pamella DeVos Center", "level": 1, "accessible": true}
+        },
+        
+        
+        
+        {
+            "id": "str0",
+            "type": "corridor",
+            "geometry": { "type": "LineString", "coordinates": [[700,1800],[700,-200]] },
+            "properties": { "name": "Michigan Street North East", "level": 1, "accessible": true}
+        },
+        {
+            "id": "rmp0",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [700, 1700] },
+            "properties": { "name": "Ramp on Michigan Street North East", "level": 1, "accessible": true}
+        },
+        {
+            "id": "sta0",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [700, 1780] },
+            "properties": { "name": "Stairs on Michigan Street North East", "level": 1, "accessible": false}
+        },
+        
+        
+        
+        {
+            "id": "int0",
+            "type": "intersection",
+            "geometry": { "type": "Point", "coordinates": [700, 1200] },
+            "properties": { "name": "Intersection Between Michigan Street North East and Prospect Avenue North East", "level": 1, "accessible": false}
+        },
+        
+        
+        
+        {
+            "id": "str1",
+            "type": "corridor",
+            "geometry": { "type": "LineString", "coordinates": [[200, 1200], [700, 1200]] },
+            "properties": { "name": "Prospect Avenue North East", "level": 1, "accessible": true }
+        },
+        
+        
+        
+        {
+            "id": "end",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [400,0]},
+            "properties": { "name": "Hampton Inn & Suites", "level": 1, "accessible": true}
+        }
+    ]
+}
