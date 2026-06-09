@@ -11,7 +11,22 @@ import TactileMapFeedback
 import TactileMapLogging
 import TactileMapView
 
-struct ContentView: View {
+
+
+@main
+struct MyApp: App {
+   var body: some Scene {
+       WindowGroup {
+           NavigationStack {
+               MapView()
+           }
+       }
+   }
+}
+
+
+
+struct MapView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -20,7 +35,7 @@ struct ContentView: View {
         
         TactileMapView(
             document: doc,
-            feedbackPolicy: DefaultFeedbackPolicy(),
+            feedbackPolicy: SpatialPolicy(),
             onBackGesture: { dismiss() }
         )
         
@@ -31,69 +46,60 @@ struct ContentView: View {
     }
 }
 
+
+
+extension TactileElementType {
+    static let street = TactileElementType(rawValue: "street")
+    static let start = TactileElementType(rawValue: "start")
+    static let end = TactileElementType(rawValue: "end")
+}
+
+
+
 @MainActor
-final class Policy: FeedbackPolicy {
-    
-    //Set up and initilize the haptic engine
-    private let hapticEngine: HapticEngine
-    private let audioEngine: SpatialAudioEngine
-    public init(hapticEngine: HapticEngine, audioEngine: SpatialAudioEngine) {
-        self.hapticEngine = hapticEngine
-        self.audioEngine = audioEngine
-    }
-    public convenience init() {
-        self.init(
-            hapticEngine: CoreHapticsEngine(),
-            audioEngine: AVSpatialAudioEngine()
-        )
-    }
-    
-    //Parameters for entering an element
-    func onEnter(element: any TactileMapElement, touchType: TouchType) {
-        //Delcare custom haptic patterns
+class SpatialPolicy: DefaultFeedbackPolicy {
+    override func onEnter(element: any TactileMapElement, touchType: TouchType) {
+        
+        //declare custom patterns
         let landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
-        let onRouteStreetPattern = HapticPattern(intensity: 0.1, sharpness: 0.5, mode: .continuous(duration: 100.0))
+        let onRouteStreetPattern = HapticPattern(intensity: 1.0, sharpness: 0.5, mode: .pulsing(onDuration: 0.10, offDuration: 0.01, count: 15))
         let onRouteIntersectionPattern = HapticPattern(intensity: 0.5, sharpness: 0.1, mode: .continuous(duration: 100.0))
         
-        //play custom haptic patterns per element type
         let name = element.properties.name
-        
+
+        //Play patterns accordingly
         switch element.elementType {
-        case .corridor:
-            hapticEngine.start(pattern: onRouteStreetPattern)
+            case .start:
+                let _ = print("__________________\nStart element: \(name)\n__________________")
+                audioEngine.speak(name)
+            
+            case .street:
+                let _ = print("__________________\nStreet element: \(name)\n__________________")
+                hapticEngine.start(pattern: onRouteStreetPattern)
+                audioEngine.speak(name)
 
-        case .intersection:
-            hapticEngine.start(pattern: .intersectionPulse)
-            audioEngine.speak(name)
+            case .intersection:
+                let _ = print("__________________\nIntersection element: \(name)\n__________________")
+                hapticEngine.start(pattern: .intersectionPulse)
+                audioEngine.speak(name)
 
-        case .landmark:
-            hapticEngine.start(pattern: .landmarkFastPulse)
-            audioEngine.playClickSound()
-            audioEngine.speak(name)
+            case .landmark:
+                let _ = print("__________________\nLandmark element: \(name)\n__________________")
+                hapticEngine.start(pattern: .landmarkFastPulse)
+                audioEngine.playClickSound()
+                audioEngine.speak(name)
 
-        default:
-            // Unknown element type -- provide basic tap + speech.
-            hapticEngine.playSingleTap()
-            audioEngine.speak(name)
+            default:
+                // Unknown element type -- provide basic tap + speech.
+                let _ = print("__________________\nE: Unknown element type: \(element.elementType)\n__________________")
+                hapticEngine.playSingleTap()
+                audioEngine.speak(name)
         }
-    }
-
-    //
-    func onContinue(element: any TactileMapElement, touchType: TouchType) {}
-
-    //
-    func onExit(element: any TactileMapElement) {
-    }
-
-    //
-    func onTap(element: any TactileMapElement, touchType: TouchType) {
-    }
-
-    //
-    func stopAll() {
     }
 }
 
+
+
 #Preview {
-    ContentView()
+    MapView()
 }
