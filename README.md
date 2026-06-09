@@ -39,6 +39,9 @@ For example:
     "geometry": { "type": "Point", "coordinates": [700, 1700] },
     "properties": { "name": "Ramp on Michigan Street North East", "level": 1, "accessible": true}
 },
+
+
+
 {
     "id": "int0",
     "type": "intersection",
