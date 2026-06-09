@@ -1,5 +1,5 @@
 # Project MulitNav App
-Short sentence that describes the overview of this specific project.
+A vibrotactile wayifinding app that enables blind and low vision (BLV) users to navigate outdoor environments.
 
 ## Structure
 ### json
