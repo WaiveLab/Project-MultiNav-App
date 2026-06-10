@@ -29,7 +29,7 @@ For example:
 
 {
     "id": "str0",
-    "type": "corridor",
+    "type": "onRoute",
     "geometry": { "type": "LineString", "coordinates": [[700,1800],[700,-200]] },
     "properties": { "name": "Michigan Street North East", "level": 1, "accessible": true}
 },
@@ -53,7 +53,7 @@ For example:
 
 {
     "id": "str1",
-    "type": "corridor",
+    "type": "onRoute",
     "geometry": { "type": "LineString", "coordinates": [[200, 1200], [700, 1200]] },
     "properties": { "name": "Prospect Avenue North East", "level": 1, "accessible": true }
 },
