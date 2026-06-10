@@ -50,7 +50,6 @@ struct MapView: View {
         //Set background
         .background(Image("Background").resizable().scaledToFill())
         .ignoresSafeArea()
-        .navigationTitle("DCIH to Hampton Inn")
     }
 }
 
@@ -95,9 +94,9 @@ class SpatialPolicy: DefaultFeedbackPolicy {
                 audioEngine.speak(name)
             
             case .offRoute:
-            let _ = print("__________________\noffRoute element: \(name)\n__________________")
-            hapticEngine.start(pattern: offRouteStreetPattern)
-            audioEngine.speak(name)
+                let _ = print("__________________\noffRoute element: \(name)\n__________________")
+                hapticEngine.start(pattern: offRouteStreetPattern)
+                audioEngine.speak(name)
 
             case .onRouteIntersection:
                 let _ = print("__________________\nonRouteIntersection element: \(name)\n__________________")
@@ -116,13 +115,13 @@ class SpatialPolicy: DefaultFeedbackPolicy {
                 audioEngine.speak(name)
             
             case .end:
-            let _ = print("__________________\nEnd element: \(name)\n__________________")
-            hapticEngine.start(pattern: test)
-            audioEngine.speak(name)
+                let _ = print("__________________\nEnd element: \(name)\n__________________")
+                hapticEngine.start(pattern: test)
+                audioEngine.speak(name)
 
             default:
                 // Unknown element type -- provide basic tap + speech.
-                let _ = print("__________________\nE: Unknown element type: \(element.elementType), \(name)\n__________________")
+                let _ = print("__________________\nE: \(name) is an Unknown element type: \(element.elementType)\n__________________")
                 hapticEngine.playSingleTap()
                 audioEngine.speak(name)
         }

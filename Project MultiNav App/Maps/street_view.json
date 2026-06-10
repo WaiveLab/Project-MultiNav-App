@@ -19,7 +19,7 @@
         {
             "id": "start",
             "type": "start",
-            "geometry": { "type": "Point", "coordinates": [700,1800]},
+            "geometry": { "type": "Point", "coordinates": [800,1600]},
             "properties": { "name": "Daniel and Pamella DeVos Center", "level": 1, "accessible": true}
         },
         
@@ -28,13 +28,19 @@
         {
             "id": "str0",
             "type": "onRoute",
-            "geometry": { "type": "LineString", "coordinates": [[800,1600],[850,-400]] },
+            "geometry": { "type": "LineString", "coordinates": [[800,1600],[850,-200]] },
             "properties": { "name": "Michigan Street North East", "level": 1, "accessible": true}
         },
         {
             "id": "str2",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[700,0],[700,-500]] },
+            "geometry": { "type": "LineString", "coordinates": [[850,-200],[875,-1000]] },
+            "properties": { "name": "Michigan Street North East", "level": 1, "accessible": false}
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[800,1600],[775,2200]] },
             "properties": { "name": "Michigan Street North East", "level": 1, "accessible": false}
         },
         {
@@ -55,7 +61,7 @@
         {
             "id": "int0",
             "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [700, 1200] },
+            "geometry": { "type": "Point", "coordinates": [815, 1350] },
             "properties": { "name": "Intersection Between Michigan Street North East and Prospect Avenue North East", "level": 1, "accessible": false}
         },
         
@@ -64,8 +70,17 @@
         {
             "id": "str1",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[450, 1150], [700, 1150]] },
+            "geometry": { "type": "LineString", "coordinates": [[550, 1350],[1400, 1350]] },
             "properties": { "name": "Prospect Avenue North East", "level": 1, "accessible": true }
+        },
+        
+        
+        
+        {
+          "id": "int1",
+          "type": "onRouteIntersection",
+          "geometry": { "type": "Point", "coordinates": [835, 350] },
+          "properties": { "name": "Intersection Between Michigan Street North East and College Avenue North East", "accessible": true }
         },
         
         
@@ -73,7 +88,7 @@
         {
             "id": "end",
             "type": "end",
-            "geometry": { "type": "Point", "coordinates": [400,0]},
+            "geometry": { "type": "Point", "coordinates": [450,-100]},
             "properties": { "name": "Hampton Inn & Suites", "level": 1, "accessible": true}
         }
     ]
