@@ -99,46 +99,46 @@ class SpatialPolicy: DefaultFeedbackPolicy {
 
         //Play patterns accordingly
         switch element.elementType {
-            case .start:
-                let _ = print("__________________\nStart element: \(name)\n__________________")
-                audioEngine.speak(name)
-            
-            case .onRoute:
-                let _ = print("__________________\nonRoute element: \(name)\n__________________")
-                hapticEngine.start(pattern: onRouteStreetPattern)
-                audioEngine.speak(name)
-            
-            case .offRoute:
-                let _ = print("__________________\noffRoute element: \(name)\n__________________")
-                hapticEngine.start(pattern: offRouteStreetPattern)
-                audioEngine.speak(name)
+        case .start:
+            let _ = print("__________________\nStart element: \(name)\n__________________")
+            audioEngine.speak(name)
+        
+        case .onRoute:
+            let _ = print("__________________\nonRoute element: \(name)\n__________________")
+            hapticEngine.start(pattern: onRouteStreetPattern)
+            audioEngine.speak(name)
+        
+        case .offRoute:
+            let _ = print("__________________\noffRoute element: \(name)\n__________________")
+            hapticEngine.start(pattern: offRouteStreetPattern)
+            audioEngine.speak(name)
 
-            case .onRouteIntersection:
-                let _ = print("__________________\nonRouteIntersection element: \(name)\n__________________")
-                hapticEngine.start(pattern: onRouteIntersectionPattern)
-                audioEngine.speak(name)
-            
-            case .offRouteIntersection:
-                let _ = print("__________________\noffRouteIntersection element: \(name)\n__________________")
-                hapticEngine.start(pattern: offRouteIntersectionPattern)
-                audioEngine.speak(name)
+        case .onRouteIntersection:
+            let _ = print("__________________\nonRouteIntersection element: \(name)\n__________________")
+            hapticEngine.start(pattern: onRouteIntersectionPattern)
+            audioEngine.speak(name)
+        
+        case .offRouteIntersection:
+            let _ = print("__________________\noffRouteIntersection element: \(name)\n__________________")
+            hapticEngine.start(pattern: offRouteIntersectionPattern)
+            audioEngine.speak(name)
 
-            case .landmark:
-                let _ = print("__________________\nLandmark element: \(name)\n__________________")
-                hapticEngine.start(pattern: landmarkPattern)
-                audioEngine.playClickSound()
-                audioEngine.speak(name)
-            
-            case .end:
-                let _ = print("__________________\nEnd element: \(name)\n__________________")
-                hapticEngine.start(pattern: test)
-                audioEngine.speak(name)
+        case .landmark:
+            let _ = print("__________________\nLandmark element: \(name)\n__________________")
+            hapticEngine.start(pattern: landmarkPattern)
+            audioEngine.playClickSound()
+            audioEngine.speak(name)
+        
+        case .end:
+            let _ = print("__________________\nEnd element: \(name)\n__________________")
+            hapticEngine.start(pattern: test)
+            audioEngine.speak(name)
 
-            default:
-                // Unknown element type -- provide basic tap + speech.
-                let _ = print("__________________\nE: \(name) is an Unknown element type: \(element.elementType)\n__________________")
-                hapticEngine.playSingleTap()
-                audioEngine.speak(name)
+        default:
+            // Unknown element type -- provide basic tap + speech.
+            let _ = print("__________________\nE: \(name) is an Unknown element type: \(element.elementType)\n__________________")
+            hapticEngine.playSingleTap()
+            audioEngine.speak(name)
         }
     }
 }
