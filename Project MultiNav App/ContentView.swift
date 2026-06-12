@@ -50,6 +50,21 @@ struct MapView: View {
         //Set background
         .background(Image("Background").resizable().scaledToFill())
         .ignoresSafeArea()
+        
+        //Settings icon
+        NavigationStack {
+            Text("")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    //link to SettingsView.swift
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -72,8 +87,8 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         
         //declare custom patterns
         //let start = HapticPattern(intensity: <#T##Float#>, sharpness: <#T##Float#>, mode: <#T##HapticPattern.HapticMode#>)
-        let test = HapticPattern(intensity: 0, sharpness: 0, mode: .continuous(duration: 0.01))
-        let landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
+        let test = HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01))
+        var landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
         let onRouteStreetPattern = HapticPattern(intensity: 1.0, sharpness: 0.5, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 15))
         let offRouteStreetPattern = HapticPattern(intensity: 0.0, sharpness: 0.0, mode: .continuous(duration: 0.01))
         let onRouteIntersectionPattern = HapticPattern(intensity: 0.5, sharpness: 0.1, mode: .continuous(duration: 100.0))
