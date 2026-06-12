@@ -15,10 +15,14 @@ import TactileMapView
 
 @main
 struct MyApp: App {
+    
+    @StateObject private var hapticSettings = HapticSettings()
+    
    var body: some Scene {
        WindowGroup {
            NavigationStack {
                MapView()
+                   .environmentObject(hapticSettings)
            }
        }
    }
@@ -28,6 +32,7 @@ struct MyApp: App {
 
 struct MapView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var hapticSettings: HapticSettings
     
     var body: some View {
         //Load json
@@ -83,8 +88,13 @@ extension TactileElementType {
 //Custom vibration parameters
 @MainActor
 class SpatialPolicy: DefaultFeedbackPolicy {
+    let hapticSettings: HapticSettings
+
+    init(hapticSettings: HapticSettings) {
+        self.hapticSettings = hapticSettings
+    }
+    
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
-        
         //declare custom patterns
         //let start = HapticPattern(intensity: <#T##Float#>, sharpness: <#T##Float#>, mode: <#T##HapticPattern.HapticMode#>)
         let test = HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01))
@@ -131,7 +141,7 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         
         case .end:
             let _ = print("__________________\nEnd element: \(name)\n__________________")
-            hapticEngine.start(pattern: test)
+            hapticEngine.start(pattern: hapticSettings.patterns[.end]!)
             audioEngine.speak(name)
 
         default:
