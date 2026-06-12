@@ -134,5 +134,26 @@ struct SettingsView: View {
         .onAppear {
             loadPattern(selectedPattern)
         }
+        .onChange(of: intensity) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: sharpness) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: duration) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: onDuration) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: offDuration) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: pulseCount) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
+        .onChange(of: hapticMode) { _, _ in
+            saveCurrentPattern(selectedPattern)
+        }
     }
 }

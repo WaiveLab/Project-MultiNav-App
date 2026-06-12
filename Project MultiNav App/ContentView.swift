@@ -142,6 +142,12 @@ class SpatialPolicy: DefaultFeedbackPolicy {
                     hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
+            
+        case .intersection:
+            if let pattern = hapticSettings.patterns[.end] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak(name)
 
         default:
             // Unknown element type -- provide basic tap + speech.
