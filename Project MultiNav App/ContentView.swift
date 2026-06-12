@@ -16,7 +16,7 @@ import TactileMapView
 @main
 struct MyApp: App {
     
-    @StateObject private var hapticSettings = HapticSettings()
+    let hapticSettings = HapticSettings.shared
     
    var body: some Scene {
        WindowGroup {
@@ -64,6 +64,7 @@ struct MapView: View {
                     //link to SettingsView.swift
                     NavigationLink {
                         SettingsView()
+                            .environmentObject(hapticSettings)
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -88,17 +89,13 @@ extension TactileElementType {
 //Custom vibration parameters
 @MainActor
 class SpatialPolicy: DefaultFeedbackPolicy {
-    let hapticSettings: HapticSettings
-
-    init(hapticSettings: HapticSettings) {
-        self.hapticSettings = hapticSettings
-    }
+    let hapticSettings = HapticSettings.shared
     
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
         //declare custom patterns
         //let start = HapticPattern(intensity: <#T##Float#>, sharpness: <#T##Float#>, mode: <#T##HapticPattern.HapticMode#>)
-        let test = HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01))
-        var landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
+//        let test = HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01))
+        let landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
         let onRouteStreetPattern = HapticPattern(intensity: 1.0, sharpness: 0.5, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 15))
         let offRouteStreetPattern = HapticPattern(intensity: 0.0, sharpness: 0.0, mode: .continuous(duration: 0.01))
         let onRouteIntersectionPattern = HapticPattern(intensity: 0.5, sharpness: 0.1, mode: .continuous(duration: 100.0))
@@ -141,7 +138,9 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         
         case .end:
             let _ = print("__________________\nEnd element: \(name)\n__________________")
-            hapticEngine.start(pattern: hapticSettings.patterns[.end]!)
+            if let pattern = hapticSettings.patterns[.end] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
 
         default:
@@ -155,6 +154,6 @@ class SpatialPolicy: DefaultFeedbackPolicy {
 
 
 
-#Preview {
-    MapView()
-}
+//#Preview {
+//    MapView()
+//}

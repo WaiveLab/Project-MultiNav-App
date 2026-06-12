@@ -7,10 +7,15 @@
 
 import SwiftUI
 import Combine
+import TactileMapCore
 import TactileMapFeedback
+import TactileMapLogging
+import TactileMapView
 
 @MainActor
 class HapticSettings: ObservableObject {
+    
+    static let shared = HapticSettings()
     
     @Published var patterns: [HapticPat: HapticPattern] = [
         .start: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 10)),
@@ -21,8 +26,4 @@ class HapticSettings: ObservableObject {
         .landmark: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
         .end: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
     ]
-    
-    func pattern(_ type: HapticPat) -> HapticPattern? {
-        patterns[type]
-    }
 }
