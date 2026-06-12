@@ -99,8 +99,8 @@ struct SettingsView: View {
                 switch hapticMode {
                 case "continuous":
                     VStack(alignment: .leading) {
-                        Text("Duration: \(duration, specifier: "%.2f")")
-                        Slider(value: $duration, in: 0...1)
+                        Text("Duration (sec): \(duration, specifier: "%.2f")")
+                        Slider(value: $duration, in: 0...15)
                     }
                 case "pulsing":
                     VStack(alignment: .leading) {
@@ -130,30 +130,18 @@ struct SettingsView: View {
                     }
                 }
             }
+            
+            Text("")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Save") {
+                            saveCurrentPattern(selectedPattern)
+                        }
+                    }
+                }
         }
         .onAppear {
             loadPattern(selectedPattern)
-        }
-        .onChange(of: intensity) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: sharpness) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: duration) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: onDuration) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: offDuration) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: pulseCount) { _, _ in
-            saveCurrentPattern(selectedPattern)
-        }
-        .onChange(of: hapticMode) { _, _ in
-            saveCurrentPattern(selectedPattern)
         }
     }
 }
