@@ -37,9 +37,11 @@ struct SettingsView: View {
     
     @EnvironmentObject var hapticSettings: HapticSettings
     
+    //gets the current pattern settings and saves them accordingly
     private func saveCurrentPattern(_ pattern: HapticPat) {
         let mode: HapticPattern.HapticMode
 
+        //Checks if the selected mode is continuous, otherwise sets mode to pulsing
         if hapticMode == "continuous" {
             mode = .continuous(duration: duration)
         } else {
@@ -57,6 +59,7 @@ struct SettingsView: View {
         )
     }
 
+    //loads patterns from HapticSettings
     private func loadPattern(_ pattern: HapticPat) {
         guard let settings = hapticSettings.patterns[pattern] else { return }
 
@@ -80,6 +83,7 @@ struct SettingsView: View {
     }
 
 
+    //Settings front-end
     var body: some View {
         NavigationStack {
             //change current pattern selected
