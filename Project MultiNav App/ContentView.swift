@@ -34,15 +34,23 @@ struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var hapticSettings: HapticSettings
     
+    //Custom visual appearance
+    public var config: TactileMapViewConfiguration {
+            var config = TactileMapViewConfiguration.default
+
+            config.typeStyles[.offRoute] = ElementStyle(
+                color: .systemGray,
+                sizeMM: 4.0,
+                pointShape: .roundedRect(cornerRadius: 3),
+                showAnchorDot: true
+            )
+
+            return config
+    }
+    
     var body: some View {
         //Load json
         let doc = try! TactileMapDocument.load(from: "street_view", bundle: .main)
-        
-        //Custom visual appearance
-        let config = TactileMapViewConfiguration(
-            backgroundColor: .clear,
-            corridorColor: .systemBlue,
-        )
         
         //Define what vibration policy to use
         TactileMapView(
@@ -53,7 +61,7 @@ struct MapView: View {
         )
         
         //Set background
-        .background(Image("Background").resizable().scaledToFill())
+        .background()
         .ignoresSafeArea()
         
         //Settings icon
@@ -89,6 +97,7 @@ extension TactileElementType {
 //Custom vibration parameters
 @MainActor
 class SpatialPolicy: DefaultFeedbackPolicy {
+    
     let hapticSettings = HapticSettings.shared
     
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
