@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  delete me
+//  Project MultiNav App
 //
 //  Created by WAIVE lab on 6/4/26.
 //
