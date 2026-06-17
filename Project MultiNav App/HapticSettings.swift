@@ -19,11 +19,11 @@ class HapticSettings: ObservableObject {
     
     @Published var patterns: [HapticPat: HapticPattern] = [
         .start: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 10)),
-        .onRoute: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
-        .offRoute: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
-        .onRouteIntersection: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
-        .offRouteIntersection: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
-        .landmark: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
-        .end: HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01)),
+        .onRoute: HapticPattern(intensity: 1.0, sharpness: 0.8, mode: .continuous(duration: 60.0)),
+        .offRoute: HapticPattern(intensity: 0.8, sharpness: 0.05, mode: .continuous(duration: 60.0)),
+        .onRouteIntersection: HapticPattern(intensity: 1.0, sharpness: 0.15, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 10)),
+        .offRouteIntersection: HapticPattern(intensity: 0.8, sharpness: 0.05, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 10)),
+        .landmark: HapticPattern(intensity: 1.0, sharpness: 0.15, mode: .continuous(duration: 60.0)),
+        .end: HapticPattern(intensity: 1.0, sharpness: 0.9, mode: .continuous(duration: 60.0)),
     ]
 }

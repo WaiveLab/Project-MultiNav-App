@@ -92,15 +92,6 @@ class SpatialPolicy: DefaultFeedbackPolicy {
     let hapticSettings = HapticSettings.shared
     
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
-        //declare custom patterns
-        //let start = HapticPattern(intensity: <#T##Float#>, sharpness: <#T##Float#>, mode: <#T##HapticPattern.HapticMode#>)
-//        let test = HapticPattern(intensity: 1.0, sharpness: 0.005, mode: .continuous(duration: 0.01))
-        let landmarkPattern = HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5))
-        let onRouteStreetPattern = HapticPattern(intensity: 1.0, sharpness: 0.5, mode: .pulsing(onDuration: 0.08, offDuration: 0.05, count: 15))
-        let offRouteStreetPattern = HapticPattern(intensity: 0.0, sharpness: 0.0, mode: .continuous(duration: 0.01))
-        let onRouteIntersectionPattern = HapticPattern(intensity: 0.5, sharpness: 0.1, mode: .continuous(duration: 100.0))
-        let offRouteIntersectionPattern = HapticPattern(intensity: 0.0, sharpness: 0.0, mode: .continuous(duration: 0.01))
-        //let end = HapticPattern(intensity: <#T##Float#>, sharpness: <#T##Float#>, mode: <#T##HapticPattern.HapticMode#>))
         
         let name = element.properties.name
 
@@ -108,42 +99,48 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         switch element.elementType {
         case .start:
             let _ = print("__________________\nStart element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.start] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
         
         case .onRoute:
             let _ = print("__________________\nonRoute element: \(name)\n__________________")
-            hapticEngine.start(pattern: onRouteStreetPattern)
+            if let pattern = hapticSettings.patterns[.onRoute] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
         
         case .offRoute:
             let _ = print("__________________\noffRoute element: \(name)\n__________________")
-            hapticEngine.start(pattern: offRouteStreetPattern)
+            if let pattern = hapticSettings.patterns[.offRoute] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
 
         case .onRouteIntersection:
             let _ = print("__________________\nonRouteIntersection element: \(name)\n__________________")
-            hapticEngine.start(pattern: onRouteIntersectionPattern)
+            if let pattern = hapticSettings.patterns[.onRouteIntersection] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
         
         case .offRouteIntersection:
             let _ = print("__________________\noffRouteIntersection element: \(name)\n__________________")
-            hapticEngine.start(pattern: offRouteIntersectionPattern)
+            if let pattern = hapticSettings.patterns[.offRouteIntersection] {
+                    hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name)
 
         case .landmark:
             let _ = print("__________________\nLandmark element: \(name)\n__________________")
-            hapticEngine.start(pattern: landmarkPattern)
-            audioEngine.playClickSound()
-            audioEngine.speak(name)
-        
-        case .end:
-            let _ = print("__________________\nEnd element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.end] {
                     hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-            
-        case .intersection:
+        
+        case .end:
+            let _ = print("__________________\nEnd element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.end] {
                     hapticEngine.start(pattern: pattern)
             }
@@ -157,9 +154,3 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         }
     }
 }
-
-
-
-//#Preview {
-//    MapView()
-//}
