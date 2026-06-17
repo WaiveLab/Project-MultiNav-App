@@ -12,6 +12,18 @@ import TactileMapFeedback
 import TactileMapView
 internal import Combine
 
+// MARK: - WAIVE Custom Tactile Element Types
+
+/// Custom line types used by the updated Northeastern renderer.
+///
+/// Keep this limited to the elements used in the current study prototype.
+/// Sidewalk, crosswalk, and APS can be added later once the intersection
+/// exploration task is finalized.
+extension TactileElementType {
+    static let routeRoad = TactileElementType(rawValue: "waive_route_road")
+    static let nonRouteRoad = TactileElementType(rawValue: "waive_non_route_road")
+}
+
 // MARK: - App Entry
 
 struct ContentView: View {
@@ -98,7 +110,9 @@ enum MapRole: String, CaseIterable, Identifiable, Hashable, Sendable {
         }
 
         switch element.elementType {
-        case .corridor:
+        case .routeRoad:
+            return .route
+        case .nonRouteRoad, .corridor:
             return .road
         case .intersection:
             return .intersection
@@ -263,11 +277,124 @@ enum DemoDestination: String, CaseIterable, Identifiable, Sendable {
         }
     }
 }
+// MARK: - Route Preset Model
+
+/// Controlled study trials. Each trial uses the same VAM interaction system
+/// but a different simplified outdoor-map topology. The layouts are still
+/// schematic, but they better represent common real navigation structures:
+/// a square/grid, a T-intersection, a dead end, an offset path, a single road,
+/// and loop/branch variants.
+enum RoutePreset: String, CaseIterable, Identifiable, Sendable {
+    case trial01 = "Trial 01: Square Grid"
+    case trial02 = "Trial 02: T-Intersection"
+    case trial03 = "Trial 03: Dead End"
+    case trial04 = "Trial 04: Offset Path"
+    case trial05 = "Trial 05: Single Road"
+    case trial06 = "Trial 06: Campus Loop"
+    case trial07 = "Trial 07: Park Branch"
+    case trial08 = "Trial 08: Transit Branch"
+    case trial09 = "Trial 09: Parking Branch"
+    case trial10 = "Trial 10: South Connector"
+
+    var id: Self { self }
+
+    var trialNumber: Int {
+        (Self.allCases.firstIndex(of: self) ?? 0) + 1
+    }
+
+    static var totalTrials: Int {
+        Self.allCases.count
+    }
+
+    var shortName: String {
+        switch self {
+        case .trial01: return "T1 Square"
+        case .trial02: return "T2 T-Int."
+        case .trial03: return "T3 Dead End"
+        case .trial04: return "T4 Offset"
+        case .trial05: return "T5 Single"
+        case .trial06: return "T6 Loop"
+        case .trial07: return "T7 Park"
+        case .trial08: return "T8 Transit"
+        case .trial09: return "T9 Parking"
+        case .trial10: return "T10 South"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .trial01:
+            return "Baseline square-grid route with multiple non-route roads."
+        case .trial02:
+            return "T-shaped route with one main decision point and side roads."
+        case .trial03:
+            return "Dead-end style route with nearby non-route branches."
+        case .trial04:
+            return "Offset route that requires following staggered intersections."
+        case .trial05:
+            return "Single-road route with minimal branching."
+        case .trial06:
+            return "Loop-style route with alternate non-route roads nearby."
+        case .trial07:
+            return "Branching route toward the park with side paths."
+        case .trial08:
+            return "Transit-focused route with a nearby alternate branch."
+        case .trial09:
+            return "Parking route with a branch and a dead-end-like spur."
+        case .trial10:
+            return "South connector route with several nearby road choices."
+        }
+    }
+
+    var destination: DemoDestination {
+        switch self {
+        case .trial01, .trial04, .trial06, .trial10:
+            return .studentCenter
+        case .trial02, .trial08:
+            return .busStop
+        case .trial05:
+            return .studentCenter
+        case .trial03, .trial09:
+            return .parkingLot
+        case .trial07:
+            return .park
+        }
+    }
+
+    /// Routes are intentionally controlled for study use. Most trials keep
+    /// similar route complexity while varying the surrounding topology.
+    var routeNodeIDs: [Int] {
+        switch self {
+        case .trial01:
+            return [1, 5, 9, 10, 11]
+        case .trial02:
+            return [1, 5, 9, 10, 6]
+        case .trial03:
+            return [1, 5, 9, 13, 12]
+        case .trial04:
+            return [1, 5, 9, 10, 11]
+        case .trial05:
+            return [1, 2, 3, 7, 11]
+        case .trial06:
+            return [1, 2, 3, 7, 11]
+        case .trial07:
+            return [1, 5, 9, 13, 14, 15]
+        case .trial08:
+            return [1, 5, 9, 10, 6]
+        case .trial09:
+            return [1, 5, 9, 13, 12]
+        case .trial10:
+            return [1, 2, 6, 10, 11]
+        }
+    }
+}
+
 // MARK: - Main State
 
 @MainActor
 final class MultiNavPrototypeState: ObservableObject {
     @Published var destination: DemoDestination = .studentCenter
+    @Published var routePreset: RoutePreset = .trial01
     @Published var document: TactileMapDocument
     @Published var selectedRole: MapRole = .route
     @Published var selectedElementName: String = "Best route"
@@ -281,8 +408,16 @@ final class MultiNavPrototypeState: ObservableObject {
     private var lastOffGraphStatusTime = Date.distantPast
 
     init() {
+        // Randomize the first trial for study use so participants do not all
+        // begin with the same route layout. Testers can still choose any trial
+        // manually from Settings.
+        let startingPreset = RoutePreset.allCases.randomElement() ?? .trial01
+        self.routePreset = startingPreset
+        self.destination = startingPreset.destination
+
         let result = MultiNavMapBuilder.makeDocument(
-            destination: .studentCenter,
+            destination: startingPreset.destination,
+            routePreset: startingPreset,
             showRouteOnly: false
         )
         self.document = result.document
@@ -299,11 +434,17 @@ final class MultiNavPrototypeState: ObservableObject {
     }
 
     var progressText: String {
-        "Best outdoor route to \(destination.rawValue): \(routeNodeIDs.count - 1) segments • about \(estimatedSteps) steps"
+        "\(routePreset.rawValue) to \(destination.rawValue): \(routeNodeIDs.count - 1) segments • about \(estimatedSteps) steps"
     }
 
     func setDestination(_ newDestination: DemoDestination) {
         destination = newDestination
+        rebuildRoute()
+    }
+
+    func setRoutePreset(_ newPreset: RoutePreset) {
+        routePreset = newPreset
+        destination = newPreset.destination
         rebuildRoute()
     }
 
@@ -322,10 +463,14 @@ final class MultiNavPrototypeState: ObservableObject {
         let touchNote = touchType == .anchor ? "Anchor point" : "Direct touch"
         let category = element.properties.category ?? element.elementType.rawValue
 
+        let actionHint = role == .intersection
+            ? "Keep holding to zoom. Double tap for haptic settings."
+            : "Double tap for haptic settings."
+
         if routeNote.isEmpty {
-            selectedElementDetail = "\(touchNote) • \(category.capitalized)"
+            selectedElementDetail = "\(touchNote) • \(category.capitalized) • \(actionHint)"
         } else {
-            selectedElementDetail = "\(touchNote) • \(category.capitalized) • \(routeNote)"
+            selectedElementDetail = "\(touchNote) • \(category.capitalized) • \(routeNote) • \(actionHint)"
         }
     }
 
@@ -345,6 +490,7 @@ final class MultiNavPrototypeState: ObservableObject {
             in: viewSize,
             routeNodeIDs: routeNodeIDs,
             destination: destination,
+            routePreset: routePreset,
             showRouteOnly: showRouteOnly
         )
 
@@ -411,13 +557,14 @@ final class MultiNavPrototypeState: ObservableObject {
     private func rebuildRoute() {
         let result = MultiNavMapBuilder.makeDocument(
             destination: destination,
+            routePreset: routePreset,
             showRouteOnly: showRouteOnly
         )
 
         document = result.document
         routeNodeIDs = result.routeNodeIDs
         isCurrentlyOffGraph = false
-        selectedElementName = "Best route to \(destination.rawValue)"
+        selectedElementName = "\(routePreset.rawValue) to \(destination.rawValue)"
         selectedRole = .route
         selectedIntersectionID = nil
         selectedElementDetail = progressText
@@ -440,6 +587,10 @@ final class MultiNavPrototypeFeedbackPolicy: FeedbackPolicy {
     private let onTouch: (any TactileMapElement, TouchType) -> Void
     private let onLift: () -> Void
     private var lastOffGraphSpokenAt = Date.distantPast
+    private var lastSpokenElementID: String?
+    private var lastSpokenPhrase: String?
+    private var lastSpokenAt = Date.distantPast
+    private var pendingActionHintWorkItem: DispatchWorkItem?
 
     init(
         getPatterns: @escaping () -> [MapRole: HapticPattern],
@@ -463,9 +614,40 @@ final class MultiNavPrototypeFeedbackPolicy: FeedbackPolicy {
             playNortheasternDefault(for: element)
         }
 
-        let prefix = role == .route ? "Best route. " : ""
-        if role != .road || touchType == .anchor {
-            audioEngine.speak(prefix + element.properties.name)
+        // Keep speech short during drag exploration. Route roads should not say
+        // "Best route" twice. The corridor name is only the road name; this layer
+        // adds the semantic role once.
+        pendingActionHintWorkItem?.cancel()
+
+        let spokenPhrase: String
+        switch role {
+        case .route:
+            spokenPhrase = "Best route, \(element.properties.name)"
+        case .road:
+            spokenPhrase = element.properties.name
+        case .intersection:
+            spokenPhrase = "Intersection. Hold to zoom. Double tap for settings."
+        case .destination:
+            spokenPhrase = "Destination, \(element.properties.name)"
+        case .userLocation:
+            spokenPhrase = "You are here"
+        case .poi:
+            spokenPhrase = element.properties.name
+        case .origin:
+            spokenPhrase = "Start"
+        case .offRoute:
+            spokenPhrase = "Off graph"
+        }
+
+        let shouldSpeakName = role != .road || touchType == .anchor
+        if shouldSpeakName {
+            let now = Date()
+            if lastSpokenPhrase != spokenPhrase || now.timeIntervalSince(lastSpokenAt) > 1.8 {
+                audioEngine.speak(spokenPhrase)
+                lastSpokenElementID = element.id
+                lastSpokenPhrase = spokenPhrase
+                lastSpokenAt = now
+            }
         }
     }
 
@@ -474,6 +656,7 @@ final class MultiNavPrototypeFeedbackPolicy: FeedbackPolicy {
     }
 
     func onExit(element: any TactileMapElement) {
+        pendingActionHintWorkItem?.cancel()
         hapticEngine.stopAll()
         onLift()
     }
@@ -494,14 +677,17 @@ final class MultiNavPrototypeFeedbackPolicy: FeedbackPolicy {
     }
 
     func stopAll() {
+        pendingActionHintWorkItem?.cancel()
         hapticEngine.stopAll()
         audioEngine.stopAll()
+        lastSpokenElementID = nil
+        lastSpokenPhrase = nil
         onLift()
     }
 
     private func playNortheasternDefault(for element: any TactileMapElement) {
         switch element.elementType {
-        case .corridor:
+        case .routeRoad, .nonRouteRoad, .corridor:
             hapticEngine.start(pattern: .corridorContinuous)
         case .intersection:
             hapticEngine.start(pattern: .intersectionPulse)
@@ -524,6 +710,8 @@ struct MultiNavBestPrototypeView: View {
     @State private var showIntersectionZoom = false
     @State private var zoomIntersectionID: Int? = nil
     @State private var settingsStartRole: MapRole = .route
+    @State private var pendingZoomIntersectionID: Int? = nil
+    @State private var pendingZoomWorkItem: DispatchWorkItem? = nil
 
     var body: some View {
         ZStack {
@@ -563,6 +751,7 @@ struct MultiNavBestPrototypeView: View {
                     intersectionID: zoomIntersectionID,
                     routeNodeIDs: state.routeNodeIDs,
                     destination: state.destination,
+                    routePreset: state.routePreset,
                     customPatterns: state.customPatterns
                 )
             }
@@ -646,7 +835,7 @@ struct MultiNavBestPrototypeView: View {
                 Label("Outdoor Route Map", systemImage: "map.fill")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                RouteBadge(text: "\(state.routeNodeIDs.count - 1) seg")
+                RouteBadge(text: "Trial \(state.routePreset.trialNumber) of \(RoutePreset.totalTrials) • \(state.routeNodeIDs.count - 1) seg")
             }
             .padding(.horizontal, 4)
 
@@ -665,7 +854,7 @@ struct MultiNavBestPrototypeView: View {
                             coordinateTransform: .default,
                             onBackGesture: { dismiss() }
                         )
-                        .id("map-\(state.destination.rawValue)-\(state.showRouteOnly)")
+                        .id("map-\(state.destination.rawValue)-\(state.routePreset.rawValue)-\(state.showRouteOnly)")
                         .accessibilityLabel("Outdoor tactile route map")
                         .accessibilityHint("Drag to explore, double tap to edit haptics, or hold on an intersection to zoom in.")
                         .simultaneousGesture(
@@ -683,8 +872,19 @@ struct MultiNavBestPrototypeView: View {
                                     if state.updateOffGraphStatusIfNeeded(location: value.location, in: mapGeometry.size) {
                                         feedbackPolicy.playOffGraphWarning()
                                     }
+
+                                    if let intersectionID = MultiNavMapGeometry.routeIntersectionID(
+                                        atViewPoint: value.location,
+                                        in: mapGeometry.size,
+                                        routeNodeIDs: state.routeNodeIDs
+                                    ) {
+                                        scheduleZoomFromContinuousTouch(intersectionID, feedbackPolicy: feedbackPolicy)
+                                    } else {
+                                        cancelPendingZoom()
+                                    }
                                 }
                                 .onEnded { _ in
+                                    cancelPendingZoom()
                                     feedbackPolicy.stopAll()
                                     state.clearTouchedElement()
 
@@ -697,13 +897,14 @@ struct MultiNavBestPrototypeView: View {
                                 }
                         )
                         .simultaneousGesture(
-                            LongPressGesture(minimumDuration: 0.75)
+                            LongPressGesture(minimumDuration: 2.5)
                                 .onEnded { _ in
                                     if let intersectionID = state.selectedIntersectionID {
                                         // Important: opening the zoom sheet can prevent
                                         // TactileMapView from receiving a normal onExit callback.
                                         // Stop the main-map haptics before presenting zoom so
                                         // intersection/route vibrations do not continue underneath.
+                                        cancelPendingZoom()
                                         feedbackPolicy.stopAll()
                                         state.clearTouchedElement()
                                         zoomIntersectionID = intersectionID
@@ -715,6 +916,7 @@ struct MultiNavBestPrototypeView: View {
                         RouteClarityOverlay(
                             routeNodeIDs: state.routeNodeIDs,
                             destination: state.destination,
+                            routePreset: state.routePreset,
                             showRouteOnly: state.showRouteOnly
                         )
                         .allowsHitTesting(false)
@@ -782,7 +984,7 @@ struct MultiNavBestPrototypeView: View {
         HStack(spacing: 8) {
             Image(systemName: "hand.tap.fill")
                 .foregroundStyle(.blue)
-            Text("Drag to explore. Hold on an intersection to zoom. Double tap map to edit haptics")
+            Text("Drag to explore. Keep holding on an intersection to zoom. Double tap to edit haptics")
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -793,7 +995,33 @@ struct MultiNavBestPrototypeView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Map instructions")
-        .accessibilityHint("Drag to explore. Hold on an intersection to zoom. Double tap the map to edit haptics.")
+        .accessibilityHint("Drag to explore. Keep holding on an intersection to zoom. Double tap to edit haptics.")
+    }
+
+    private func scheduleZoomFromContinuousTouch(_ intersectionID: Int, feedbackPolicy: MultiNavPrototypeFeedbackPolicy) {
+        guard !showIntersectionZoom else { return }
+        guard pendingZoomIntersectionID != intersectionID else { return }
+
+        cancelPendingZoom()
+        pendingZoomIntersectionID = intersectionID
+
+        let workItem = DispatchWorkItem {
+            guard pendingZoomIntersectionID == intersectionID, !showIntersectionZoom else { return }
+            feedbackPolicy.stopAll()
+            state.clearTouchedElement()
+            zoomIntersectionID = intersectionID
+            showIntersectionZoom = true
+            cancelPendingZoom()
+        }
+
+        pendingZoomWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: workItem)
+    }
+
+    private func cancelPendingZoom() {
+        pendingZoomWorkItem?.cancel()
+        pendingZoomWorkItem = nil
+        pendingZoomIntersectionID = nil
     }
 
     private func createFeedbackPolicyIfNeeded() {
@@ -840,15 +1068,19 @@ enum MultiNavMapGeometry {
         in viewSize: CGSize,
         routeNodeIDs: [Int],
         destination: DemoDestination,
+        routePreset: RoutePreset,
         showRouteOnly: Bool
     ) -> MapRole {
         let point = documentPoint(from: viewPoint, in: viewSize)
+        let activeEdges = edges(for: routePreset)
         let destinationNode = destination.nodeID
 
         if let start = nodes[1], distance(point, start) < 26 { return .userLocation }
         if let destinationPoint = nodes[destinationNode], distance(point, destinationPoint) < 30 { return .destination }
 
         if !showRouteOnly {
+            // All navigation scenarios use the same square-grid context, so any
+            // visible non-destination landmark can be treated as a POI.
             for place in DemoDestination.allCases where place != destination && place != .entrance {
                 if let poiPoint = nodes[place.nodeID], distance(point, poiPoint) < 24 {
                     return .poi
@@ -862,16 +1094,130 @@ enum MultiNavMapGeometry {
             }
         }
 
-        if isNearRoute(point, routeNodeIDs: routeNodeIDs) { return .route }
-        if !showRouteOnly && isNearAnyRoad(point) { return .road }
+        if isNearRoute(point, routeNodeIDs: routeNodeIDs, edges: activeEdges) { return .route }
+        if !showRouteOnly && isNearAnyRoad(point, edges: activeEdges) { return .road }
         return .offRoute
     }
 
-    static func neighbors(of node: Int) -> [Int] {
-        edges.compactMap { from, to in
+    static func edges(for preset: RoutePreset) -> [(Int, Int)] {
+        switch preset {
+        case .trial01:
+            // Baseline: full original square/grid network.
+            return edges
+
+        case .trial02:
+            // T-intersection style: main road with a turn toward the bus stop
+            // and a few nearby non-route branches.
+            return [
+                (1, 5), (5, 9), (9, 10), (10, 6),
+                (5, 6), (6, 7), (4, 5)
+            ]
+
+        case .trial03:
+            // Dead-end style: the destination spur ends at the parking lot,
+            // with one non-route connector nearby.
+            return [
+                (1, 5), (5, 9), (9, 13), (13, 12),
+                (9, 10), (10, 14)
+            ]
+
+        case .trial04:
+            // Clean offset route.
+            return [
+                (1, 5), (5, 9), (9, 10), (10, 11),
+                (0, 4), (4, 5),
+                (8, 9), (9, 13),
+                (10, 14), (7, 11)
+            ]
+
+        case .trial05:
+            // Single-corridor style route with one small side path.
+            return [
+                (1, 2), (2, 3), (3, 7), (7, 11),
+                (2, 6)
+            ]
+
+        case .trial06:
+            // Loop-like route along the lower part of the map.
+            return [
+                (1, 2), (2, 3), (3, 7), (7, 11),
+                (1, 5), (5, 6), (6, 7), (7, 11)
+            ]
+
+        case .trial07:
+            // Branching route toward Campus Park with alternate side roads.
+            return [
+                (1, 5), (5, 9), (9, 13), (13, 14), (14, 15),
+                (9, 10), (10, 14), (13, 12)
+            ]
+
+        case .trial08:
+            // Transit branch: route reaches the bus stop through a longer
+            // controlled path, with nearby alternatives.
+            return [
+                (1, 5), (5, 9), (9, 10), (10, 6),
+                (5, 6), (6, 7), (6, 10)
+            ]
+
+        case .trial09:
+            // Parking branch with a spur and cross connector.
+            return [
+                (1, 5), (5, 9), (9, 13), (13, 12),
+                (8, 12), (9, 10), (10, 14)
+            ]
+
+        case .trial10:
+            // South connector route with several nearby road choices.
+            return [
+                (1, 2), (2, 6), (6, 10), (10, 11),
+                (1, 5), (5, 6), (6, 7), (7, 11), (10, 14)
+            ]
+        }
+    }
+
+    static func neighbors(of node: Int, preset: RoutePreset = .trial01) -> [Int] {
+        edges(for: preset).compactMap { from, to in
             if from == node { return to }
             if to == node { return from }
             return nil
+        }
+    }
+
+    static func routeIntersectionID(atViewPoint viewPoint: CGPoint, in viewSize: CGSize, routeNodeIDs: [Int]) -> Int? {
+        let point = documentPoint(from: viewPoint, in: viewSize)
+        return routeNodeIDs.first { id in
+            guard let nodePoint = nodes[id] else { return false }
+            return distance(point, nodePoint) < 22
+        }
+    }
+
+    static func roadName(from: Int, to: Int) -> String {
+        // Road names are grouped by continuous campus road instead of giving
+        // every single segment a different name. This makes audio feedback
+        // feel more realistic for navigation.
+        switch edgeKey(from, to) {
+        // Horizontal roads across the grid
+        case "0-4", "4-8", "8-12":
+            return "North Campus Road"
+        case "1-5", "5-9", "9-13":
+            return "Main Road"
+        case "2-6", "6-10", "10-14":
+            return "Transit Road"
+        case "3-7", "7-11", "11-15":
+            return "South Campus Road"
+
+        // Vertical roads down the grid
+        case "0-1", "1-2", "2-3":
+            return "West Walkway"
+        case "4-5", "5-6", "6-7":
+            return "Library Walk"
+        case "8-9", "9-10", "10-11":
+            return "Central Walkway"
+        case "12-13", "13-14", "14-15":
+            return "Lake Michigan Road"
+
+        default:
+            return "Campus Road"
         }
     }
 
@@ -884,14 +1230,14 @@ enum MultiNavMapGeometry {
         return CGPoint(x: (viewPoint.x - originX) / scale, y: (viewPoint.y - originY) / scale)
     }
 
-    private static func isNearRoute(_ point: CGPoint, routeNodeIDs: [Int]) -> Bool {
+    private static func isNearRoute(_ point: CGPoint, routeNodeIDs: [Int], edges: [(Int, Int)]) -> Bool {
         let routeEdges = Set(routePairs(routeNodeIDs).map { edgeKey($0.0, $0.1) })
         return edges.contains { from, to in
             routeEdges.contains(edgeKey(from, to)) && distanceFromLine(point, nodes[from]!, nodes[to]!) < 24
         }
     }
 
-    private static func isNearAnyRoad(_ point: CGPoint) -> Bool {
+    private static func isNearAnyRoad(_ point: CGPoint, edges: [(Int, Int)]) -> Bool {
         edges.contains { from, to in
             distanceFromLine(point, nodes[from]!, nodes[to]!) < 24
         }
@@ -927,6 +1273,7 @@ enum MultiNavMapGeometry {
 struct RouteClarityOverlay: View {
     let routeNodeIDs: [Int]
     let destination: DemoDestination
+    let routePreset: RoutePreset
     let showRouteOnly: Bool
 
     // Uses MultiNavMapGeometry as the single source of truth for visual overlay coordinates.
@@ -936,10 +1283,13 @@ struct RouteClarityOverlay: View {
             let transform = makeTransform(size: geo.size)
 
             ZStack {
+                // Blue visual route overlay. The Northeastern update made route
+                // lines visually thicker, so this overlay intentionally stays
+                // modest to avoid covering intersections and nearby POIs.
                 routePath(transform: transform)
                     .stroke(
                         Color.blue,
-                        style: StrokeStyle(lineWidth: showRouteOnly ? 13 : 10, lineCap: .round, lineJoin: .round)
+                        style: StrokeStyle(lineWidth: showRouteOnly ? 9 : 6, lineCap: .round, lineJoin: .round)
                     )
                     .shadow(color: .blue.opacity(0.35), radius: 8, x: 0, y: 0)
                     .opacity(0.88)
@@ -954,7 +1304,7 @@ struct RouteClarityOverlay: View {
                     if id != 1 && id != destination.nodeID, let point = MultiNavMapGeometry.nodes[id] {
                         RouteIntersectionDot()
                             .position(transform.apply(point))
-                            .zIndex(10)
+                            .zIndex(20)
                     }
                 }
 
@@ -994,7 +1344,15 @@ struct RouteClarityOverlay: View {
                 }
 
                 if !showRouteOnly {
-                    ForEach(DemoDestination.allCases.filter { $0 != destination && $0 != .entrance }, id: \.self) { place in
+                    // Only show POIs that are connected to the active trial network.
+                    // This avoids floating landmarks when a trial intentionally uses
+                    // a T-intersection, dead-end, or single-road topology.
+                    let activeNodes = Set(MultiNavMapGeometry.edges(for: routePreset).flatMap { [$0.0, $0.1] })
+                    let visiblePOIs = DemoDestination.allCases.filter { place in
+                        place != destination && place != .entrance && activeNodes.contains(place.nodeID)
+                    }
+
+                    ForEach(visiblePOIs, id: \.self) { place in
                         if let point = MultiNavMapGeometry.nodes[place.nodeID] {
                             MapImageMarker(
                                 systemName: place.icon,
@@ -1011,16 +1369,51 @@ struct RouteClarityOverlay: View {
         }
     }
 
-    private func routePath(transform: OverlayTransform) -> Path {
+    private func routePath(transform: OverlayTransform, trimDistance: CGFloat = 14) -> Path {
         var path = Path()
-        guard let firstID = routeNodeIDs.first, let first = MultiNavMapGeometry.nodes[firstID] else { return path }
+        let points = routeNodeIDs.compactMap { MultiNavMapGeometry.nodes[$0] }
+        guard points.count >= 2 else { return path }
+
+        // Trim route overlays away from the first and last intersections.
+        // The dotted centerline gets a larger trim so it does not visually sit
+        // on top of the beginning intersection or "You Are Here" marker.
+        let trimmedPoints = trimmedRoutePoints(points, trimDistance: trimDistance)
+
+        guard let first = trimmedPoints.first else { return path }
         path.move(to: transform.apply(first))
-        for id in routeNodeIDs.dropFirst() {
-            if let point = MultiNavMapGeometry.nodes[id] {
-                path.addLine(to: transform.apply(point))
-            }
+
+        for point in trimmedPoints.dropFirst() {
+            path.addLine(to: transform.apply(point))
         }
+
         return path
+    }
+
+    private func trimmedRoutePoints(_ points: [CGPoint], trimDistance: CGFloat) -> [CGPoint] {
+        guard points.count >= 2 else { return points }
+
+        var output = points
+
+        if let first = points.first, let second = points.dropFirst().first {
+            output[0] = point(from: first, toward: second, distance: trimDistance)
+        }
+
+        if let last = points.last, points.count >= 2 {
+            let previous = points[points.count - 2]
+            output[output.count - 1] = point(from: last, toward: previous, distance: trimDistance)
+        }
+
+        return output
+    }
+
+    private func point(from start: CGPoint, toward end: CGPoint, distance: CGFloat) -> CGPoint {
+        let dx = end.x - start.x
+        let dy = end.y - start.y
+        let length = max(CGFloat(1), sqrt(dx * dx + dy * dy))
+        return CGPoint(
+            x: start.x + (dx / length) * distance,
+            y: start.y + (dy / length) * distance
+        )
     }
 
     private func makeTransform(size: CGSize) -> OverlayTransform {
@@ -1052,7 +1445,7 @@ struct RouteIntersectionDot: View {
                 Circle().stroke(.white, lineWidth: 3)
             )
             .shadow(color: .orange.opacity(0.28), radius: 6)
-            .zIndex(10)
+            .zIndex(20)
     }
 }
 
@@ -1093,7 +1486,6 @@ struct MapImageMarker: View {
     }
 }
 
-
 // MARK: - Zoomed Intersection View
 
 struct IntersectionZoomView: View {
@@ -1101,10 +1493,13 @@ struct IntersectionZoomView: View {
     let intersectionID: Int
     let routeNodeIDs: [Int]
     let destination: DemoDestination
+    let routePreset: RoutePreset
     let customPatterns: [MapRole: HapticPattern]
 
     @State private var zoomHapticEngine: (any HapticEngine)?
     @State private var zoomAudioEngine: (any SpatialAudioEngine)?
+    @State private var lastZoomSpokenName: String?
+    @State private var lastZoomSpokenAt = Date.distantPast
 
     var body: some View {
         NavigationStack {
@@ -1128,6 +1523,7 @@ struct IntersectionZoomView: View {
                         intersectionID: intersectionID,
                         routeNodeIDs: routeNodeIDs,
                         destination: destination,
+                        routePreset: routePreset,
                         onStartFeedback: { role, name in
                             startZoomFeedback(role: role, name: name)
                         },
@@ -1168,12 +1564,24 @@ struct IntersectionZoomView: View {
 
     private func startZoomFeedback(role: MapRole, name: String) {
         let pattern = customPatterns[role] ?? northeasternDefaultPattern(for: role)
-        stopZoomFeedback()
+
+        // Stop only the current haptic immediately before starting the next one.
+        // Do not call stopZoomFeedback() here because its delayed defensive stops
+        // would stop the new zoom haptic/audio almost immediately after it starts.
+        zoomHapticEngine?.stopAll()
         zoomHapticEngine?.start(pattern: pattern)
-        zoomAudioEngine?.speak(name)
+
+        let now = Date()
+        if lastZoomSpokenName != name || now.timeIntervalSince(lastZoomSpokenAt) > 1.15 {
+            zoomAudioEngine?.stopAll()
+            zoomAudioEngine?.speak(name)
+            lastZoomSpokenName = name
+            lastZoomSpokenAt = now
+        }
     }
 
     private func stopZoomFeedback() {
+        lastZoomSpokenName = nil
         zoomHapticEngine?.stopAll()
         zoomAudioEngine?.stopAll()
 
@@ -1195,6 +1603,7 @@ struct LocalIntersectionMap: View {
     let intersectionID: Int
     let routeNodeIDs: [Int]
     let destination: DemoDestination
+    let routePreset: RoutePreset
     let onStartFeedback: (MapRole, String) -> Void
     let onStopFeedback: () -> Void
 
@@ -1239,7 +1648,7 @@ struct LocalIntersectionMap: View {
                 ForEach(routeNeighbors, id: \.self) { neighbor in
                     let endpoint = localPoint(for: neighbor, center: center, radius: routeRadius)
                     localRoad(from: center, to: endpoint)
-                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 18, lineCap: .round))
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 15, lineCap: .round))
                         .shadow(color: .blue.opacity(0.25), radius: 8)
 
                     localRoad(from: center, to: endpoint)
@@ -1261,7 +1670,7 @@ struct LocalIntersectionMap: View {
 
                 ForEach(nearbyLandmarks) { landmark in
                     zoomMarker(landmark)
-                        .position(localPoint(for: landmark.nodeID, center: center, radius: landmark.nodeID == intersectionID ? centerLandmarkRadius : landmarkRadius))
+                        .position(zoomLandmarkPoint(for: landmark, center: center))
                 }
 
 
@@ -1313,24 +1722,32 @@ struct LocalIntersectionMap: View {
     }
 
     private var nonRouteNeighborIDs: [Int] {
-        MultiNavMapGeometry.neighbors(of: intersectionID)
+        MultiNavMapGeometry.neighbors(of: intersectionID, preset: routePreset)
             .filter { !routeNeighborIDs.contains($0) }
     }
 
     private var nearbyZoomLandmarks: [ZoomLandmark] {
-        let visibleNodes = Set([intersectionID] + MultiNavMapGeometry.neighbors(of: intersectionID))
+        let visibleNodes = Set([intersectionID] + MultiNavMapGeometry.neighbors(of: intersectionID, preset: routePreset))
         var landmarks: [ZoomLandmark] = []
 
-        if visibleNodes.contains(1) {
+        // Do not place landmarks directly on the current zoomed intersection.
+        // If a POI/destination/user marker shares the same node as the active
+        // intersection, it can steal audio/haptic focus from the intersection.
+        // The landmark remains available on the route overview; zoom keeps the
+        // intersection itself as the priority at this exact location.
+        if visibleNodes.contains(1), 1 != intersectionID {
             landmarks.append(ZoomLandmark(id: "you", nodeID: 1, role: .userLocation, systemName: "location.fill", tint: .cyan, label: "You"))
         }
 
-        if visibleNodes.contains(destination.nodeID) {
+        if visibleNodes.contains(destination.nodeID), destination.nodeID != intersectionID {
             landmarks.append(ZoomLandmark(id: "destination", nodeID: destination.nodeID, role: .destination, systemName: destination.icon, tint: .red, label: destination.rawValue))
         }
 
         for place in DemoDestination.allCases where place != destination && place != .entrance {
-            if visibleNodes.contains(place.nodeID) {
+            // Keep zoom landmarks tied to the active route instead of showing unrelated floating POIs.
+            if visibleNodes.contains(place.nodeID),
+               routeNodeIDs.contains(place.nodeID),
+               place.nodeID != intersectionID {
                 landmarks.append(ZoomLandmark(id: place.rawValue, nodeID: place.nodeID, role: .poi, systemName: place.icon, tint: .purple, label: place.rawValue))
             }
         }
@@ -1401,29 +1818,94 @@ struct LocalIntersectionMap: View {
         )
     }
 
-    private func zoomHit(at point: CGPoint, center: CGPoint) -> (role: MapRole, name: String) {
-        // Hit-test the zoomed view using the same roles as the main Northeastern map.
-        // This returns both the role for haptics and a readable name for Northeastern audio.
-        for landmark in nearbyZoomLandmarks {
-            let landmarkPoint = localPoint(
-                for: landmark.nodeID,
-                center: center,
-                radius: landmark.nodeID == intersectionID ? centerLandmarkRadius : landmarkRadius
-            )
-            if distance(point, landmarkPoint) <= 32 {
-                return (landmark.role, landmark.accessibilityLabel)
+    private func zoomLandmarkPoint(for landmark: ZoomLandmark, center: CGPoint) -> CGPoint {
+        let radius = landmark.nodeID == intersectionID ? centerLandmarkRadius : landmarkRadius
+        let basePoint = localPoint(for: landmark.nodeID, center: center, radius: radius)
+
+        // Any landmark that shares an intersection node must be drawn and hit-tested
+        // away from the exact intersection point. This includes POIs, destinations,
+        // and You Are Here. Otherwise the landmark can steal the intersection audio.
+        let offsetDistance: CGFloat = 62
+
+        if landmark.nodeID == intersectionID {
+            switch landmark.role {
+            case .userLocation:
+                return CGPoint(x: center.x - offsetDistance, y: center.y - offsetDistance)
+            case .destination:
+                return CGPoint(x: center.x + offsetDistance, y: center.y - offsetDistance)
+            case .poi:
+                return CGPoint(x: center.x + offsetDistance, y: center.y + offsetDistance)
+            default:
+                return CGPoint(x: center.x + offsetDistance, y: center.y)
             }
         }
 
+        guard let centerNode = MultiNavMapGeometry.nodes[intersectionID],
+              let landmarkNode = MultiNavMapGeometry.nodes[landmark.nodeID] else {
+            return CGPoint(x: basePoint.x + offsetDistance, y: basePoint.y)
+        }
+
+        let dx = landmarkNode.x - centerNode.x
+        let dy = landmarkNode.y - centerNode.y
+        let length = max(CGFloat(1), sqrt(dx * dx + dy * dy))
+
+        // Offset away from the road direction so the marker stays near the node
+        // but no longer sits directly on the route-neighbor/intersection marker.
+        let normalX = -dy / length
+        let normalY = dx / length
+
+        let roleMultiplier: CGFloat
+        switch landmark.role {
+        case .destination:
+            roleMultiplier = 1.15
+        case .userLocation:
+            roleMultiplier = -1.15
+        case .poi:
+            roleMultiplier = 1.0
+        default:
+            roleMultiplier = 1.0
+        }
+
+        return CGPoint(
+            x: basePoint.x + normalX * offsetDistance * roleMultiplier,
+            y: basePoint.y + normalY * offsetDistance * roleMultiplier
+        )
+    }
+
+    private func zoomHit(at point: CGPoint, center: CGPoint) -> (role: MapRole, name: String) {
+        // Intersection hit targets always win over landmarks. This prevents POIs,
+        // Destination, or You Are Here from speaking when the finger is actually
+        // on top of an intersection point.
         if distance(point, center) <= centerHitRadius {
             return (.intersection, "Intersection \(intersectionID)")
         }
 
         for neighbor in routeNeighborIDs {
             let endpoint = localPoint(for: neighbor, center: center, radius: routeRadius)
-            if distance(point, endpoint) <= 34 {
+            if distance(point, endpoint) <= 36 {
                 return (.intersection, "Intersection \(neighbor)")
             }
+        }
+
+        for neighbor in nonRouteNeighborIDs {
+            let endpoint = localPoint(for: neighbor, center: center, radius: roadRadius)
+            if distance(point, endpoint) <= 32 {
+                return (.intersection, "Intersection \(neighbor)")
+            }
+        }
+
+        // Landmarks are checked only after all intersection nodes. Since their
+        // visual positions are offset with zoomLandmarkPoint, users can still
+        // intentionally explore POIs/destination without them stealing node audio.
+        for landmark in nearbyZoomLandmarks {
+            let landmarkPoint = zoomLandmarkPoint(for: landmark, center: center)
+            if distance(point, landmarkPoint) <= 30 {
+                return (landmark.role, landmark.accessibilityLabel)
+            }
+        }
+
+        for neighbor in routeNeighborIDs {
+            let endpoint = localPoint(for: neighbor, center: center, radius: routeRadius)
             if distanceFromLine(point, center, endpoint) <= 30 {
                 return (.route, "Best route toward Intersection \(neighbor)")
             }
@@ -1431,9 +1913,6 @@ struct LocalIntersectionMap: View {
 
         for neighbor in nonRouteNeighborIDs {
             let endpoint = localPoint(for: neighbor, center: center, radius: roadRadius)
-            if distance(point, endpoint) <= 30 {
-                return (.intersection, "Intersection \(neighbor)")
-            }
             if distanceFromLine(point, center, endpoint) <= 24 {
                 return (.road, "Nearby path toward Intersection \(neighbor)")
             }
@@ -1544,7 +2023,6 @@ struct RouteBadge: View {
     }
 }
 
-
 // MARK: - Settings
 
 struct HapticSettingsView: View {
@@ -1565,6 +2043,7 @@ struct HapticSettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 18) {
+                    routePresetPicker
                     rolePicker
                     editorCard
                 }
@@ -1596,6 +2075,35 @@ struct HapticSettingsView: View {
                 stopPreviewSafely()
             }
         }
+    }
+
+    private var routePresetPicker: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Study Trial")
+                .font(.subheadline.weight(.semibold))
+
+            Picker("Study Trial", selection: Binding<RoutePreset>(
+                get: { state.routePreset },
+                set: { newPreset in
+                    stopPreviewSafely()
+                    state.setRoutePreset(newPreset)
+                }
+            )) {
+                ForEach(RoutePreset.allCases) { preset in
+                    Text(preset.shortName).tag(preset)
+                }
+            }
+            .pickerStyle(.menu)
+
+            Text(state.routePreset.subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background(.background, in: RoundedRectangle(cornerRadius: 20))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Study trial, \(state.routePreset.rawValue)")
+        .accessibilityHint(state.routePreset.subtitle)
     }
 
     private var rolePicker: some View {
@@ -1921,7 +2429,17 @@ extension TactileMapViewConfiguration {
             longPressMinDuration: 0.05,
             junctionDiscEnabled: true,
             showTouchIndicator: true,
-            canvasPadding: 18
+            canvasPadding: 18,
+            typeStyles: [
+                .routeRoad: ElementStyle(
+                    color: UIColor.systemBlue.withAlphaComponent(0.92),
+                    sizeMM: 3.2
+                ),
+                .nonRouteRoad: ElementStyle(
+                    color: UIColor.systemGray3.withAlphaComponent(0.85),
+                    sizeMM: 3.6
+                )
+            ]
         )
     }
 }
@@ -1964,12 +2482,15 @@ enum MultiNavMapBuilder {
         (3, 7), (7, 11), (11, 15)
     ]
 
-    static func makeDocument(destination: DemoDestination, showRouteOnly: Bool) -> BuildResult {
-        let route = shortestPath(from: originID, to: destination.nodeID)
+    static func makeDocument(destination: DemoDestination, routePreset: RoutePreset, showRouteOnly: Bool) -> BuildResult {
+        let presetRoute = routePreset.routeNodeIDs
+        let route = presetRoute.last == destination.nodeID ? presetRoute : shortestPath(from: originID, to: destination.nodeID, edges: MultiNavMapGeometry.edges(for: routePreset))
+        let activeEdges = MultiNavMapGeometry.edges(for: routePreset)
         let routeEdges = Set(routePairs(route).map { edgeKey($0.0, $0.1) })
+        let visibleNodes = Set(activeEdges.flatMap { [$0.0, $0.1] } + route)
         var features: [MapElement] = []
 
-        for (from, to) in edges {
+        for (from, to) in activeEdges {
             let key = edgeKey(from, to)
             let isRoute = routeEdges.contains(key)
             if showRouteOnly && !isRoute { continue }
@@ -1977,10 +2498,10 @@ enum MultiNavMapBuilder {
             features.append(
                 MapElement(
                     id: "corridor_\(from)_\(to)",
-                    elementType: .corridor,
+                    elementType: isRoute ? .routeRoad : .nonRouteRoad,
                     geometry: .lineString([nodes[from]!, nodes[to]!]),
                     properties: TactileProperties(
-                        name: isRoute ? "Best outdoor route segment from node \(from) to \(to)" : "Outdoor path from node \(from) to \(to)",
+                        name: MultiNavMapGeometry.roadName(from: from, to: to),
                         category: isRoute ? "best outdoor route path" : "corridor",
                         custom: [
                             "waiveRole": isRoute ? MapRole.route.storageValue : MapRole.road.storageValue,
@@ -1996,7 +2517,7 @@ enum MultiNavMapBuilder {
         // Clean prototype view: only show intersections that are actually on the selected route.
         // This reduces clutter while still using Northeastern MapElement + TactileMapView hit detection.
         for id in route {
-            let connected = connectedCorridorIDs(for: id, visibleRouteOnly: true, routeEdges: routeEdges)
+            let connected = connectedCorridorIDs(for: id, visibleRouteOnly: true, routeEdges: routeEdges, activeEdges: activeEdges)
 
             features.append(
                 MapElement(
@@ -2047,7 +2568,7 @@ enum MultiNavMapBuilder {
             )
         )
 
-        if destination != .busStop && !showRouteOnly {
+        if destination != .busStop && !showRouteOnly && visibleNodes.contains(DemoDestination.busStop.nodeID) {
             features.append(
                 marker(
                     id: "bus_stop",
@@ -2059,7 +2580,7 @@ enum MultiNavMapBuilder {
             )
         }
 
-        if destination != .studentCenter && !showRouteOnly {
+        if destination != .studentCenter && !showRouteOnly && visibleNodes.contains(DemoDestination.studentCenter.nodeID) {
             features.append(
                 marker(
                     id: "student_center",
@@ -2071,7 +2592,7 @@ enum MultiNavMapBuilder {
             )
         }
 
-        if destination != .parkingLot && !showRouteOnly {
+        if destination != .parkingLot && !showRouteOnly && visibleNodes.contains(DemoDestination.parkingLot.nodeID) {
             features.append(
                 marker(
                     id: "parking_lot",
@@ -2083,7 +2604,7 @@ enum MultiNavMapBuilder {
             )
         }
 
-        if destination != .park && !showRouteOnly {
+        if destination != .park && !showRouteOnly && visibleNodes.contains(DemoDestination.park.nodeID) {
             features.append(
                 marker(
                     id: "campus_park",
@@ -2100,7 +2621,7 @@ enum MultiNavMapBuilder {
             bounds: TactileMapBounds(width: 390, height: 450),
             features: features,
             metadata: TactileMapMetadata(
-                name: "WAIVE MultiNav Outdoor Route Prototype",
+                name: "WAIVE MultiNav Outdoor Route Prototype - \(routePreset.rawValue)",
                 buildingName: "Outdoor Campus Route",
                 floor: 1,
                 scale: "Outdoor prototype coordinate space",
@@ -2145,7 +2666,7 @@ enum MultiNavMapBuilder {
         )
     }
 
-    private static func shortestPath(from start: Int, to end: Int) -> [Int] {
+    private static func shortestPath(from start: Int, to end: Int, edges: [(Int, Int)] = MultiNavMapGeometry.edges(for: .trial01)) -> [Int] {
         var distances = Dictionary(uniqueKeysWithValues: nodes.keys.map { ($0, Double.infinity) })
         var previous: [Int: Int] = [:]
         var unvisited = Set(nodes.keys)
@@ -2156,7 +2677,7 @@ enum MultiNavMapBuilder {
             if current == end { break }
             unvisited.remove(current)
 
-            for neighbor in neighbors(of: current) where unvisited.contains(neighbor) {
+            for neighbor in neighbors(of: current, edges: edges) where unvisited.contains(neighbor) {
                 let alt = distances[current, default: .infinity] + distance(nodes[current]!, nodes[neighbor]!)
                 if alt < distances[neighbor, default: .infinity] {
                     distances[neighbor] = alt
@@ -2175,7 +2696,7 @@ enum MultiNavMapBuilder {
         return route
     }
 
-    private static func neighbors(of node: Int) -> [Int] {
+    private static func neighbors(of node: Int, edges: [(Int, Int)]) -> [Int] {
         edges.compactMap { from, to in
             if from == node { return to }
             if to == node { return from }
@@ -2196,8 +2717,8 @@ enum MultiNavMapBuilder {
         return "Step \(index + 1) of \(pairs.count)"
     }
 
-    private static func connectedCorridorIDs(for node: Int, visibleRouteOnly: Bool, routeEdges: Set<String>) -> [String] {
-        edges.compactMap { from, to in
+    private static func connectedCorridorIDs(for node: Int, visibleRouteOnly: Bool, routeEdges: Set<String>, activeEdges: [(Int, Int)]) -> [String] {
+        activeEdges.compactMap { from, to in
             guard from == node || to == node else { return nil }
             if visibleRouteOnly && !routeEdges.contains(edgeKey(from, to)) { return nil }
             return "corridor_\(from)_\(to)"
