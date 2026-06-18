@@ -2433,11 +2433,11 @@ extension TactileMapViewConfiguration {
             typeStyles: [
                 .routeRoad: ElementStyle(
                     color: UIColor.systemBlue.withAlphaComponent(0.92),
-                    sizeMM: 3.2
+                    sizeMM: 2.8
                 ),
                 .nonRouteRoad: ElementStyle(
                     color: UIColor.systemGray3.withAlphaComponent(0.85),
-                    sizeMM: 3.6
+                    sizeMM: 3.0
                 )
             ]
         )
