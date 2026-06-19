@@ -57,6 +57,16 @@ struct MapView: View {
             sizeMM: 6.0,
             showAnchorDot: true
         )
+        config.typeStyles[.offRouteIntersection] = ElementStyle(
+            color: .systemGray,
+            sizeMM: 6.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.end] = ElementStyle(
+            color : .systemRed,
+            sizeMM: 6.0,
+            showAnchorDot: true
+        )
 
         return config
     }
