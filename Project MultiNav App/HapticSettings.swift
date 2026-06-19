@@ -12,6 +12,7 @@ import TactileMapFeedback
 import TactileMapLogging
 import TactileMapView
 
+
 @MainActor
 class HapticSettings: ObservableObject {
     

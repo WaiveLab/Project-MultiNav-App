@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E28F5BAC2FD87947003051C5 /* TactileMapCore in Frameworks */ = {isa = PBXBuildFile; productRef = E28F5BAB2FD87947003051C5 /* TactileMapCore */; };
-		E28F5BAE2FD87947003051C5 /* TactileMapFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = E28F5BAD2FD87947003051C5 /* TactileMapFeedback */; };
-		E28F5BB02FD87947003051C5 /* TactileMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E28F5BAF2FD87947003051C5 /* TactileMapKit */; };
-		E28F5BB22FD87947003051C5 /* TactileMapLogging in Frameworks */ = {isa = PBXBuildFile; productRef = E28F5BB12FD87947003051C5 /* TactileMapLogging */; };
-		E28F5BB42FD87947003051C5 /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = E28F5BB32FD87947003051C5 /* TactileMapView */; };
+		E263A0062FE5971D00BD2ED9 /* TactileMapCore in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0052FE5971D00BD2ED9 /* TactileMapCore */; };
+		E263A0082FE5971D00BD2ED9 /* TactileMapFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */; };
+		E263A00A2FE5971D00BD2ED9 /* TactileMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0092FE5971D00BD2ED9 /* TactileMapKit */; };
+		E263A00C2FE5971D00BD2ED9 /* TactileMapLogging in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */; };
+		E263A00E2FE5971D00BD2ED9 /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00D2FE5971D00BD2ED9 /* TactileMapView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,11 +31,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E28F5BB42FD87947003051C5 /* TactileMapView in Frameworks */,
-				E28F5BB22FD87947003051C5 /* TactileMapLogging in Frameworks */,
-				E28F5BB02FD87947003051C5 /* TactileMapKit in Frameworks */,
-				E28F5BAC2FD87947003051C5 /* TactileMapCore in Frameworks */,
-				E28F5BAE2FD87947003051C5 /* TactileMapFeedback in Frameworks */,
+				E263A00E2FE5971D00BD2ED9 /* TactileMapView in Frameworks */,
+				E263A00C2FE5971D00BD2ED9 /* TactileMapLogging in Frameworks */,
+				E263A00A2FE5971D00BD2ED9 /* TactileMapKit in Frameworks */,
+				E263A0062FE5971D00BD2ED9 /* TactileMapCore in Frameworks */,
+				E263A0082FE5971D00BD2ED9 /* TactileMapFeedback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,11 +78,11 @@
 			);
 			name = "Project MultiNav App";
 			packageProductDependencies = (
-				E28F5BAB2FD87947003051C5 /* TactileMapCore */,
-				E28F5BAD2FD87947003051C5 /* TactileMapFeedback */,
-				E28F5BAF2FD87947003051C5 /* TactileMapKit */,
-				E28F5BB12FD87947003051C5 /* TactileMapLogging */,
-				E28F5BB32FD87947003051C5 /* TactileMapView */,
+				E263A0052FE5971D00BD2ED9 /* TactileMapCore */,
+				E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */,
+				E263A0092FE5971D00BD2ED9 /* TactileMapKit */,
+				E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */,
+				E263A00D2FE5971D00BD2ED9 /* TactileMapView */,
 			);
 			productName = "Project MultiNav App";
 			productReference = E2DFE5362FD73F9A009569F8 /* Project MultiNav App.app */;
@@ -113,7 +113,7 @@
 			mainGroup = E2DFE52D2FD73F9A009569F8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */,
+				E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E2DFE5372FD73F9A009569F8 /* Products */;
@@ -359,9 +359,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */ = {
+		E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/WaiveLab/ProjectMultiNav.git";
+			repositoryURL = "https://github.com/Hariprasath88/ProjectMultiNav";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -370,29 +370,29 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E28F5BAB2FD87947003051C5 /* TactileMapCore */ = {
+		E263A0052FE5971D00BD2ED9 /* TactileMapCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapCore;
 		};
-		E28F5BAD2FD87947003051C5 /* TactileMapFeedback */ = {
+		E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapFeedback;
 		};
-		E28F5BAF2FD87947003051C5 /* TactileMapKit */ = {
+		E263A0092FE5971D00BD2ED9 /* TactileMapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapKit;
 		};
-		E28F5BB12FD87947003051C5 /* TactileMapLogging */ = {
+		E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapLogging;
 		};
-		E28F5BB32FD87947003051C5 /* TactileMapView */ = {
+		E263A00D2FE5971D00BD2ED9 /* TactileMapView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E28F5BAA2FD87947003051C5 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapView;
 		};
 /* End XCSwiftPackageProductDependency section */

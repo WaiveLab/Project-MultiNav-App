@@ -12,7 +12,6 @@ import TactileMapLogging
 import TactileMapView
 
 
-
 @main
 struct MyApp: App {
     
@@ -29,23 +28,37 @@ struct MyApp: App {
 }
 
 
-
 struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var hapticSettings: HapticSettings
     
     //Custom visual appearance
     public var config: TactileMapViewConfiguration {
-            var config = TactileMapViewConfiguration.default
+        var config = TactileMapViewConfiguration.default
 
-            config.typeStyles[.offRoute] = ElementStyle(
-                color: .systemGray,
-                sizeMM: 4.0,
-                pointShape: .roundedRect(cornerRadius: 3),
-                showAnchorDot: true
-            )
+        config.typeStyles[.start] = ElementStyle(
+            color: .systemGreen,
+            sizeMM: 6.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.onRoute] = ElementStyle(
+            color: .systemBlue,
+            sizeMM: 4.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.offRoute] = ElementStyle(
+            color: .systemGray,
+            sizeMM: 4.0,
+            pointShape: .roundedRect(cornerRadius: 3),
+            showAnchorDot: true
+        )
+        config.typeStyles[.onRouteIntersection] = ElementStyle(
+            color: .systemTeal,
+            sizeMM: 6.0,
+            showAnchorDot: true
+        )
 
-            return config
+        return config
     }
     
     var body: some View {

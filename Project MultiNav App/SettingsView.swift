@@ -11,6 +11,7 @@ import TactileMapFeedback
 import TactileMapLogging
 import TactileMapView
 
+
 enum HapticPat: String, CaseIterable, Identifiable {
     case start
     case onRoute
@@ -22,6 +23,7 @@ enum HapticPat: String, CaseIterable, Identifiable {
     
     var id: Self { self }
 }
+
 
 struct SettingsView: View {
     let hapticModes = ["continuous", "pulsing"]

@@ -1,13 +1,13 @@
 {
-  "originHash" : "756f51d7fda0b245200b1a2ec62729bd949786addf6ae59d5932c81d18b16f20",
+  "originHash" : "6ddfea8059ff81dda77efb78bafb80c274adebeef7e51169bcb839f99ca89630",
   "pins" : [
     {
       "identity" : "projectmultinav",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/WaiveLab/ProjectMultiNav.git",
+      "location" : "https://github.com/Hariprasath88/ProjectMultiNav",
       "state" : {
         "branch" : "main",
-        "revision" : "599f9373c08cc82e16833ce177077bcd8cb25176"
+        "revision" : "07c3931c75a0bff355857ea506288e44beae9ff8"
       }
     }
   ],
