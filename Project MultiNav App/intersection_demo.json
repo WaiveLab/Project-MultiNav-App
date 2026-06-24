@@ -1,0 +1,578 @@
+{
+  "version": "1.0",
+  "type": "TactileMapDocument",
+  "metadata": {
+    "name": "Intersection Exploration - State St & Main St (Demo)",
+    "scale": "1 unit = 1 foot",
+    "coordinate_unit": "feet",
+    "author": "WAIVE Lab",
+    "created": "2026-06-24"
+  },
+  "bounds": {
+    "width": 1000,
+    "height": 1400
+  },
+  "features": [
+    {
+      "id": "v_street",
+      "element_type": "street",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            470,
+            220
+          ],
+          [
+            470,
+            1180
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Main Street",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Main Street",
+          "role": "non_route_street",
+          "audio_label_positive": "Main Street North",
+          "audio_label_negative": "Main Street South",
+          "traffic_direction": "north-south"
+        }
+      }
+    },
+    {
+      "id": "h_street",
+      "element_type": "street",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            150,
+            700
+          ],
+          [
+            850,
+            700
+          ]
+        ]
+      },
+      "properties": {
+        "name": "State Street",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "State Street",
+          "role": "non_route_street",
+          "audio_label_positive": "State Street East",
+          "audio_label_negative": "State Street West",
+          "traffic_direction": "east-west"
+        }
+      }
+    },
+    {
+      "id": "cw_top_1",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            428,
+            620
+          ],
+          [
+            428,
+            656
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_top_2",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            458,
+            620
+          ],
+          [
+            458,
+            656
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_top_3",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            488,
+            620
+          ],
+          [
+            488,
+            656
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_top_4",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            518,
+            620
+          ],
+          [
+            518,
+            656
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_left_1",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            416,
+            672
+          ],
+          [
+            486,
+            672
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_left_2",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            416,
+            700
+          ],
+          [
+            486,
+            700
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_left_3",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            416,
+            728
+          ],
+          [
+            486,
+            728
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_right_1",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            532,
+            672
+          ],
+          [
+            602,
+            672
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_right_2",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            532,
+            700
+          ],
+          [
+            602,
+            700
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "cw_right_3",
+      "element_type": "crosswalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            532,
+            728
+          ],
+          [
+            602,
+            728
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Crosswalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Crosswalk",
+          "role": "crosswalk"
+        }
+      }
+    },
+    {
+      "id": "route",
+      "element_type": "route",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            560,
+            250
+          ],
+          [
+            560,
+            1150
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Route",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Route",
+          "role": "route"
+        }
+      }
+    },
+    {
+      "id": "swb_vleft",
+      "element_type": "sidewalk_border",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            345,
+            240
+          ],
+          [
+            345,
+            1160
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk_border"
+        }
+      }
+    },
+    {
+      "id": "sw_vleft",
+      "element_type": "sidewalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            345,
+            240
+          ],
+          [
+            345,
+            1160
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk"
+        }
+      }
+    },
+    {
+      "id": "swb_htop",
+      "element_type": "sidewalk_border",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            180,
+            605
+          ],
+          [
+            770,
+            605
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk_border"
+        }
+      }
+    },
+    {
+      "id": "sw_htop",
+      "element_type": "sidewalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            180,
+            605
+          ],
+          [
+            770,
+            605
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk"
+        }
+      }
+    },
+    {
+      "id": "swb_hbot",
+      "element_type": "sidewalk_border",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            180,
+            795
+          ],
+          [
+            770,
+            795
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk_border",
+          "study_gap": "true",
+          "gap_range": "250-430"
+        }
+      }
+    },
+    {
+      "id": "sw_hbot",
+      "element_type": "sidewalk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            180,
+            795
+          ],
+          [
+            770,
+            795
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sidewalk",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Sidewalk",
+          "role": "sidewalk",
+          "study_gap": "true",
+          "gap_range": "250-430"
+        }
+      }
+    },
+    {
+      "id": "median",
+      "element_type": "median",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          500,
+          700
+        ]
+      },
+      "properties": {
+        "name": "Island",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "Island",
+          "role": "median"
+        }
+      }
+    },
+    {
+      "id": "aps_corner",
+      "element_type": "aps",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          620,
+          640
+        ]
+      },
+      "properties": {
+        "name": "APS",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "APS",
+          "role": "aps"
+        }
+      }
+    },
+    {
+      "id": "destination",
+      "element_type": "destination",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          560,
+          250
+        ]
+      },
+      "properties": {
+        "name": "End of route. Double tap to return to map overview.",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "End of route. Double tap to return to map overview.",
+          "role": "destination"
+        }
+      }
+    },
+    {
+      "id": "you_are_here",
+      "element_type": "you_are_here",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          560,
+          1150
+        ]
+      },
+      "properties": {
+        "name": "You are here at the intersection of State Street and Main Street",
+        "is_accessible": true,
+        "custom": {
+          "audio_label": "You are here at the intersection of State Street and Main Street",
+          "role": "you_are_here"
+        }
+      }
+    }
+  ]
+}
