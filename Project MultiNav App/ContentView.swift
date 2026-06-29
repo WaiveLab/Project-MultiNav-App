@@ -34,7 +34,7 @@ struct MapView: View {
     
     //Load json
     @State public var document =
-        try! TactileMapDocument.load(from: "civic_zoom_community_and_garden", bundle: .main)
+        try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main)
     
     //MARK: - Custom visual appearance
     public var config: TactileMapViewConfiguration {
@@ -81,22 +81,22 @@ struct MapView: View {
         )
         config.typeStyles[.offRouteSidewalk] = ElementStyle(
             color : .systemGray,
-            sizeMM: 5.0,
+            sizeMM: 8.0,
             showAnchorDot: true
         )
         config.typeStyles[.onRouteSidewalk] = ElementStyle(
             color : .systemBlue,
-            sizeMM: 5.0,
+            sizeMM: 8.0,
             showAnchorDot: true
         )
         config.typeStyles[.offRouteCrosswalk] = ElementStyle(
             color : .systemRed,
-            sizeMM: 4.0,
+            sizeMM: 6.0,
             showAnchorDot: true
         )
         config.typeStyles[.onRouteCrosswalk] = ElementStyle(
             color : .white,
-            sizeMM: 4.0,
+            sizeMM: 6.0,
             showAnchorDot: true
         )
 
@@ -150,8 +150,8 @@ struct MapView: View {
     ///updates document and trys to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
         switch name {
-            case "Intersection Between Michigan Street North East and College Avenue North East":
-                document = try! TactileMapDocument.load(from: "Map1 IntersectionX", bundle: .main )
+            case "Intersection Between Civic Avenue and Library Street":
+                document = try! TactileMapDocument.load(from: "civic_zoom_civic_and_library", bundle: .main )
 
             default:
                 let _ = print("Failed to load document : \(name)")
@@ -244,9 +244,6 @@ class SpatialPolicy: DefaultFeedbackPolicy {
         ///Zoomed
         case .street:
             let _ = print("__________________\nStreet element: \(name)\n__________________")
-            if let pattern = hapticSettings.patterns[.street] {
-                    hapticEngine.start(pattern: pattern)
-            }
             
         case .onRouteSidewalk:
             let _ = print("__________________\nonRouteSidewalk element: \(name)\n__________________")
