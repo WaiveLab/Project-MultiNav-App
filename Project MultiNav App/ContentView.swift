@@ -32,13 +32,18 @@ struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var hapticSettings: HapticSettings
     
-    //Custom visual appearance
+    //Load json
+    @State public var document =
+        try! TactileMapDocument.load(from: "civic_zoom_community_and_garden", bundle: .main)
+    
+    //MARK: - Custom visual appearance
     public var config: TactileMapViewConfiguration {
         var config = TactileMapViewConfiguration.default
 
+        //Overview Styles
         config.typeStyles[.start] = ElementStyle(
             color: .systemGreen,
-            sizeMM: 6.0,
+            sizeMM: 10.0,
             showAnchorDot: true
         )
         config.typeStyles[.onRoute] = ElementStyle(
@@ -53,71 +58,128 @@ struct MapView: View {
             showAnchorDot: true
         )
         config.typeStyles[.onRouteIntersection] = ElementStyle(
-            color: .systemTeal,
-            sizeMM: 6.0,
+            color: .systemBlue,
+            sizeMM: 10.0,
             showAnchorDot: true
         )
         config.typeStyles[.offRouteIntersection] = ElementStyle(
             color: .systemGray,
-            sizeMM: 6.0,
+            sizeMM: 10.0,
             showAnchorDot: true
         )
         config.typeStyles[.end] = ElementStyle(
             color : .systemRed,
-            sizeMM: 6.0,
+            sizeMM: 10.0,
+            showAnchorDot: true
+        )
+        
+        //Zoomed Styles
+        config.typeStyles[.street] = ElementStyle(
+            color : .systemGray2,
+            sizeMM: 20.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.offRouteSidewalk] = ElementStyle(
+            color : .systemGray,
+            sizeMM: 5.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.onRouteSidewalk] = ElementStyle(
+            color : .systemBlue,
+            sizeMM: 5.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.offRouteCrosswalk] = ElementStyle(
+            color : .systemRed,
+            sizeMM: 4.0,
+            showAnchorDot: true
+        )
+        config.typeStyles[.onRouteCrosswalk] = ElementStyle(
+            color : .white,
+            sizeMM: 4.0,
             showAnchorDot: true
         )
 
         return config
     }
-    
+
+    //MARK: - Draw Document
     var body: some View {
-        //Load json
-        let doc = try! TactileMapDocument.load(from: "street_view", bundle: .main)
-        
-        //Define what vibration policy to use
-        TactileMapView(
-            document: doc,
-            configuration: config,
-            feedbackPolicy: SpatialPolicy(),
-            onBackGesture: { dismiss() }
-        )
-        
-        //Set background
-        .background()
-        .ignoresSafeArea()
-        
-        //Settings icon
-        NavigationStack {
-            Text("")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    //link to SettingsView.swift
-                    NavigationLink {
-                        SettingsView()
-                            .environmentObject(hapticSettings)
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
+        ZStack {
+            TactileMapView(
+                document: document,
+                configuration: config,
+                feedbackPolicy: SpatialPolicy(),
+                onBackGesture: { dismiss() },
+                onDoubleTap: { element in
+                        doubleTap(on: element)
+                }
+            )
+            .ignoresSafeArea()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    SettingsView()
+                        .environmentObject(hapticSettings)
+                } label: {
+                    Image(systemName: "gearshape")
                 }
             }
+        }
+    }
+    
+    //Handles doubletap feature
+    ///Reports doubletapped element to console and goes to the intersection of interest
+    private func doubleTap(on element: any TactileMapElement) {
+        print("__________________\nDouble tapped:")
+        print("  name: \(element.properties.name)")
+        print("  type: \(element.elementType)")
+        print("  raw: \(element.elementType.rawValue)\n__________________")
+
+        switch element.elementType {
+            case .onRouteIntersection:
+                zoomIntoIntersection(named: element.properties.name)
+            
+            default:
+                print("That element is not a recognized intersection")
+        }
+    }
+
+    //Handles zoom feature
+    ///updates document and trys to load the new TactileMapDocument
+    private func zoomIntoIntersection(named name: String) {
+        switch name {
+            case "Intersection Between Michigan Street North East and College Avenue North East":
+                document = try! TactileMapDocument.load(from: "Map1 IntersectionX", bundle: .main )
+
+            default:
+                let _ = print("Failed to load document : \(name)")
         }
     }
 }
 
 
-//Custom element types are defined here
+//MARK: - Custom Element Types
 extension TactileElementType {
+    ///Overview elements:
     static let onRoute = TactileElementType(rawValue: "onRoute")
     static let offRoute = TactileElementType(rawValue: "offRoute")
     static let onRouteIntersection = TactileElementType(rawValue: "onRouteIntersection")
     static let offRouteIntersection = TactileElementType(rawValue: "offRouteIntersection")
     static let start = TactileElementType(rawValue: "start")
     static let end = TactileElementType(rawValue: "end")
+    
+    ///Zoomed in elements:
+    static let street = TactileElementType(rawValue: "street")
+    static let onRouteSidewalk = TactileElementType(rawValue: "onRouteSidewalk")
+    static let offRouteSidewalk = TactileElementType(rawValue: "offRouteSidewalk")
+    static let onRouteCrosswalk = TactileElementType(rawValue: "onRouteCrosswalk")
+    static let offRouteCrosswalk = TactileElementType(rawValue: "offRouteCrosswalk")
 }
 
 
-//Custom vibration parameters
+//MARK: - Feedback Policy
 @MainActor
 class SpatialPolicy: DefaultFeedbackPolicy {
     
@@ -129,6 +191,7 @@ class SpatialPolicy: DefaultFeedbackPolicy {
 
         //Play patterns accordingly
         switch element.elementType {
+        ///Overview patterns
         case .start:
             let _ = print("__________________\nStart element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.start] {
@@ -177,7 +240,43 @@ class SpatialPolicy: DefaultFeedbackPolicy {
                     hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-
+        
+        ///Zoomed
+        case .street:
+            let _ = print("__________________\nStreet element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.street] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            
+        case .onRouteSidewalk:
+            let _ = print("__________________\nonRouteSidewalk element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.onRouteSidewalk] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak(name)
+            
+        case .offRouteSidewalk:
+            let _ = print("__________________\noffRouteSidewalk element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak(name)
+            
+        case .onRouteCrosswalk:
+            let _ = print("__________________\nonRouteCrosswalk element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak(name)
+        
+        case .offRouteCrosswalk:
+            let _ = print("__________________\noffRouteCrosswalk element: \(name)\n__________________")
+            if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
+                    hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak(name)
+    
+        ///Unkown element
         default:
             // Unknown element type -- provide basic tap + speech.
             let _ = print("__________________\nE: \(name) is an Unknown element type: \(element.elementType)\n__________________")
@@ -185,4 +284,5 @@ class SpatialPolicy: DefaultFeedbackPolicy {
             audioEngine.speak(name)
         }
     }
+    
 }

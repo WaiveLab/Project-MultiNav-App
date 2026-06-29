@@ -1,0 +1,398 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "sparse_civic_blocks",
+        "buildingName": "",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-06-29"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    140,
+                    150
+                ]
+            },
+            "properties": {
+                "name": "North Community Center",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str0",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        140,
+                        150
+                    ],
+                    [
+                        140,
+                        720
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str1",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        140,
+                        720
+                    ],
+                    [
+                        670,
+                        720
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Civic Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str2",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        670,
+                        720
+                    ],
+                    [
+                        670,
+                        1430
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Transit Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    670,
+                    1430
+                ]
+            },
+            "properties": {
+                "name": "South Transit Pavilion",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        390,
+                        100
+                    ],
+                    [
+                        390,
+                        1500
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Library Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str4",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        790,
+                        100
+                    ],
+                    [
+                        790,
+                        1500
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Court Street",
+                "level": 1,
+                "accessible": false
+            }
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        70,
+                        410
+                    ],
+                    [
+                        830,
+                        410
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str6",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        70,
+                        1110
+                    ],
+                    [
+                        830,
+                        1110
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk0",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    225,
+                    340
+                ]
+            },
+            "properties": {
+                "name": "Community Garden",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    510,
+                    680
+                ]
+            },
+            "properties": {
+                "name": "Civic Fountain",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk2",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    720,
+                    1320
+                ]
+            },
+            "properties": {
+                "name": "Transit Shelter",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int0",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    140,
+                    720
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Community Street and Civic Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    140,
+                    410
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Community Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int2",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    670,
+                    720
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Civic Avenue and Transit Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int3",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    390,
+                    720
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Civic Avenue and Library Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int4",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    670,
+                    1110
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Transit Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint0",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    390,
+                    410
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Library Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint1",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    390,
+                    1110
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Library Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint2",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    790,
+                    410
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Court Street and Garden Avenue",
+                "level": 1,
+                "accessible": false
+            }
+        },
+        {
+            "id": "offint3",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    790,
+                    1110
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Court Street and Market Avenue",
+                "level": 1,
+                "accessible": false
+            }
+        }
+    ]
+}

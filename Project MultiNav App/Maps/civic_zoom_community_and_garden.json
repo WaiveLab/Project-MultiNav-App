@@ -1,0 +1,312 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "civic_zoom_community_and_garden",
+        "buildingName": "Intersection Between Community Street and Garden Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-06-29"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "street0",
+            "type": "street",
+            "geometry": {"type": "LineString", "coordinates": [[450,90],[450,1510]]},
+            "properties": {"name": "Community Street","level": 1,"accessible": true}
+        },
+        {
+            "id": "street1",
+            "type": "street",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        60,
+                        800
+                    ],
+                    [
+                        840,
+                        800
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        90
+                    ],
+                    [
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "West sidewalk of Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "onsw1",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        300,
+                        1510
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "West sidewalk of Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw0",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        90
+                    ],
+                    [
+                        600,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "East sidewalk of Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw1",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        950
+                    ],
+                    [
+                        600,
+                        1510
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "East sidewalk of Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw2",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        60,
+                        650
+                    ],
+                    [
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "North sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw3",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
+                    ],
+                    [
+                        840,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "North sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw4",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        60,
+                        950
+                    ],
+                    [
+                        300,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "South sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw5",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        950
+                    ],
+                    [
+                        840,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "South sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "oncw0",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        300,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "West crosswalk across Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
+                    ],
+                    [
+                        600,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "East crosswalk across Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        600,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "North crosswalk across Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offcw2",
+            "type": "offRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        600,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "South crosswalk across Community Street",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,366 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "riverside_switchback",
+        "buildingName": "",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-06-29"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    130,
+                    140
+                ]
+            },
+            "properties": {
+                "name": "Historic Mill Entrance",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str0",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        130,
+                        140
+                    ],
+                    [
+                        130,
+                        610
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Mill Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str1",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        130,
+                        610
+                    ],
+                    [
+                        640,
+                        920
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "River Bend Road",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str2",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        640,
+                        920
+                    ],
+                    [
+                        640,
+                        1460
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Harbor Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    640,
+                    1460
+                ]
+            },
+            "properties": {
+                "name": "Harbor Ferry Landing",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        60,
+                        390
+                    ],
+                    [
+                        820,
+                        390
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Lock Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str4",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        340,
+                        80
+                    ],
+                    [
+                        340,
+                        800
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Canal Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        80,
+                        1080
+                    ],
+                    [
+                        820,
+                        1330
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Riverside Drive",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str6",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        250,
+                        990
+                    ],
+                    [
+                        810,
+                        700
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Wharf Lane",
+                "level": 1,
+                "accessible": false
+            }
+        },
+        {
+            "id": "lmk0",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    220,
+                    330
+                ]
+            },
+            "properties": {
+                "name": "Waterwheel Overlook",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    470,
+                    830
+                ]
+            },
+            "properties": {
+                "name": "Riverwalk Seating",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk2",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    720,
+                    1390
+                ]
+            },
+            "properties": {
+                "name": "Ferry Ticket Office",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int0",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    130,
+                    610
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Mill Street and River Bend Road",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    130,
+                    390
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Mill Street and Lock Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int2",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    640,
+                    920
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between River Bend Road and Harbor Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int3",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    340,
+                    738
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between River Bend Road and Canal Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "int4",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    523,
+                    849
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between River Bend Road and Wharf Lane",
+                "level": 1,
+                "accessible": false
+            }
+        },
+        {
+            "id": "int5",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    640,
+                    1269
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Harbor Street and Riverside Drive",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint0",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    340,
+                    390
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Lock Avenue and Canal Street",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}
