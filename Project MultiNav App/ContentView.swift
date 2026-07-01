@@ -17,14 +17,14 @@ struct MyApp: App {
     
     let hapticSettings = HapticSettings.shared
     
-   var body: some Scene {
-       WindowGroup {
-           NavigationStack {
-               MapView()
-                   .environmentObject(hapticSettings)
-           }
-       }
-   }
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                MapView()
+                    .environmentObject(hapticSettings)
+            }
+        }
+    }
 }
 
 
@@ -33,8 +33,7 @@ struct MapView: View {
     @EnvironmentObject var hapticSettings: HapticSettings
     
     //Load json
-    @State public var document =
-        try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main)
+    @State public var document = try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main)
     
     //MARK: - Custom visual appearance
     public var config: TactileMapViewConfiguration {
@@ -44,60 +43,53 @@ struct MapView: View {
         config.typeStyles[.start] = ElementStyle(
             color: .systemGreen,
             sizeMM: 10.0,
-            showAnchorDot: true
         )
         config.typeStyles[.onRoute] = ElementStyle(
             color: .systemBlue,
             sizeMM: 4.0,
-            showAnchorDot: true
         )
         config.typeStyles[.offRoute] = ElementStyle(
             color: .systemGray,
             sizeMM: 4.0,
             pointShape: .roundedRect(cornerRadius: 3),
-            showAnchorDot: true
         )
         config.typeStyles[.onRouteIntersection] = ElementStyle(
             color: .systemBlue,
             sizeMM: 10.0,
-            showAnchorDot: true
         )
         config.typeStyles[.offRouteIntersection] = ElementStyle(
             color: .systemGray,
             sizeMM: 10.0,
-            showAnchorDot: true
         )
         config.typeStyles[.end] = ElementStyle(
             color : .systemRed,
             sizeMM: 10.0,
-            showAnchorDot: true
+        )
+        config.typeStyles[.landmark] = ElementStyle(
+            color: .systemYellow,
+            sizeMM: 4.0,
         )
         
         //Zoomed Styles
         config.typeStyles[.street] = ElementStyle(
             color : .systemGray2,
             sizeMM: 20.0,
-            showAnchorDot: true
         )
         config.typeStyles[.offRouteSidewalk] = ElementStyle(
             color : .systemGray,
             sizeMM: 8.0,
-            showAnchorDot: true
         )
         config.typeStyles[.onRouteSidewalk] = ElementStyle(
             color : .systemBlue,
             sizeMM: 8.0,
-            showAnchorDot: true
         )
         config.typeStyles[.offRouteCrosswalk] = ElementStyle(
             color : .systemRed,
-            sizeMM: 6.0,
-            showAnchorDot: true
+            sizeMM: 8.0,
         )
         config.typeStyles[.onRouteCrosswalk] = ElementStyle(
             color : .white,
-            sizeMM: 6.0,
-            showAnchorDot: true
+            sizeMM: 8.0,
         )
 
         return config
@@ -138,23 +130,24 @@ struct MapView: View {
         print("  raw: \(element.elementType.rawValue)\n__________________")
 
         switch element.elementType {
-            case .onRouteIntersection:
-                zoomIntoIntersection(named: element.properties.name)
-            
-            default:
-                print("That element is not a recognized intersection")
+        case .onRouteIntersection:
+            zoomIntoIntersection(named: element.properties.name)
+        
+        default:
+            document = try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main )
         }
     }
 
     //Handles zoom feature
     ///updates document and trys to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
+        //MARK: - Custom Intersections
         switch name {
-            case "Intersection Between Civic Avenue and Library Street":
-                document = try! TactileMapDocument.load(from: "civic_zoom_civic_and_library", bundle: .main )
+        case "Intersection Between Civic Avenue and Library Street":
+            document = try! TactileMapDocument.load(from: "civic_zoom_civic_and_library", bundle: .main )
 
-            default:
-                let _ = print("Failed to load document : \(name)")
+        default:
+            let _ = print("Failed to load document : \(name)")
         }
     }
 }
@@ -281,5 +274,4 @@ class SpatialPolicy: DefaultFeedbackPolicy {
             audioEngine.speak(name)
         }
     }
-    
 }
