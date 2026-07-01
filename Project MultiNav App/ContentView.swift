@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GameplayKit
 import TactileMapCore
 import TactileMapFeedback
 import TactileMapLogging
@@ -17,11 +18,18 @@ struct MyApp: App {
     
     let hapticSettings = HapticSettings.shared
     
+    @State private var isLoggedIn = false
+    @State private var participantID = 0
+    
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                MapView()
-                    .environmentObject(hapticSettings)
+            
+            if isLoggedIn{
+                NavigationStack {
+                    MapView(participantID: participantID).environmentObject(hapticSettings)
+                }
+            } else {
+                LoginView(isLoggedIn: $isLoggedIn, participantID: $participantID)
             }
         }
     }
@@ -31,6 +39,11 @@ struct MyApp: App {
 struct MapView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var hapticSettings: HapticSettings
+    
+    let participantID: Int
+    
+    //Document order to be loaded
+    
     
     //Load json
     @State public var document = try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main)
