@@ -42,7 +42,7 @@ struct MapView: View {
     let participantID: Int
     
     //Load json
-    @State public var document = try! TactileMapDocument.load(from: "civic_blocks", bundle: .main)
+    @State public var document = try! TactileMapDocument.load(from: "overview1", bundle: .main)
     
     //MARK: - Custom visual appearance
     public var config: TactileMapViewConfiguration {
@@ -138,6 +138,7 @@ struct MapView: View {
         }
     }
     
+    //MARK: - Double Tap
     //Handles doubletap feature
     ///Reports doubletapped element to console and goes to the intersection of interest
     private func doubleTap(on element: any TactileMapElement) {
@@ -154,14 +155,14 @@ struct MapView: View {
             zoomIntoIntersection(named: element.properties.name)
             
         default:
-            document = try! TactileMapDocument.load(from: "civic_blocks", bundle: .main )
+            document = try! TactileMapDocument.load(from: "overview1", bundle: .main )
         }
     }
 
     //Handles zoom feature
     ///updates document and trys to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
-        //MARK: - Custom Intersections
+        //MARK: - Load Intersections
         do {
             document = try TactileMapDocument.load(from: "\(name)", bundle: .main )
         }catch{

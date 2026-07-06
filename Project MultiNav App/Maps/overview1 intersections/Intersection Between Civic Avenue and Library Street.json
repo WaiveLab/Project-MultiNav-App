@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "civic_zoom_civic_and_library",
+        "name": "Intersection Between Civic Avenue and Library Street",
         "buildingName": "Intersection Between Civic Avenue and Library Street",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-06-29"
+        "created": "2026-07-06"
     },
     "bounds": {
         "width": 900,
@@ -17,40 +17,16 @@
     },
     "features": [
         {
-            "id": "start",
-            "type": "start",
-            "geometry": { "type": "Point", "coordinates": [60, 650]},
-            "properties": { "name": "Civic Avenue Route Start", "level": 1, "accessible": true}
+            "id": "street0",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 90], [450, 1510]]},
+            "properties": { "name": "Library Street", "level": 1, "accessible": true}
         },
         {
-            "id": "end",
-            "type": "end",
-            "geometry": { "type": "Point", "coordinates": [840, 650]},
-            "properties": { "name": "Civic Avenue Route End", "level": 1, "accessible": true}
-        },
-        {
-            "id": "onsw0",
-            "type": "onRouteSidewalk",
-            "geometry": { "type": "LineString", "coordinates": [[60, 650], [840, 650]]},
-            "properties": { "name": "On-route sidewalk along Civic Avenue", "level": 1, "accessible": true}
-        },
-        {
-            "id": "offcw0",
-            "type": "offRouteCrosswalk",
-            "geometry": { "type": "LineString", "coordinates": [[300, 650], [300, 950]]},
-            "properties": { "name": "West crosswalk across Civic Avenue", "level": 1, "accessible": true}
-        },
-        {
-            "id": "offcw1",
-            "type": "offRouteCrosswalk",
-            "geometry": { "type": "LineString", "coordinates": [[600, 650], [600, 950]]},
-            "properties": { "name": "East crosswalk across Civic Avenue", "level": 1, "accessible": true}
-        },
-        {
-            "id": "offcw2",
-            "type": "offRouteCrosswalk",
-            "geometry": { "type": "LineString", "coordinates": [[300, 950], [600, 950]]},
-            "properties": { "name": "South crosswalk across Library Street", "level": 1, "accessible": true}
+            "id": "street1",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[60, 800], [840, 800]]},
+            "properties": { "name": "Civic Avenue", "level": 1, "accessible": true}
         },
         {
             "id": "offsw0",
@@ -89,16 +65,34 @@
             "properties": { "name": "South sidewalk of Civic Avenue", "level": 1, "accessible": true}
         },
         {
-            "id": "street0",
-            "type": "street",
-            "geometry": { "type": "LineString", "coordinates": [[450, 90], [450, 1510]]},
-            "properties": { "name": "Library Street", "level": 1, "accessible": true}
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [300, 950]]},
+            "properties": { "name": "West crosswalk across Civic Avenue", "level": 1, "accessible": true}
         },
         {
-            "id": "street1",
-            "type": "street",
-            "geometry": { "type": "LineString", "coordinates": [[60, 800], [840, 800]]},
-            "properties": { "name": "Civic Avenue", "level": 1, "accessible": true}
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 650], [600, 950]]},
+            "properties": { "name": "East crosswalk across Civic Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[60, 650], [840, 650]]},
+            "properties": { "name": "On-route sidewalk along Civic Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [60, 650]},
+            "properties": { "name": "Civic Avenue Route Start", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [840, 650]},
+            "properties": { "name": "Civic Avenue Route End", "level": 1, "accessible": true}
         }
     ]
 }
