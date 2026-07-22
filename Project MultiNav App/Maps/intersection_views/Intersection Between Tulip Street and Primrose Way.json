@@ -1,0 +1,92 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "Intersection Between Tulip Street and Primrose Way",
+        "buildingName": "Intersection Between Tulip Street and Primrose Way",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "street0",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[60, 1000], [450, 1000]]},
+            "properties": { "name": "Tulip Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "street1",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 1000], [840, 220]]},
+            "properties": { "name": "Primrose Way", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw0",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[60, 1150], [358, 1150]]},
+            "properties": { "name": "South sidewalk of Tulip Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw1",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[626, 984], [840, 556]]},
+            "properties": { "name": "Southeast sidewalk of Primrose Way", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw2",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[358, 1150], [543, 1150]]},
+            "properties": { "name": "South sidewalk of Tulip Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw3",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[543, 1150], [626, 984]]},
+            "properties": { "name": "Southeast sidewalk of Primrose Way", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[358, 850], [626, 984]]},
+            "properties": { "name": "Crosswalk across Primrose Way", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[358, 850], [358, 1150]]},
+            "properties": { "name": "Crosswalk across Tulip Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[60, 850], [358, 850]]},
+            "properties": { "name": "On-route sidewalk along Tulip Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw1",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[358, 850], [738, 90]]},
+            "properties": { "name": "On-route sidewalk along Primrose Way", "level": 1, "accessible": true}
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [60, 850]},
+            "properties": { "name": "Tulip Street Route Start", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [738, 90]},
+            "properties": { "name": "Primrose Way Route End", "level": 1, "accessible": true}
+        }
+    ]
+}
