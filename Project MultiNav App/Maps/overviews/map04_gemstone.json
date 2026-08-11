@@ -1,0 +1,152 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map04_gemstone",
+        "buildingName": "",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [140, 1250]},
+            "properties": { "name": "Garnet Exhibition Hall", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str0",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[140, 1250], [140, 350]]},
+            "properties": { "name": "Garnet Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str1",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[140, 350], [760, 350]]},
+            "properties": { "name": "Quartz Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str2",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[760, 350], [760, 1250]]},
+            "properties": { "name": "Opal Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [760, 1250]},
+            "properties": { "name": "Opal Theater", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[450, 70], [450, 1530]]},
+            "properties": { "name": "Topaz Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str4",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[70, 900], [830, 900]]},
+            "properties": { "name": "Emerald Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[140, 1530], [140, 1250]]},
+            "properties": { "name": "Garnet Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str6",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[140, 350], [140, 70]]},
+            "properties": { "name": "Garnet Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str7",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[70, 350], [140, 350]]},
+            "properties": { "name": "Quartz Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str8",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[760, 350], [830, 350]]},
+            "properties": { "name": "Quartz Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str9",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[760, 70], [760, 350]]},
+            "properties": { "name": "Opal Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str10",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[760, 1250], [760, 1530]]},
+            "properties": { "name": "Opal Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk0",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [225, 1130]},
+            "properties": { "name": "Gem Cutter Studio", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [560, 270]},
+            "properties": { "name": "Crystal Fountain", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk2",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [660, 1120]},
+            "properties": { "name": "Mineral Museum", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int0",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [140, 900]},
+            "properties": { "name": "Intersection Between Garnet Street and Emerald Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int1",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [140, 350]},
+            "properties": { "name": "Intersection Between Garnet Street and Quartz Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int2",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [450, 350]},
+            "properties": { "name": "Intersection Between Quartz Avenue and Topaz Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int3",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [760, 350]},
+            "properties": { "name": "Intersection Between Quartz Avenue and Opal Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int4",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [760, 900]},
+            "properties": { "name": "Intersection Between Opal Street and Emerald Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offint0",
+            "type": "offRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [450, 900]},
+            "properties": { "name": "Intersection Between Topaz Street and Emerald Avenue", "level": 1, "accessible": true}
+        }
+    ]
+}

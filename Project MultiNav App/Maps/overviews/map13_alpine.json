@@ -1,0 +1,152 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map13_alpine",
+        "buildingName": "",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [135, 1000]},
+            "properties": { "name": "Summit Trailhead Lodge", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str0",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[135, 1000], [445, 1000]]},
+            "properties": { "name": "Summit Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str1",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[445, 1000], [445, 620]]},
+            "properties": { "name": "Glacier Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str2",
+            "type": "onRoute",
+            "geometry": { "type": "LineString", "coordinates": [[445, 620], [765, 620]]},
+            "properties": { "name": "Timberline Road", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [765, 620]},
+            "properties": { "name": "Timberline Chalet", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[610, 70], [610, 1530]]},
+            "properties": { "name": "Ridge Lane", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str4",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[70, 810], [830, 810]]},
+            "properties": { "name": "Moraine Drive", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[70, 1000], [135, 1000]]},
+            "properties": { "name": "Summit Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str6",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[445, 1000], [830, 1000]]},
+            "properties": { "name": "Summit Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str7",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[445, 1530], [445, 1000]]},
+            "properties": { "name": "Glacier Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str8",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[445, 620], [445, 70]]},
+            "properties": { "name": "Glacier Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str9",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[70, 620], [445, 620]]},
+            "properties": { "name": "Timberline Road", "level": 1, "accessible": true}
+        },
+        {
+            "id": "str10",
+            "type": "offRoute",
+            "geometry": { "type": "LineString", "coordinates": [[765, 620], [830, 620]]},
+            "properties": { "name": "Timberline Road", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk0",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [230, 1090]},
+            "properties": { "name": "Gondola Base Station", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [530, 900]},
+            "properties": { "name": "Ice Cave Kiosk", "level": 1, "accessible": true}
+        },
+        {
+            "id": "lmk2",
+            "type": "landmark",
+            "geometry": { "type": "Point", "coordinates": [690, 530]},
+            "properties": { "name": "Alpine Garden", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int0",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [445, 1000]},
+            "properties": { "name": "Intersection Between Summit Street and Glacier Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int1",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [445, 810]},
+            "properties": { "name": "Intersection Between Glacier Avenue and Moraine Drive", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int2",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [445, 620]},
+            "properties": { "name": "Intersection Between Glacier Avenue and Timberline Road", "level": 1, "accessible": true}
+        },
+        {
+            "id": "int3",
+            "type": "onRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [610, 620]},
+            "properties": { "name": "Intersection Between Timberline Road and Ridge Lane", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offint0",
+            "type": "offRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [610, 810]},
+            "properties": { "name": "Intersection Between Ridge Lane and Moraine Drive", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offint1",
+            "type": "offRouteIntersection",
+            "geometry": { "type": "Point", "coordinates": [610, 1000]},
+            "properties": { "name": "Intersection Between Summit Street and Ridge Lane", "level": 1, "accessible": true}
+        }
+    ]
+}
