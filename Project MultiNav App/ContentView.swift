@@ -1,11 +1,5 @@
-//
-//  ContentView.swift
-//  Project MultiNav App
-//
-//  Created by WAIVE lab on 6/4/26.
-//
-
 import SwiftUI
+import FirebaseCore
 import TactileMapCore
 import TactileMapFeedback
 import TactileMapLogging
@@ -14,41 +8,105 @@ import TactileMapView
 
 @main
 struct MyApp: App {
-    
+
+    @StateObject private var session = StudySession()
     let hapticSettings = HapticSettings.shared
-    
-    @State private var isLoggedIn = false
-    @State private var participantID = 0
-    
+
+    init() {
+        FirebaseApp.configure()   
+    }
+
     var body: some Scene {
         WindowGroup {
-            
-            if isLoggedIn{
-                NavigationStack {
-                    MapView(participantID: participantID).environmentObject(hapticSettings)
-                }
-            } else {
-                LoginView(isLoggedIn: $isLoggedIn, participantID: $participantID)
-            }
+            RootView()
+                .environmentObject(session)
+                .environmentObject(hapticSettings)
         }
     }
 }
 
 
-struct MapView: View {
-    @Environment(\.dismiss) var dismiss
+struct RootView: View {
+    @EnvironmentObject var session: StudySession
     @EnvironmentObject var hapticSettings: HapticSettings
-    
-    let participantID: Int
-    
-    //Load json
-    @State public var document = try! TactileMapDocument.load(from: "overview1", bundle: .main)
-    
-    //MARK: - Custom visual appearance
-    public var config: TactileMapViewConfiguration {
+
+    var body: some View {
+        switch session.phase {
+        case .login:
+            LoginView()
+
+        case .waitingForParameters:
+            WaitingView()
+
+        case .exploring:
+            NavigationStack {
+                MapScreen()
+            }
+
+        case .survey:
+            SurveyView { score, attentionPassed, raw in
+                session.submit(subjectiveScore: score,
+                               attentionCheckPassed: attentionPassed,
+                               rawAnswers: raw)
+            }
+
+        case .submitting:
+            VStack(spacing: 12) {
+                ProgressView()
+                Text("Uploading your answers…")
+            }
+
+        case .error(let message):
+            VStack(spacing: 12) {
+                Text(message).multilineTextAlignment(.center)
+                Button("Retry") { session.retrySurvey() }
+                    .buttonStyle(.borderedProminent)
+            }
+            .padding()
+        }
+    }
+}
+
+struct WaitingView: View {
+    @EnvironmentObject var session: StudySession
+    @State private var showEscapeHatch = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+            Text(session.roundNumber == 0
+                 ? "Loading your vibration settings…"
+                 : "Preparing the next round…")
+
+            if showEscapeHatch, session.current != nil, session.roundNumber > 0 {
+                Button("Still waiting — continue with same settings") {
+                    session.continueWithCurrentSettings()
+                }
+                .font(.footnote)
+                .accessibilityHint("Starts the next map without waiting for new vibration settings")
+            }
+        }
+        .padding()
+        .task {
+            try? await Task.sleep(nanoseconds: 8_000_000_000)
+            showEscapeHatch = true
+        }
+    }
+}
+
+
+struct MapScreen: View {
+    @EnvironmentObject var session: StudySession
+    @EnvironmentObject var hapticSettings: HapticSettings
+
+    @State private var document: TactileMapDocument?
+    @State private var isZoomed = false
+    @State private var loadError: String?
+    @State private var policy = OptimizedSpatialPolicy()
+
+    private var config: TactileMapViewConfiguration {
         var config = TactileMapViewConfiguration.default
 
-        //Overview Styles
         config.typeStyles[.start] = ElementStyle(
             color: .systemGreen,
             sizeMM: 10.0,
@@ -78,8 +136,7 @@ struct MapView: View {
             color: .systemYellow,
             sizeMM: 4.0,
         )
-        
-        //Zoomed Styles
+
         config.typeStyles[.street] = ElementStyle(
             color : .systemGray2,
             sizeMM: 20.0,
@@ -104,19 +161,30 @@ struct MapView: View {
         return config
     }
 
-    //MARK: - Draw Document
     var body: some View {
-        ZStack {
-            TactileMapView(
-                document: document,
-                configuration: config,
-                feedbackPolicy: SpatialPolicy(),
-                onBackGesture: { dismiss() },
-                onDoubleTap: { element in
+        VStack(spacing: 0) {
+            roundHeader
+
+            if let document {
+                TactileMapView(
+                    document: document,
+                    configuration: config,
+                    feedbackPolicy: policy,
+                    onBackGesture: { handleBackGesture() },
+                    onDoubleTap: { element in
                         doubleTap(on: element)
-                }
-            )
-            .ignoresSafeArea()
+                    }
+                )
+                .ignoresSafeArea(edges: .horizontal)
+            } else {
+                Spacer()
+                Text(loadError ?? "Loading map…")
+                    .multilineTextAlignment(.center)
+                    .padding()
+                Spacer()
+            }
+
+            foundButton
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -126,53 +194,100 @@ struct MapView: View {
                 } label: {
                     Image(systemName: "gearshape")
                 }
+                .accessibilityLabel("Haptic settings")
             }
         }
+        .onAppear { loadOverview() }
+        .onChange(of: session.currentMapName) { _, _ in loadOverview() }
+        .onDisappear { policy.stopAll() }
     }
-        
-    //Participant ID document order
-    private func documentOrder(){
-        switch participantID{
-        default:
-            let _ = print("")
+
+    private var roundHeader: some View {
+        VStack(spacing: 4) {
+            Text("Round \(session.roundNumber)")
+                .font(.headline)
+            if !session.targetName.isEmpty {
+                Text("Find: \(session.targetName)")
+                    .font(.title3.bold())
+            }
+            Text(session.currentMapName)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(.thinMaterial)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Round \(session.roundNumber). Your task: find \(session.targetName)")
+    }
+
+    private var foundButton: some View {
+        Button {
+            policy.stopAll()
+            session.foundTarget()
+        } label: {
+            Text("I found the target")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        .padding()
+        .accessibilityHint("Ends this round and opens the survey")
+    }
+
+    private func loadOverview() {
+        policy.parameters = session.current ?? ParameterSet()
+        policy.onElementEntered = { [weak session] element in
+            session?.elementEntered(name: element.properties.name,
+                                    typeRaw: element.elementType.rawValue)
+        }
+        do {
+            let doc = try TactileMapDocument.load(from: session.currentMapName, bundle: .main)
+            document = doc
+            isZoomed = false
+            loadError = nil
+            let target = doc.features.first { $0.elementType == .end }?.properties.name ?? ""
+            session.overviewLoaded(targetName: target)
+        } catch {
+            document = nil
+            loadError = "Could not load map \(session.currentMapName): \(error.localizedDescription)"
         }
     }
-    
-    //MARK: - Double Tap
-    //Handles doubletap feature
-    ///Reports doubletapped element to console and goes to the intersection of interest
-    private func doubleTap(on element: any TactileMapElement) {
-        print("__________________\nDouble tapped:")
-        print("  name: \(element.properties.name)")
-        print("  type: \(element.elementType)")
-        print("  raw: \(element.elementType.rawValue)\n__________________")
 
+    //MARK: - Double Tap
+    ///Zooms into the intersection of interest; double-tap elsewhere returns
+    ///to the overview when zoomed in.
+    private func doubleTap(on element: any TactileMapElement) {
         switch element.elementType {
         case .onRouteIntersection:
             zoomIntoIntersection(named: element.properties.name)
-        
+
         case .end:
             zoomIntoIntersection(named: element.properties.name)
-            
+
         default:
-            document = try! TactileMapDocument.load(from: "overview1", bundle: .main )
+            if isZoomed { loadOverview() }
         }
     }
 
-    //Handles zoom feature
-    ///updates document and trys to load the new TactileMapDocument
+    ///Updates document and tries to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
-        //MARK: - Load Intersections
         do {
-            document = try TactileMapDocument.load(from: "\(name)", bundle: .main )
-        }catch{
+            document = try TactileMapDocument.load(from: "\(name)", bundle: .main)
+            isZoomed = true
+        } catch {
             print("\(name) does not have a json file to load")
         }
+    }
+
+    private func handleBackGesture() {
+        if isZoomed { loadOverview() }
     }
 }
 
 
-//MARK: - Custom Element Types
+// MARK: - Custom Element Types
+
 extension TactileElementType {
     ///Overview elements:
     static let onRoute = TactileElementType(rawValue: "onRoute")
@@ -181,7 +296,7 @@ extension TactileElementType {
     static let offRouteIntersection = TactileElementType(rawValue: "offRouteIntersection")
     static let start = TactileElementType(rawValue: "start")
     static let end = TactileElementType(rawValue: "end")
-    
+
     ///Zoomed in elements:
     static let street = TactileElementType(rawValue: "street")
     static let onRouteSidewalk = TactileElementType(rawValue: "onRouteSidewalk")
@@ -191,106 +306,115 @@ extension TactileElementType {
 }
 
 
-//MARK: - Feedback Policy
+// MARK: - Feedback Policy
+
+/// The round's feedback policy. The ON-ROUTE elements (the path the
+/// participant follows most of the time) vibrate with the optimizer's
+/// parameter set from Firebase; every other element keeps the shared
+/// defaults from `HapticSettings`, so intersections, landmarks, start and
+/// end stay distinguishable.
 @MainActor
-class SpatialPolicy: DefaultFeedbackPolicy {
-    
+class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
+
     let hapticSettings = HapticSettings.shared
-    
+
+    /// The parameter set under test. Swapped in at the start of every round.
+    var parameters = ParameterSet()
+
+    /// Hook for the session (behavioral measurement — detects when the
+    /// finger reaches the round's destination).
+    var onElementEntered: ((any TactileMapElement) -> Void)?
+
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
-        
+        onElementEntered?(element)
+
         let name = element.properties.name
 
-        //Play patterns accordingly
         switch element.elementType {
-        ///Overview patterns
+        // ── The optimized feedback: on-route path elements ──
+        case .onRoute, .onRouteSidewalk:
+            hapticEngine.start(pattern: parameters.hapticPattern)
+            audioEngine.speak(name)
+
+        // ── Everything else keeps the shared defaults ──
         case .start:
-            let _ = print("__________________\nStart element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.start] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-        
-        case .onRoute:
-            let _ = print("__________________\nonRoute element: \(name)\n__________________")
-            if let pattern = hapticSettings.patterns[.onRoute] {
-                    hapticEngine.start(pattern: pattern)
-            }
-            audioEngine.speak(name)
-        
+
         case .offRoute:
-            let _ = print("__________________\noffRoute element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.offRoute] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
 
         case .onRouteIntersection:
-            let _ = print("__________________\nonRouteIntersection element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.onRouteIntersection] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-        
+
         case .offRouteIntersection:
-            let _ = print("__________________\noffRouteIntersection element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.offRouteIntersection] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
 
         case .landmark:
-            let _ = print("__________________\nLandmark element: \(name)\n__________________")
-            if let pattern = hapticSettings.patterns[.end] {
-                    hapticEngine.start(pattern: pattern)
+            if let pattern = hapticSettings.patterns[.landmark] {
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-        
+
         case .end:
-            let _ = print("__________________\nEnd element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.end] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-        
-        ///Zoomed
+
+        // ── Zoomed-in view ──
         case .street:
-            let _ = print("__________________\nStreet element: \(name)\n__________________")
-            
-        case .onRouteSidewalk:
-            let _ = print("__________________\nonRouteSidewalk element: \(name)\n__________________")
-            if let pattern = hapticSettings.patterns[.onRouteSidewalk] {
-                    hapticEngine.start(pattern: pattern)
+            if let pattern = hapticSettings.patterns[.street] {
+                hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
-            
+
         case .offRouteSidewalk:
-            let _ = print("__________________\noffRouteSidewalk element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-            
+
         case .onRouteCrosswalk:
-            let _ = print("__________________\nonRouteCrosswalk element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-        
+
         case .offRouteCrosswalk:
-            let _ = print("__________________\noffRouteCrosswalk element: \(name)\n__________________")
             if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
-                    hapticEngine.start(pattern: pattern)
+                hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name)
-    
-        ///Unkown element
+
+        ///Unknown element
         default:
-            // Unknown element type -- provide basic tap + speech.
-            let _ = print("__________________\nE: \(name) is an Unknown element type: \(element.elementType)\n__________________")
             hapticEngine.playSingleTap()
             audioEngine.speak(name)
+        }
+    }
+
+    /// The optimizer can pick very short durations (0.03–2.0 s). Restart the
+    /// pattern while the finger stays on an on-route element so contact
+    /// keeps vibrating, matching the reference integration's behavior.
+    override func onContinue(element: any TactileMapElement, touchType: TouchType) {
+        switch element.elementType {
+        case .onRoute, .onRouteSidewalk:
+            if !hapticEngine.isPlaying {
+                hapticEngine.start(pattern: parameters.hapticPattern)
+            }
+        default:
+            break
         }
     }
 }

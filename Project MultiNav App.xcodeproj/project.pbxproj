@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E263A0062FE5971D00BD2ED9 /* TactileMapCore in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0052FE5971D00BD2ED9 /* TactileMapCore */; };
-		E263A0082FE5971D00BD2ED9 /* TactileMapFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */; };
-		E263A00A2FE5971D00BD2ED9 /* TactileMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0092FE5971D00BD2ED9 /* TactileMapKit */; };
-		E263A00C2FE5971D00BD2ED9 /* TactileMapLogging in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */; };
-		E263A00E2FE5971D00BD2ED9 /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00D2FE5971D00BD2ED9 /* TactileMapView */; };
+		847D9E6E302B87B9007BCF67 /* TactileMapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 847D9E6D302B87B9007BCF67 /* TactileMapCore */; };
+		847D9E70302B87B9007BCF67 /* TactileMapFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = 847D9E6F302B87B9007BCF67 /* TactileMapFeedback */; };
+		847D9E72302B87B9007BCF67 /* TactileMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 847D9E71302B87B9007BCF67 /* TactileMapKit */; };
+		847D9E74302B87B9007BCF67 /* TactileMapLogging in Frameworks */ = {isa = PBXBuildFile; productRef = 847D9E73302B87B9007BCF67 /* TactileMapLogging */; };
+		847D9E76302B87B9007BCF67 /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = 847D9E75302B87B9007BCF67 /* TactileMapView */; };
+		CDECC24B3017DCC1002E410B /* TactileMapCore in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC24A3017DCC1002E410B /* TactileMapCore */; };
+		CDECC24D3017DCC1002E410B /* TactileMapFeedback in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC24C3017DCC1002E410B /* TactileMapFeedback */; };
+		CDECC24F3017DCC1002E410B /* TactileMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC24E3017DCC1002E410B /* TactileMapKit */; };
+		CDECC2513017DCC1002E410B /* TactileMapLogging in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC2503017DCC1002E410B /* TactileMapLogging */; };
+		CDECC2533017DCC1002E410B /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC2523017DCC1002E410B /* TactileMapView */; };
+		E263A0102FE5971D00BD2ED9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00F2FE5971D00BD2ED9 /* FirebaseAuth */; };
+		E263A0122FE5971D00BD2ED9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0112FE5971D00BD2ED9 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,11 +38,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E263A00E2FE5971D00BD2ED9 /* TactileMapView in Frameworks */,
-				E263A00C2FE5971D00BD2ED9 /* TactileMapLogging in Frameworks */,
-				E263A00A2FE5971D00BD2ED9 /* TactileMapKit in Frameworks */,
-				E263A0062FE5971D00BD2ED9 /* TactileMapCore in Frameworks */,
-				E263A0082FE5971D00BD2ED9 /* TactileMapFeedback in Frameworks */,
+				847D9E74302B87B9007BCF67 /* TactileMapLogging in Frameworks */,
+				CDECC2513017DCC1002E410B /* TactileMapLogging in Frameworks */,
+				CDECC2533017DCC1002E410B /* TactileMapView in Frameworks */,
+				E263A0102FE5971D00BD2ED9 /* FirebaseAuth in Frameworks */,
+				847D9E72302B87B9007BCF67 /* TactileMapKit in Frameworks */,
+				847D9E76302B87B9007BCF67 /* TactileMapView in Frameworks */,
+				847D9E6E302B87B9007BCF67 /* TactileMapCore in Frameworks */,
+				847D9E70302B87B9007BCF67 /* TactileMapFeedback in Frameworks */,
+				E263A0122FE5971D00BD2ED9 /* FirebaseFirestore in Frameworks */,
+				CDECC24B3017DCC1002E410B /* TactileMapCore in Frameworks */,
+				CDECC24F3017DCC1002E410B /* TactileMapKit in Frameworks */,
+				CDECC24D3017DCC1002E410B /* TactileMapFeedback in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,11 +92,18 @@
 			);
 			name = "Project MultiNav App";
 			packageProductDependencies = (
-				E263A0052FE5971D00BD2ED9 /* TactileMapCore */,
-				E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */,
-				E263A0092FE5971D00BD2ED9 /* TactileMapKit */,
-				E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */,
-				E263A00D2FE5971D00BD2ED9 /* TactileMapView */,
+				E263A00F2FE5971D00BD2ED9 /* FirebaseAuth */,
+				E263A0112FE5971D00BD2ED9 /* FirebaseFirestore */,
+				CDECC24A3017DCC1002E410B /* TactileMapCore */,
+				CDECC24C3017DCC1002E410B /* TactileMapFeedback */,
+				CDECC24E3017DCC1002E410B /* TactileMapKit */,
+				CDECC2503017DCC1002E410B /* TactileMapLogging */,
+				CDECC2523017DCC1002E410B /* TactileMapView */,
+				847D9E6D302B87B9007BCF67 /* TactileMapCore */,
+				847D9E6F302B87B9007BCF67 /* TactileMapFeedback */,
+				847D9E71302B87B9007BCF67 /* TactileMapKit */,
+				847D9E73302B87B9007BCF67 /* TactileMapLogging */,
+				847D9E75302B87B9007BCF67 /* TactileMapView */,
 			);
 			productName = "Project MultiNav App";
 			productReference = E2DFE5362FD73F9A009569F8 /* Project MultiNav App.app */;
@@ -113,7 +134,8 @@
 			mainGroup = E2DFE52D2FD73F9A009569F8;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */,
+				E263A0132FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E2DFE5372FD73F9A009569F8 /* Products */;
@@ -286,6 +308,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,6 +343,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -361,7 +385,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */ = {
+		847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Hariprasath88/ProjectMultiNav";
 			requirement = {
@@ -369,33 +393,71 @@
 				kind = branch;
 			};
 		};
+		E263A0132FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E263A0052FE5971D00BD2ED9 /* TactileMapCore */ = {
+		847D9E6D302B87B9007BCF67 /* TactileMapCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapCore;
 		};
-		E263A0072FE5971D00BD2ED9 /* TactileMapFeedback */ = {
+		847D9E6F302B87B9007BCF67 /* TactileMapFeedback */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapFeedback;
 		};
-		E263A0092FE5971D00BD2ED9 /* TactileMapKit */ = {
+		847D9E71302B87B9007BCF67 /* TactileMapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapKit;
 		};
-		E263A00B2FE5971D00BD2ED9 /* TactileMapLogging */ = {
+		847D9E73302B87B9007BCF67 /* TactileMapLogging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapLogging;
 		};
-		E263A00D2FE5971D00BD2ED9 /* TactileMapView */ = {
+		847D9E75302B87B9007BCF67 /* TactileMapView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E263A0042FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
+			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;
 			productName = TactileMapView;
+		};
+		CDECC24A3017DCC1002E410B /* TactileMapCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TactileMapCore;
+		};
+		CDECC24C3017DCC1002E410B /* TactileMapFeedback */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TactileMapFeedback;
+		};
+		CDECC24E3017DCC1002E410B /* TactileMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TactileMapKit;
+		};
+		CDECC2503017DCC1002E410B /* TactileMapLogging */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TactileMapLogging;
+		};
+		CDECC2523017DCC1002E410B /* TactileMapView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TactileMapView;
+		};
+		E263A00F2FE5971D00BD2ED9 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E263A0132FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		E263A0112FE5971D00BD2ED9 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E263A0132FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
