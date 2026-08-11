@@ -1,0 +1,92 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "Intersection Between Willow Street and Orchard Avenue",
+        "buildingName": "Intersection Between Willow Street and Orchard Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "street0",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 90], [450, 800]]},
+            "properties": { "name": "Willow Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "street1",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 800], [840, 800]]},
+            "properties": { "name": "Orchard Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw0",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 90], [600, 650]]},
+            "properties": { "name": "East sidewalk of Willow Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw1",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 950], [840, 950]]},
+            "properties": { "name": "South sidewalk of Orchard Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw2",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [300, 950]]},
+            "properties": { "name": "West sidewalk of Willow Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw3",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 950], [600, 950]]},
+            "properties": { "name": "South sidewalk of Orchard Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 650], [600, 950]]},
+            "properties": { "name": "Crosswalk across Orchard Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [600, 650]]},
+            "properties": { "name": "Crosswalk across Willow Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 90], [300, 650]]},
+            "properties": { "name": "On-route sidewalk along Willow Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw1",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [840, 650]]},
+            "properties": { "name": "On-route sidewalk along Orchard Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [300, 90]},
+            "properties": { "name": "Willow Street Route Start", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [840, 650]},
+            "properties": { "name": "Orchard Avenue Route End", "level": 1, "accessible": true}
+        }
+    ]
+}

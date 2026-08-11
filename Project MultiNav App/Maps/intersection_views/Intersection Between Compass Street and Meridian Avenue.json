@@ -1,0 +1,92 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "Intersection Between Compass Street and Meridian Avenue",
+        "buildingName": "Intersection Between Compass Street and Meridian Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "street0",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 1510], [450, 800]]},
+            "properties": { "name": "Compass Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "street1",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 800], [840, 800]]},
+            "properties": { "name": "Meridian Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw0",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 1510], [600, 950]]},
+            "properties": { "name": "East sidewalk of Compass Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw1",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 650], [840, 650]]},
+            "properties": { "name": "North sidewalk of Meridian Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw2",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 950], [300, 650]]},
+            "properties": { "name": "West sidewalk of Compass Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw3",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [600, 650]]},
+            "properties": { "name": "North sidewalk of Meridian Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 950], [600, 650]]},
+            "properties": { "name": "Crosswalk across Meridian Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 950], [600, 950]]},
+            "properties": { "name": "Crosswalk across Compass Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 1510], [300, 950]]},
+            "properties": { "name": "On-route sidewalk along Compass Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw1",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 950], [840, 950]]},
+            "properties": { "name": "On-route sidewalk along Meridian Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [300, 1510]},
+            "properties": { "name": "Compass Street Route Start", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [840, 950]},
+            "properties": { "name": "Meridian Avenue Route End", "level": 1, "accessible": true}
+        }
+    ]
+}

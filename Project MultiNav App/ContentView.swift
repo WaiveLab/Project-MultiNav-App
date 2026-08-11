@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import GameplayKit
 import TactileMapCore
 import TactileMapFeedback
 import TactileMapLogging
@@ -42,11 +41,8 @@ struct MapView: View {
     
     let participantID: Int
     
-    //Document order to be loaded
-    
-    
     //Load json
-    @State public var document = try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main)
+    @State public var document = try! TactileMapDocument.load(from: "overview1", bundle: .main)
     
     //MARK: - Custom visual appearance
     public var config: TactileMapViewConfiguration {
@@ -133,7 +129,16 @@ struct MapView: View {
             }
         }
     }
+        
+    //Participant ID document order
+    private func documentOrder(){
+        switch participantID{
+        default:
+            let _ = print("")
+        }
+    }
     
+    //MARK: - Double Tap
     //Handles doubletap feature
     ///Reports doubletapped element to console and goes to the intersection of interest
     private func doubleTap(on element: any TactileMapElement) {
@@ -146,21 +151,22 @@ struct MapView: View {
         case .onRouteIntersection:
             zoomIntoIntersection(named: element.properties.name)
         
+        case .end:
+            zoomIntoIntersection(named: element.properties.name)
+            
         default:
-            document = try! TactileMapDocument.load(from: "sparse_civic_blocks", bundle: .main )
+            document = try! TactileMapDocument.load(from: "overview1", bundle: .main )
         }
     }
 
     //Handles zoom feature
     ///updates document and trys to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
-        //MARK: - Custom Intersections
-        switch name {
-        case "Intersection Between Civic Avenue and Library Street":
-            document = try! TactileMapDocument.load(from: "civic_zoom_civic_and_library", bundle: .main )
-
-        default:
-            let _ = print("Failed to load document : \(name)")
+        //MARK: - Load Intersections
+        do {
+            document = try TactileMapDocument.load(from: "\(name)", bundle: .main )
+        }catch{
+            print("\(name) does not have a json file to load")
         }
     }
 }

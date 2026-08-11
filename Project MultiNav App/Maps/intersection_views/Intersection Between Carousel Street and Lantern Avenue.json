@@ -1,0 +1,92 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "Intersection Between Carousel Street and Lantern Avenue",
+        "buildingName": "Intersection Between Carousel Street and Lantern Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-07-20"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "street0",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[60, 800], [450, 800]]},
+            "properties": { "name": "Carousel Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "street1",
+            "type": "street",
+            "geometry": { "type": "LineString", "coordinates": [[450, 800], [450, 1510]]},
+            "properties": { "name": "Lantern Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw0",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[60, 950], [300, 950]]},
+            "properties": { "name": "South sidewalk of Carousel Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw1",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 950], [600, 1510]]},
+            "properties": { "name": "East sidewalk of Lantern Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw2",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [600, 650]]},
+            "properties": { "name": "North sidewalk of Carousel Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offsw3",
+            "type": "offRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[600, 650], [600, 950]]},
+            "properties": { "name": "East sidewalk of Lantern Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw0",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 950], [600, 950]]},
+            "properties": { "name": "Crosswalk across Lantern Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "offcw1",
+            "type": "offRouteCrosswalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [300, 950]]},
+            "properties": { "name": "Crosswalk across Carousel Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw0",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[60, 650], [300, 650]]},
+            "properties": { "name": "On-route sidewalk along Carousel Street", "level": 1, "accessible": true}
+        },
+        {
+            "id": "onsw1",
+            "type": "onRouteSidewalk",
+            "geometry": { "type": "LineString", "coordinates": [[300, 650], [300, 1510]]},
+            "properties": { "name": "On-route sidewalk along Lantern Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": { "type": "Point", "coordinates": [60, 650]},
+            "properties": { "name": "Carousel Street Route Start", "level": 1, "accessible": true}
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": { "type": "Point", "coordinates": [300, 1510]},
+            "properties": { "name": "Lantern Avenue Route End", "level": 1, "accessible": true}
+        }
+    ]
+}
