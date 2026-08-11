@@ -23,6 +23,7 @@ struct LoginView: View {
                 .frame(maxWidth: 260)
                 .accessibilityLabel("Participant ID")
                 .onSubmit(logIn)
+                .keyboardType(.numberPad)
 
             Button("Log in", action: logIn)
                 .buttonStyle(.borderedProminent)

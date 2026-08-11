@@ -263,7 +263,7 @@ struct MapScreen: View {
             zoomIntoIntersection(named: element.properties.name)
 
         case .end:
-            zoomIntoIntersection(named: element.properties.name)
+            if isZoomed { loadOverview() }
 
         default:
             if isZoomed { loadOverview() }
@@ -317,6 +317,7 @@ extension TactileElementType {
 class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
     let hapticSettings = HapticSettings.shared
+    let toneGen = ToneGenerator()
 
     /// The parameter set under test. Swapped in at the start of every round.
     var parameters = ParameterSet()
@@ -383,12 +384,14 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
                 hapticEngine.start(pattern: pattern)
             }
+            toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.17, count: 6)
             audioEngine.speak(name)
 
         case .onRouteCrosswalk:
             if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
+            toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.17, count: 6)
             audioEngine.speak(name)
 
         case .offRouteCrosswalk:

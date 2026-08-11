@@ -32,7 +32,7 @@ enum HapticPat: String, CaseIterable, Identifiable {
 
 
 struct SettingsView: View {
-    let hapticModes = ["continuous", "pulsing"]
+    let hapticModes = ["continuous", "pulsing", "burst"]
     @State public var intensity: Float = 1.0
     @State public var sharpness: Float = 0.005
     @State public var duration: Double = 0.01
@@ -49,14 +49,20 @@ struct SettingsView: View {
     private func saveCurrentPattern(_ pattern: HapticPat) {
         let mode: HapticPattern.HapticMode
 
-        //Checks if the selected mode is continuous, otherwise sets mode to pulsing
+        //Checks if the selected mode is continuous, otherwise sets mode to burst
         if hapticMode == "continuous" {
             mode = .continuous(duration: duration)
-        } else {
+        } else if hapticMode == "pulsing" {
             mode = .pulsing(
                 onDuration: onDuration,
                 offDuration: offDuration,
                 count: pulseCount
+            )
+        } else {
+            mode = .burst(
+                pulseCount: pulseCount,
+                onDuration: onDuration,
+                offDuration: offDuration
             )
         }
 
@@ -84,6 +90,12 @@ struct SettingsView: View {
             self.onDuration = onDuration
             self.offDuration = offDuration
             self.pulseCount = count
+            
+        case .burst(let pulseCount, let onDuration, let offDuration):
+            hapticMode = "burst"
+            self.onDuration = onDuration
+            self.offDuration = offDuration
+            self.pulseCount = pulseCount
             
         default:
             let _ = print("unhandled")
@@ -115,6 +127,15 @@ struct SettingsView: View {
                         Slider(value: $duration, in: 0...15)
                     }
                 case "pulsing":
+                    VStack(alignment: .leading) {
+                        Text("On Duration: \(onDuration, specifier: "%.2f")")
+                        Slider(value: $onDuration, in: 0...1)
+                        Text("Off Duration: \(offDuration, specifier: "%.2f")")
+                        Slider(value: $offDuration, in: 0...1)
+                        Text("Pulse Count")
+                        TextField("Enter a number", value: $pulseCount, format: .number).keyboardType(.numberPad)
+                    }
+                case "burst":
                     VStack(alignment: .leading) {
                         Text("On Duration: \(onDuration, specifier: "%.2f")")
                         Slider(value: $onDuration, in: 0...1)
