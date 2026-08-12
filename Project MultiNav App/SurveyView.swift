@@ -13,8 +13,11 @@ struct SurveyView: View {
         ("q_comfort", "I could use this vibration for a long session without discomfort."),
     ]
 
-    private static let attentionText = "Please select “Agree” (6) for this statement."
-    private static let attentionExpected = 6
+    @State public var attentionExpected = Int.random(in: 1..<7)
+
+    public var attentionText: String {
+        "Please select “Agree” (\(attentionExpected)) for this statement."
+    }
 
     @State private var answers: [Int?] = Array(repeating: nil, count: items.count)
     @State private var attentionAnswer: Int?
@@ -28,7 +31,7 @@ struct SurveyView: View {
             Section {
                 likertRow(text: Self.items[0].text, selection: $answers[0])
                 likertRow(text: Self.items[1].text, selection: $answers[1])
-                likertRow(text: Self.attentionText, selection: $attentionAnswer)
+                likertRow(text: attentionText, selection: $attentionAnswer)
                 likertRow(text: Self.items[2].text, selection: $answers[2])
                 likertRow(text: Self.items[3].text, selection: $answers[3])
             } header: {
@@ -44,7 +47,7 @@ struct SurveyView: View {
                 var raw: [String: Any] = [:]
                 for (i, item) in Self.items.enumerated() { raw[item.key] = answers[i] ?? 0 }
                 raw["q_attention"] = attentionAnswer ?? 0
-                onSubmit(score, attentionAnswer == Self.attentionExpected, raw)
+                onSubmit(score, attentionAnswer == attentionExpected, raw)
             }
             .disabled(!complete)
             .accessibilityHint(complete
