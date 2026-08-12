@@ -12,7 +12,7 @@ class HapticSettings: ObservableObject {
     static let shared = HapticSettings()
     
     @Published var patterns: [HapticPat: HapticPattern] = [
-        .start: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .pulsing(onDuration: 0.25, offDuration: 0.05, count: 5)),
+        .start: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 10, onDuration: 0.25, offDuration: 1.00)),
         .onRoute: HapticPattern(intensity: 1.0, sharpness: 0.8, mode: .burst(pulseCount: 3, onDuration: 0.25, offDuration: 1.00)),
         .offRoute: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .continuous(duration: 60.0)),
         .onRouteIntersection: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .pulsing(onDuration: 0.05, offDuration: 0.05, count: 5)),

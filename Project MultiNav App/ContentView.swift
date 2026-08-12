@@ -94,7 +94,7 @@ struct WaitingView: View {
     }
 }
 
-
+// MARK: - Custom Element Style
 struct MapScreen: View {
     @EnvironmentObject var session: StudySession
     @EnvironmentObject var hapticSettings: HapticSettings
@@ -122,11 +122,11 @@ struct MapScreen: View {
         )
         config.typeStyles[.onRouteIntersection] = ElementStyle(
             color: .systemBlue,
-            sizeMM: 10.0,
+            sizeMM: 8.0,
         )
         config.typeStyles[.offRouteIntersection] = ElementStyle(
             color: .systemGray,
-            sizeMM: 10.0,
+            sizeMM: 8.0,
         )
         config.typeStyles[.end] = ElementStyle(
             color : .systemRed,
@@ -161,6 +161,7 @@ struct MapScreen: View {
         return config
     }
 
+    // MARK: - .json Handling
     var body: some View {
         VStack(spacing: 0) {
             roundHeader
@@ -266,13 +267,14 @@ struct MapScreen: View {
             if isZoomed { loadOverview() }
 
         default:
-            if isZoomed { loadOverview() }
+            print("\(element) is not able to be double tapped.")
         }
     }
 
     ///Updates document and tries to load the new TactileMapDocument
     private func zoomIntoIntersection(named name: String) {
         do {
+            print("loading \(name)...")
             document = try TactileMapDocument.load(from: "\(name)", bundle: .main)
             isZoomed = true
         } catch {
@@ -384,7 +386,6 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
                 hapticEngine.start(pattern: pattern)
             }
-            toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.17, count: 6)
             audioEngine.speak(name)
 
         case .onRouteCrosswalk:
@@ -398,6 +399,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
+            toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 6)
             audioEngine.speak(name)
 
         ///Unknown element
