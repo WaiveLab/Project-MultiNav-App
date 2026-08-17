@@ -9,7 +9,7 @@
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-07-20"
+        "created": "2026-07-27"
     },
     "bounds": {
         "width": 900,
@@ -19,134 +19,544 @@
         {
             "id": "start",
             "type": "start",
-            "geometry": { "type": "Point", "coordinates": [155, 330]},
-            "properties": { "name": "Aurora Observatory", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    270,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Route Start on Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str0",
             "type": "onRoute",
-            "geometry": { "type": "LineString", "coordinates": [[155, 330], [155, 1230]]},
-            "properties": { "name": "Aurora Street", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        270,
+                        600
+                    ],
+                    [
+                        450,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str1",
             "type": "onRoute",
-            "geometry": { "type": "LineString", "coordinates": [[155, 1230], [745, 755]]},
-            "properties": { "name": "Comet Way", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        600
+                    ],
+                    [
+                        450,
+                        1000
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Birch Street",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str2",
             "type": "onRoute",
-            "geometry": { "type": "LineString", "coordinates": [[745, 755], [745, 275]]},
-            "properties": { "name": "Starlight Boulevard", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        1000
+                    ],
+                    [
+                        630,
+                        1000
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "end",
             "type": "end",
-            "geometry": { "type": "Point", "coordinates": [745, 275]},
-            "properties": { "name": "Starlight Pavilion", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    630,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Route End on Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str3",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[509, 70], [509, 1530]]},
-            "properties": { "name": "Nebula Drive", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        150,
+                        200
+                    ],
+                    [
+                        150,
+                        1400
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str4",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[70, 560], [830, 560]]},
-            "properties": { "name": "Eclipse Road", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        200
+                    ],
+                    [
+                        450,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Birch Street",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str5",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[155, 70], [155, 330]]},
-            "properties": { "name": "Aurora Street", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        1000
+                    ],
+                    [
+                        450,
+                        1400
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Birch Street",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str6",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[155, 1230], [155, 1530]]},
-            "properties": { "name": "Aurora Street", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        750,
+                        200
+                    ],
+                    [
+                        750,
+                        1400
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Cedar Street",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str7",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[70, 1298], [155, 1230]]},
-            "properties": { "name": "Comet Way", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        150,
+                        200
+                    ],
+                    [
+                        750,
+                        200
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str8",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[745, 755], [830, 687]]},
-            "properties": { "name": "Comet Way", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        150,
+                        600
+                    ],
+                    [
+                        270,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str9",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[745, 1530], [745, 755]]},
-            "properties": { "name": "Starlight Boulevard", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        600
+                    ],
+                    [
+                        750,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "str10",
             "type": "offRoute",
-            "geometry": { "type": "LineString", "coordinates": [[745, 275], [745, 70]]},
-            "properties": { "name": "Starlight Boulevard", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        150,
+                        1000
+                    ],
+                    [
+                        450,
+                        1000
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str11",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        630,
+                        1000
+                    ],
+                    [
+                        750,
+                        1000
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str12",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        150,
+                        1400
+                    ],
+                    [
+                        750,
+                        1400
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "lmk0",
             "type": "landmark",
-            "geometry": { "type": "Point", "coordinates": [235, 410]},
-            "properties": { "name": "Aurora Telescope Deck", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    400
+                ]
+            },
+            "properties": {
+                "name": "Clock Tower",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "lmk1",
             "type": "landmark",
-            "geometry": { "type": "Point", "coordinates": [420, 1170]},
-            "properties": { "name": "Meteor Overlook", "level": 1, "accessible": true}
-        },
-        {
-            "id": "lmk2",
-            "type": "landmark",
-            "geometry": { "type": "Point", "coordinates": [655, 340]},
-            "properties": { "name": "Constellation Kiosk", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    1200
+                ]
+            },
+            "properties": {
+                "name": "Fountain Plaza",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "int0",
             "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [155, 560]},
-            "properties": { "name": "Intersection Between Aurora Street and Eclipse Road", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "int1",
             "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [155, 1230]},
-            "properties": { "name": "Intersection Between Aurora Street and Comet Way", "level": 1, "accessible": true}
-        },
-        {
-            "id": "int2",
-            "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [509, 945]},
-            "properties": { "name": "Intersection Between Comet Way and Nebula Drive", "level": 1, "accessible": true}
-        },
-        {
-            "id": "int3",
-            "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [745, 755]},
-            "properties": { "name": "Intersection Between Comet Way and Starlight Boulevard", "level": 1, "accessible": true}
-        },
-        {
-            "id": "int4",
-            "type": "onRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [745, 560]},
-            "properties": { "name": "Intersection Between Starlight Boulevard and Eclipse Road", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
         },
         {
             "id": "offint0",
             "type": "offRouteIntersection",
-            "geometry": { "type": "Point", "coordinates": [509, 560]},
-            "properties": { "name": "Intersection Between Nebula Drive and Eclipse Road", "level": 1, "accessible": true}
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    200
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Aspen Street and Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint1",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    200
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint2",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    200
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint3",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Aspen Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint4",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint5",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Aspen Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint6",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint7",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    1400
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Aspen Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint8",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    1400
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offint9",
+            "type": "offRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    1400
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
         }
     ]
 }
