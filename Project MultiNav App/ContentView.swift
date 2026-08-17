@@ -1,3 +1,10 @@
+//
+//  SettingsView.swift
+//  Project MultiNav App
+//
+//  Main file - Document management, Customized elements, Double tap, Feedback Policy
+//
+
 import SwiftUI
 import FirebaseCore
 import TactileMapCore
@@ -137,9 +144,10 @@ struct MapScreen: View {
             sizeMM: 4.0,
         )
 
+        //Intersection specific elements
         config.typeStyles[.street] = ElementStyle(
             color : .systemGray2,
-            sizeMM: 20.0,
+            sizeMM: 12.0,
         )
         config.typeStyles[.offRouteSidewalk] = ElementStyle(
             color : .systemGray,
@@ -163,6 +171,8 @@ struct MapScreen: View {
 
     // MARK: - .json Handling
     var body: some View {
+        @AppStorage("participantID") var participantID = ""
+        
         VStack(spacing: 0) {
             roundHeader
 
@@ -189,13 +199,19 @@ struct MapScreen: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    SettingsView()
-                        .environmentObject(hapticSettings)
-                } label: {
-                    Image(systemName: "gearshape")
+                if participantID == "0"{
+                    NavigationLink {
+                            SettingsView()
+                                .environmentObject(hapticSettings)
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                    .accessibilityLabel("Haptic settings")
                 }
-                .accessibilityLabel("Haptic settings")
+                
+                if isZoomed {
+                    
+                }
             }
         }
         .onAppear { loadOverview() }
@@ -256,8 +272,7 @@ struct MapScreen: View {
     }
 
     //MARK: - Double Tap
-    ///Zooms into the intersection of interest; double-tap elsewhere returns
-    ///to the overview when zoomed in.
+    ///Zooms into the intersection of interest; double-tapping an end element returns to the overview when zoomed in.
     private func doubleTap(on element: any TactileMapElement) {
         switch element.elementType {
         case .onRouteIntersection:

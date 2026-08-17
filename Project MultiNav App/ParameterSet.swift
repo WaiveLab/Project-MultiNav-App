@@ -1,31 +1,34 @@
+// The comments for this .swift file have been annotated by chatGPT
+
 import Foundation
 import TactileMapFeedback
 
+// Stores the parameters used to control haptic feedback.
 struct ParameterSet: Equatable {
-
-    var intensity: Double = 0.5      
-    var sharpness: Double = 0.5       
-    var duration: Double = 0.2        
-    var interval: Double = 10.0     
-    var pattern: String = "constant"  
+    var intensity: Double = 0.5
+    var sharpness: Double = 0.5
+    var duration: Double = 0.2
+    var interval: Double = 10.0
+    var pattern: String = "constant"
     var phase: String = "exploration"
     var phaseStep: Int = 1
 
     enum Pattern: String { case constant, puls }
 }
 
-
+// Converts the parameters into a HapticPattern used by the feedback system.
 extension ParameterSet {
-
     var hapticPattern: HapticPattern {
         let i = Float(intensity)
         let s = Float(sharpness)
 
         switch Pattern(rawValue: pattern) ?? .constant {
         case .constant:
+            // Creates a continuous vibration for the specified duration.
             return HapticPattern(intensity: i, sharpness: s,
                                  mode: .continuous(duration: duration))
         case .puls:
+            // Calculates the on/off timing and number of pulses.
             let period = 1.0 / max(interval, 0.1)
             let off = max(0.01, period - duration)
             let count = max(1, Int(interval.rounded()))
@@ -37,8 +40,9 @@ extension ParameterSet {
     }
 }
 
-
+// Handles converting parameter data to and from dictionary format.
 extension ParameterSet {
+    // Creates parameters from data loaded from a document.
     init?(document data: [String: Any]) {
         guard let intensity = data["intensity"] as? Double,
               let sharpness = data["sharpness"] as? Double,
@@ -46,6 +50,7 @@ extension ParameterSet {
               let interval = data["interval"] as? Double,
               let pattern = data["pattern"] as? String
         else { return nil }
+
         self.intensity = intensity
         self.sharpness = sharpness
         self.duration = duration
@@ -55,6 +60,7 @@ extension ParameterSet {
         self.phaseStep = data["phaseStep"] as? Int ?? 1
     }
 
+    // Converts the parameters back into dictionary form for saving/results.
     var asResultFields: [String: Any] {
         [
             "intensity": intensity,
@@ -67,6 +73,8 @@ extension ParameterSet {
         ]
     }
 }
+
+// Associates a set of parameters with the document they belong to.
 struct PublishedParameters: Equatable {
     let documentID: String
     let values: ParameterSet

@@ -1,3 +1,5 @@
+///deticated .swift file to store the default haptic settings
+
 import SwiftUI
 import Combine
 import TactileMapCore

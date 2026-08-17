@@ -1,11 +1,16 @@
+// The comments for this .swift file have been annotated by chatGPT
+
 import SwiftUI
 
+// Displays the post-round questionnaire and calculates a subjective score.
 struct SurveyView: View {
 
+    // Sends the survey score, attention-check result, and raw answers to the study session.
     let onSubmit: (_ subjectiveScore: Double,
                    _ attentionPassed: Bool,
                    _ rawAnswers: [String: Any]) -> Void
 
+    // Survey questions using a 1–7 Likert scale.
     private static let items: [(key: String, text: String)] = [
         ("q_pleasant", "The vibration felt pleasant."),
         ("q_clear", "I could clearly feel when I was on the route."),
@@ -13,15 +18,18 @@ struct SurveyView: View {
         ("q_comfort", "I could use this vibration for a long session without discomfort."),
     ]
 
+    // Randomly selects the correct answer for the attention-check question.
     @State public var attentionExpected = Int.random(in: 1..<7)
 
     public var attentionText: String {
         "Please select “Agree” (\(attentionExpected)) for this statement."
     }
 
+    // Stores the participant's survey selections.
     @State private var answers: [Int?] = Array(repeating: nil, count: items.count)
     @State private var attentionAnswer: Int?
 
+    // The Submit button is enabled only after every question is answered.
     private var complete: Bool {
         answers.allSatisfy { $0 != nil } && attentionAnswer != nil
     }
@@ -40,13 +48,18 @@ struct SurveyView: View {
                 Text("1 = strongly disagree, 7 = strongly agree.")
             }
 
+            // Calculates the survey score and submits all responses.
             Button("Submit") {
                 let values = answers.compactMap { $0 }
                 let mean = Double(values.reduce(0, +)) / Double(values.count)
-                let score = (mean - 1) / 6   // 1–7 → 0–1
+                let score = (mean - 1) / 6   // Converts 1–7 to 0–1.
+
                 var raw: [String: Any] = [:]
-                for (i, item) in Self.items.enumerated() { raw[item.key] = answers[i] ?? 0 }
+                for (i, item) in Self.items.enumerated() {
+                    raw[item.key] = answers[i] ?? 0
+                }
                 raw["q_attention"] = attentionAnswer ?? 0
+
                 onSubmit(score, attentionAnswer == attentionExpected, raw)
             }
             .disabled(!complete)
@@ -56,6 +69,7 @@ struct SurveyView: View {
         }
     }
 
+    // Creates a reusable row of 1–7 Likert-scale buttons.
     private func likertRow(text: String, selection: Binding<Int?>) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(text)
