@@ -13,6 +13,7 @@ import TactileMapLogging
 import TactileMapView
 
 
+
 @main
 struct MyApp: App {
 
@@ -31,6 +32,7 @@ struct MyApp: App {
         }
     }
 }
+
 
 
 struct RootView: View {
@@ -74,6 +76,8 @@ struct RootView: View {
     }
 }
 
+
+
 struct WaitingView: View {
     @EnvironmentObject var session: StudySession
     @State private var showEscapeHatch = false
@@ -101,7 +105,9 @@ struct WaitingView: View {
     }
 }
 
-// MARK: - Custom Element Style
+
+
+// MARK: Custom Element Style
 struct MapScreen: View {
     @EnvironmentObject var session: StudySession
     @EnvironmentObject var hapticSettings: HapticSettings
@@ -169,7 +175,9 @@ struct MapScreen: View {
         return config
     }
 
-    // MARK: - .json Handling
+    
+    
+    // MARK: .json Handling
     var body: some View {
         @AppStorage("participantID") var participantID = ""
         
@@ -197,6 +205,8 @@ struct MapScreen: View {
 
             foundButton
         }
+        
+        //Toolbar with navigation buttons
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if participantID == "0"{
@@ -208,9 +218,13 @@ struct MapScreen: View {
                     }
                     .accessibilityLabel("Haptic settings")
                 }
-                
+            }
+            
+            ToolbarItem(placement: .topBarLeading) {
                 if isZoomed {
-                    
+                    Button(action: loadOverview) {
+                        Label("Back to Overview", systemImage: "arrow.left")
+                    }
                 }
             }
         }
@@ -271,12 +285,12 @@ struct MapScreen: View {
         }
     }
 
-    //MARK: - Double Tap
+    //MARK: Double Tap
     ///Zooms into the intersection of interest; double-tapping an end element returns to the overview when zoomed in.
     private func doubleTap(on element: any TactileMapElement) {
         switch element.elementType {
         case .onRouteIntersection:
-            zoomIntoIntersection(named: element.properties.name)
+            loadMapDocument(named: element.properties.name)
 
         case .end:
             if isZoomed { loadOverview() }
@@ -286,8 +300,9 @@ struct MapScreen: View {
         }
     }
 
+    //MARK: Zoom Funciton
     ///Updates document and tries to load the new TactileMapDocument
-    private func zoomIntoIntersection(named name: String) {
+    private func loadMapDocument(named name: String) {
         do {
             print("loading \(name)...")
             document = try TactileMapDocument.load(from: "\(name)", bundle: .main)
@@ -303,8 +318,8 @@ struct MapScreen: View {
 }
 
 
-// MARK: - Custom Element Types
 
+// MARK: Custom Element Types
 extension TactileElementType {
     ///Overview elements:
     static let onRoute = TactileElementType(rawValue: "onRoute")
@@ -323,7 +338,8 @@ extension TactileElementType {
 }
 
 
-// MARK: - Feedback Policy
+
+// MARK: Feedback Policy
 
 /// The round's feedback policy. The ON-ROUTE elements (the path the
 /// participant follows most of the time) vibrate with the optimizer's
@@ -332,6 +348,9 @@ extension TactileElementType {
 /// end stay distinguishable.
 @MainActor
 class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
+    
+    // MARK: Speech config
+    let config = SpeechConfiguration(rate: 0.65, volume: 1.0, language: "en-US", pitchMultiplier: 1.0)
 
     let hapticSettings = HapticSettings.shared
     let toneGen = ToneGenerator()
@@ -352,44 +371,44 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
         // ── The optimized feedback: on-route path elements ──
         case .onRoute, .onRouteSidewalk:
             hapticEngine.start(pattern: parameters.hapticPattern)
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         // ── Everything else keeps the shared defaults ──
         case .start:
             if let pattern = hapticSettings.patterns[.start] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .offRoute:
             if let pattern = hapticSettings.patterns[.offRoute] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .onRouteIntersection:
             if let pattern = hapticSettings.patterns[.onRouteIntersection] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .offRouteIntersection:
             if let pattern = hapticSettings.patterns[.offRouteIntersection] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak("This intersection is not on your route.", configuration: config)
 
         case .landmark:
             if let pattern = hapticSettings.patterns[.landmark] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .end:
             if let pattern = hapticSettings.patterns[.end] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         // ── Zoomed-in view ──
         case .street:
@@ -401,26 +420,26 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
                 hapticEngine.start(pattern: pattern)
             }
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .onRouteCrosswalk:
             if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
             toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.17, count: 6)
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         case .offRouteCrosswalk:
             if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
             toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 6)
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
 
         ///Unknown element
         default:
             hapticEngine.playSingleTap()
-            audioEngine.speak(name)
+            audioEngine.speak(name, configuration: config)
         }
     }
 
