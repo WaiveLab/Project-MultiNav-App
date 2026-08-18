@@ -335,6 +335,7 @@ extension TactileElementType {
     static let offRouteSidewalk = TactileElementType(rawValue: "offRouteSidewalk")
     static let onRouteCrosswalk = TactileElementType(rawValue: "onRouteCrosswalk")
     static let offRouteCrosswalk = TactileElementType(rawValue: "offRouteCrosswalk")
+    static let turn = TactileElementType(rawValue: "turn")
 }
 
 
@@ -434,6 +435,12 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
                 hapticEngine.start(pattern: pattern)
             }
             toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 6)
+            audioEngine.speak(name, configuration: config)
+            
+        case .turn:
+            if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
+                hapticEngine.start(pattern: pattern)
+            }
             audioEngine.speak(name, configuration: config)
 
         ///Unknown element

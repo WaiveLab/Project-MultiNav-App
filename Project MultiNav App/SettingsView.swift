@@ -26,6 +26,7 @@ enum HapticPat: String, CaseIterable, Identifiable {
     case offRouteSidewalk
     case onRouteCrosswalk
     case offRouteCrosswalk
+    case turn
     
     var id: Self { self }
 }
