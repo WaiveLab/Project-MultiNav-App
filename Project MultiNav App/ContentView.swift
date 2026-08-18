@@ -427,14 +427,14 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
-            toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.17, count: 6)
+            toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.50, count: 15)
             audioEngine.speak(name, configuration: config)
 
         case .offRouteCrosswalk:
             if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
                 hapticEngine.start(pattern: pattern)
             }
-            toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 6)
+            toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 100)
             audioEngine.speak(name, configuration: config)
             
         case .turn:
@@ -448,6 +448,12 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             hapticEngine.playSingleTap()
             audioEngine.speak(name, configuration: config)
         }
+    }
+    
+    // Stops the haptic engine and tone generator when the finger exits an element
+    override func onExit(element: any TactileMapElement) {
+        hapticEngine.stopAll()
+        toneGen.stop()
     }
 
     /// The optimizer can pick very short durations (0.03–2.0 s). Restart the
