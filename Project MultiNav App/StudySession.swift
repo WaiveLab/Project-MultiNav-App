@@ -208,6 +208,15 @@ final class StudySession: ObservableObject {
         guard phase == .waitingForParameters, let params = current else { return }
         startRound(with: params)
     }
+    
+    // Changes the currently displayed overview map.
+    func selectOverviewMap(_ mapName: String) {
+        guard Self.overviewMaps.contains(mapName) else {
+            return
+        }
+
+        currentMapName = mapName
+    }
 
     // Returns to the survey after a submission error.
     func retrySurvey() {

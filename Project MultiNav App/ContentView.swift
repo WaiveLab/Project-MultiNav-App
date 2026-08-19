@@ -208,11 +208,18 @@ struct MapScreen: View {
         
         //Toolbar with navigation buttons
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if participantID == "0"{
+            if participantID == "0"{
+                ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                            SettingsView()
-                                .environmentObject(hapticSettings)
+                        MapSwitcherView()
+                    } label: {
+                        Image(systemName: "map")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView()
+                            .environmentObject(hapticSettings)
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -302,7 +309,7 @@ struct MapScreen: View {
 
     //MARK: Zoom Funciton
     ///Updates document and tries to load the new TactileMapDocument
-    private func loadMapDocument(named name: String) {
+    public func loadMapDocument(named name: String) {
         do {
             print("loading \(name)...")
             document = try TactileMapDocument.load(from: "\(name)", bundle: .main)
@@ -410,6 +417,9 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
                 hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name, configuration: config)
+//            if isZoomed {
+//                audioEngine.speak("Double tap to exit", configuration: config)
+//            }
 
         // ── Zoomed-in view ──
         case .street:
