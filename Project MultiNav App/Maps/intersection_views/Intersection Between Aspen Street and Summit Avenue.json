@@ -61,8 +61,14 @@
         {
             "id": "onsw1",
             "type": "onRouteSidewalk",
-            "geometry": { "type": "LineString", "coordinates": [[600, 950], [840, 950]]},
+            "geometry": { "type": "LineString", "coordinates": [[600, 950], [840, 950]] },
             "properties": { "name": "On-route sidewalk along Summit Avenue", "level": 1, "accessible": true}
+        },
+        {
+            "id": "turn",
+            "type": "turn",
+            "geometry": { "type": "Point", "coordinates": [600, 950] },
+            "properties": { "name": "Turn right", "level": 1}
         },
         {
             "id": "start",

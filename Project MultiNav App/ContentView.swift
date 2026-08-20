@@ -122,7 +122,7 @@ struct MapScreen: View {
 
         config.typeStyles[.start] = ElementStyle(
             color: .systemGreen,
-            sizeMM: 10.0,
+            sizeMM: 8.0,
         )
         config.typeStyles[.onRoute] = ElementStyle(
             color: .systemBlue,
@@ -134,16 +134,18 @@ struct MapScreen: View {
             pointShape: .roundedRect(cornerRadius: 3),
         )
         config.typeStyles[.onRouteIntersection] = ElementStyle(
-            color: .systemBlue,
-            sizeMM: 8.0,
+            color: .systemYellow,
+            sizeMM: 6.0,
+            pointShape: .roundedRect(cornerRadius: 3),
         )
         config.typeStyles[.offRouteIntersection] = ElementStyle(
             color: .systemGray,
-            sizeMM: 8.0,
+            sizeMM: 6.0,
+            pointShape: .roundedRect(cornerRadius: 3),
         )
         config.typeStyles[.end] = ElementStyle(
             color : .systemRed,
-            sizeMM: 10.0,
+            sizeMM: 8.0,
         )
         config.typeStyles[.landmark] = ElementStyle(
             color: .systemYellow,
@@ -153,23 +155,36 @@ struct MapScreen: View {
         //Intersection specific elements
         config.typeStyles[.street] = ElementStyle(
             color : .systemGray2,
-            sizeMM: 12.0,
+            sizeMM: 10.0,
         )
         config.typeStyles[.offRouteSidewalk] = ElementStyle(
             color : .systemGray,
-            sizeMM: 8.0,
+            sizeMM: 6.0,
         )
         config.typeStyles[.onRouteSidewalk] = ElementStyle(
             color : .systemBlue,
-            sizeMM: 8.0,
+            sizeMM: 6.0,
         )
         config.typeStyles[.offRouteCrosswalk] = ElementStyle(
             color : .systemRed,
-            sizeMM: 8.0,
+            sizeMM: 4.0,
         )
         config.typeStyles[.onRouteCrosswalk] = ElementStyle(
             color : .white,
-            sizeMM: 8.0,
+            sizeMM: 4.0,
+        )
+        config.typeStyles[.crosswalk] = ElementStyle(
+            color: .white,
+            sizeMM: 6.0,
+        )
+        config.typeStyles[.turn] = ElementStyle(
+            color: .systemRed,
+            sizeMM: 6.0,
+            pointShape: .roundedRect(cornerRadius: 3),
+        )
+        config.typeStyles[.intersectionCenter] = ElementStyle(
+            color: .systemGray2,
+            sizeMM: 10.0,
         )
 
         return config
@@ -186,7 +201,10 @@ struct MapScreen: View {
 
             if let document {
                 TactileMapView(
-                    document: document,
+                    layers: [
+                        TactileMapLayer(document: document, isInteractable: true),
+                        //TactileMapLayer(document: intersectionDoc, isInteractable: true),
+                    ],
                     configuration: config,
                     feedbackPolicy: policy,
                     onBackGesture: { handleBackGesture() },
@@ -343,6 +361,7 @@ extension TactileElementType {
     static let onRouteCrosswalk = TactileElementType(rawValue: "onRouteCrosswalk")
     static let offRouteCrosswalk = TactileElementType(rawValue: "offRouteCrosswalk")
     static let turn = TactileElementType(rawValue: "turn")
+    static let intersectionCenter = TactileElementType(rawValue: "intersectionCenter")
 }
 
 
@@ -448,10 +467,16 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             audioEngine.speak(name, configuration: config)
             
         case .turn:
-            if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
+            if let pattern = hapticSettings.patterns[.turn] {
                 hapticEngine.start(pattern: pattern)
             }
             audioEngine.speak(name, configuration: config)
+            
+        case .intersectionCenter:
+            if let pattern = hapticSettings.patterns[.intersectionCenter] {
+                hapticEngine.start(pattern: pattern)
+            }
+            audioEngine.speak("center", configuration: config)
 
         ///Unknown element
         default:
@@ -462,6 +487,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     
     // Stops the haptic engine and tone generator when the finger exits an element
     override func onExit(element: any TactileMapElement) {
+        audioEngine.stopAll()
         hapticEngine.stopAll()
         toneGen.stop()
     }

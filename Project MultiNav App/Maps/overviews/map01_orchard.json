@@ -17,22 +17,6 @@
     },
     "features": [
         {
-            "id": "start",
-            "type": "start",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    630,
-                    200
-                ]
-            },
-            "properties": {
-                "name": "Route Start on Summit Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
             "id": "str0",
             "type": "onRoute",
             "geometry": {
@@ -94,22 +78,6 @@
             },
             "properties": {
                 "name": "Harbor Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "end",
-            "type": "end",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    270,
-                    1400
-                ]
-            },
-            "properties": {
-                "name": "Route End on Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -510,6 +478,38 @@
             },
             "properties": {
                 "name": "Intersection Between Cedar Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    630,
+                    200
+                ]
+            },
+            "properties": {
+                "name": "Route Start on Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    270,
+                    1400
+                ]
+            },
+            "properties": {
+                "name": "Route End on Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }

@@ -54,7 +54,7 @@
         },
         {
             "id": "offcw0",
-            "type": "offRouteCrosswalk",
+            "type": "CrosswalkPolyline",
             "geometry": { "type": "LineString", "coordinates": [[300, 950], [600, 950]]},
             "properties": { "name": "South crosswalk across Birch Street", "level": 1, "accessible": true}
         },

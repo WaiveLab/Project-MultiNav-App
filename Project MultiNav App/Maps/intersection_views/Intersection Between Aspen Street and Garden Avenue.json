@@ -54,7 +54,7 @@
         },
         {
             "id": "offcw0",
-            "type": "crosswalk",
+            "type": "offRouteCrosswalk",
             "geometry": { "type": "LineString", "coordinates": [[300, 650], [600, 650]]},
             "properties": { "name": "North crosswalk across Aspen Street", "level": 1, "accessible": true}
         },

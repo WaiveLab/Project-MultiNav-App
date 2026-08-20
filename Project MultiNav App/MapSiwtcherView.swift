@@ -1,3 +1,10 @@
+//
+//  MapSwitcherView.swift
+//  Project MultiNav App
+//
+//  Manually switches the maps for debugging
+//
+
 import SwiftUI
 
 struct MapSwitcherView: View {

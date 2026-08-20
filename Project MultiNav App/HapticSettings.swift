@@ -27,6 +27,7 @@ class HapticSettings: ObservableObject {
         .onRouteCrosswalk:HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
         .offRouteCrosswalk: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
         .turn: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .intersectionCenter: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
         
         //All applicaiton elements
         .start: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 10, onDuration: 0.25, offDuration: 0.50)),
