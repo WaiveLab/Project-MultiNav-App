@@ -1,0 +1,118 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map01_orchard__Intersection Between Birch Street and Market Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Market Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-09-07"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "route0",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        90
+                    ],
+                    [
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        300,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west crosswalk across Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route2",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        300,
+                        1510
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    90
+                ]
+            },
+            "properties": {
+                "name": "Route enters from Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    1510
+                ]
+            },
+            "properties": {
+                "name": "Route continues on Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}

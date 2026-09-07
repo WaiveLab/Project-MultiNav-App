@@ -1,0 +1,138 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map10_solstice__Intersection Between Birch Street and Summit Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Summit Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-09-07"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "route0",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        1510
+                    ],
+                    [
+                        600,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route east sidewalk of Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        950
+                    ],
+                    [
+                        600,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route east crosswalk across Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route2",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
+                    ],
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        60,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "turn",
+            "type": "turn",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Turn left",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    1510
+                ]
+            },
+            "properties": {
+                "name": "Route enters from Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    60,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Route End on Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}

@@ -2,8 +2,8 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "Intersection Between Aspen Street and Summit Avenue",
-        "buildingName": "Intersection Between Aspen Street and Summit Avenue",
+        "name": "Intersection Between Birch Street and Harbor Avenue",
+        "buildingName": "Intersection Between Birch Street and Harbor Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
@@ -24,16 +24,16 @@
                 "coordinates": [
                     [
                         450,
-                        800
+                        90
                     ],
                     [
                         450,
-                        1510
+                        800
                     ]
                 ]
             },
             "properties": {
-                "name": "Aspen Street",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -45,7 +45,7 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        60,
                         800
                     ],
                     [
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "Summit Avenue",
+                "name": "Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -68,16 +68,16 @@
                 "coordinates": [
                     [
                         300,
-                        950
+                        90
                     ],
                     [
                         300,
-                        1510
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "West sidewalk of Aspen Street",
+                "name": "West sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -90,16 +90,16 @@
                 "coordinates": [
                     [
                         600,
-                        950
+                        90
                     ],
                     [
                         600,
-                        1510
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "East sidewalk of Aspen Street",
+                "name": "East sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -111,17 +111,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        60,
                         650
                     ],
                     [
-                        840,
+                        300,
                         650
                     ]
                 ]
             },
             "properties": {
-                "name": "North sidewalk of Summit Avenue",
+                "name": "North sidewalk of Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -133,17 +133,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        60,
                         950
                     ],
                     [
-                        840,
+                        300,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "South sidewalk of Summit Avenue",
+                "name": "South sidewalk of Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -155,17 +155,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        600,
                         650
                     ],
                     [
-                        600,
+                        840,
                         650
                     ]
                 ]
             },
             "properties": {
-                "name": "North sidewalk of Summit Avenue",
+                "name": "North sidewalk of Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -177,17 +177,39 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        650
+                        600,
+                        950
                     ],
                     [
-                        300,
+                        840,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "West sidewalk of Aspen Street",
+                "name": "South sidewalk of Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offsw6",
+            "type": "offRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        600,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "South sidewalk of Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -199,17 +221,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        300,
                         650
                     ],
                     [
                         600,
-                        950
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "East crosswalk across Summit Avenue",
+                "name": "North crosswalk across Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -221,8 +243,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        950
+                        600,
+                        650
                     ],
                     [
                         600,
@@ -231,7 +253,29 @@
                 ]
             },
             "properties": {
-                "name": "South crosswalk across Aspen Street",
+                "name": "East crosswalk across Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "offcw2",
+            "type": "offRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        300,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "West crosswalk across Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }

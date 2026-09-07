@@ -1,0 +1,112 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map08_atlas__Intersection Between Cedar Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Cedar Street and Garden Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-09-07"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "route0",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        90
+                    ],
+                    [
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Cedar Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        60,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "turn",
+            "type": "turn",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Turn right",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    90
+                ]
+            },
+            "properties": {
+                "name": "Route Start on Cedar Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    60,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Route continues on Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}

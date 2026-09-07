@@ -1,0 +1,112 @@
+{
+    "version": "1.0",
+    "type": "TactileMapDocument",
+    "metadata": {
+        "name": "map17_trades__Intersection Between Aspen Street and Market Avenue_route",
+        "buildingName": "Intersection Between Aspen Street and Market Avenue",
+        "floor": 1,
+        "scale": "1 unit = 1 foot",
+        "coordinate_unit": "feet",
+        "coordinateOrigin": "top-left",
+        "author": "WaiveLab",
+        "created": "2026-09-07"
+    },
+    "bounds": {
+        "width": 900,
+        "height": 1600
+    },
+    "features": [
+        {
+            "id": "route0",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        840,
+                        650
+                    ],
+                    [
+                        600,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
+                    ],
+                    [
+                        600,
+                        90
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route east sidewalk of Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "turn",
+            "type": "turn",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Turn right",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    840,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Route Start on Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    90
+                ]
+            },
+            "properties": {
+                "name": "Route continues on Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        }
+    ]
+}

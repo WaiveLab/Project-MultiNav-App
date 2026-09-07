@@ -2,8 +2,8 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "Intersection Between Aspen Street and Summit Avenue",
-        "buildingName": "Intersection Between Aspen Street and Summit Avenue",
+        "name": "Intersection Between Cedar Street and Summit Avenue",
+        "buildingName": "Intersection Between Cedar Street and Summit Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "Aspen Street",
+                "name": "Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -45,11 +45,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        60,
                         800
                     ],
                     [
-                        840,
+                        450,
                         800
                     ]
                 ]
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "West sidewalk of Aspen Street",
+                "name": "West sidewalk of Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -99,7 +99,7 @@
                 ]
             },
             "properties": {
-                "name": "East sidewalk of Aspen Street",
+                "name": "East sidewalk of Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -111,11 +111,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        60,
                         650
                     ],
                     [
-                        840,
+                        300,
                         650
                     ]
                 ]
@@ -133,11 +133,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        60,
                         950
                     ],
                     [
-                        840,
+                        300,
                         950
                     ]
                 ]
@@ -177,17 +177,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        600,
                         650
                     ],
                     [
-                        300,
+                        600,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "West sidewalk of Aspen Street",
+                "name": "East sidewalk of Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -199,8 +199,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
-                        650
+                        300,
+                        950
                     ],
                     [
                         600,
@@ -209,7 +209,7 @@
                 ]
             },
             "properties": {
-                "name": "East crosswalk across Summit Avenue",
+                "name": "South crosswalk across Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -222,16 +222,16 @@
                 "coordinates": [
                     [
                         300,
-                        950
+                        650
                     ],
                     [
-                        600,
+                        300,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "South crosswalk across Aspen Street",
+                "name": "West crosswalk across Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

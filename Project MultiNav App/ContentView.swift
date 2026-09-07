@@ -112,10 +112,32 @@ struct MapScreen: View {
     @EnvironmentObject var session: StudySession
     @EnvironmentObject var hapticSettings: HapticSettings
 
-    @State private var document: TactileMapDocument?
-    @State private var isZoomed = false
+    private enum MapPresentation {
+        case overview(TactileMapLayer)
+        case intersection(overview: TactileMapLayer, base: TactileMapLayer, route: TactileMapLayer)
+
+        var layers: [TactileMapLayer] {
+            switch self {
+            case .overview(let layer):
+                return [layer]
+            case .intersection(_, let base, let route):
+                // Drawing is bottom-to-top; touches check the route first.
+                return [base, route]
+            }
+        }
+
+        var isZoomed: Bool {
+            if case .intersection = self { return true }
+            return false
+        }
+    }
+
+    @State private var presentation: MapPresentation?
     @State private var loadError: String?
+    @State private var intersectionLoadError: String?
     @State private var policy = OptimizedSpatialPolicy()
+
+    private var isZoomed: Bool { presentation?.isZoomed ?? false }
 
     private var config: TactileMapViewConfiguration {
         var config = TactileMapViewConfiguration.default
@@ -199,12 +221,9 @@ struct MapScreen: View {
         VStack(spacing: 0) {
             roundHeader
 
-            if let document {
+            if let presentation {
                 TactileMapView(
-                    layers: [
-                        TactileMapLayer(document: document, isInteractable: true),
-                        //TactileMapLayer(document: intersectionDoc, isInteractable: true),
-                    ],
+                    layers: presentation.layers,
                     configuration: config,
                     feedbackPolicy: policy,
                     onBackGesture: { handleBackGesture() },
@@ -212,6 +231,7 @@ struct MapScreen: View {
                         doubleTap(on: element)
                     }
                 )
+                .id(presentation.layers.map(\.id))
                 .ignoresSafeArea(edges: .horizontal)
             } else {
                 Spacer()
@@ -247,7 +267,7 @@ struct MapScreen: View {
             
             ToolbarItem(placement: .topBarLeading) {
                 if isZoomed {
-                    Button(action: loadOverview) {
+                    Button(action: returnToOverview) {
                         Label("Back to Overview", systemImage: "arrow.left")
                     }
                 }
@@ -256,6 +276,14 @@ struct MapScreen: View {
         .onAppear { loadOverview() }
         .onChange(of: session.currentMapName) { _, _ in loadOverview() }
         .onDisappear { policy.stopAll() }
+        .alert("Could not open intersection", isPresented: Binding(
+            get: { intersectionLoadError != nil },
+            set: { if !$0 { intersectionLoadError = nil } }
+        )) {
+            Button("OK", role: .cancel) { intersectionLoadError = nil }
+        } message: {
+            Text(intersectionLoadError ?? "")
+        }
     }
 
     private var roundHeader: some View {
@@ -292,6 +320,7 @@ struct MapScreen: View {
     }
 
     private func loadOverview() {
+        intersectionLoadError = nil
         policy.parameters = session.current ?? ParameterSet()
         policy.onElementEntered = { [weak session] element in
             session?.elementEntered(name: element.properties.name,
@@ -299,13 +328,16 @@ struct MapScreen: View {
         }
         do {
             let doc = try TactileMapDocument.load(from: session.currentMapName, bundle: .main)
-            document = doc
-            isZoomed = false
+            showMap(.overview(TactileMapLayer(
+                id: "overview:\(session.currentMapName)",
+                document: doc,
+                isInteractable: true
+            )))
             loadError = nil
             let target = doc.features.first { $0.elementType == .end }?.properties.name ?? ""
             session.overviewLoaded(targetName: target)
         } catch {
-            document = nil
+            showMap(nil)
             loadError = "Could not load map \(session.currentMapName): \(error.localizedDescription)"
         }
     }
@@ -315,30 +347,59 @@ struct MapScreen: View {
     private func doubleTap(on element: any TactileMapElement) {
         switch element.elementType {
         case .onRouteIntersection:
-            loadMapDocument(named: element.properties.name)
+            if !isZoomed { loadIntersection(named: element.properties.name) }
 
         case .end:
-            if isZoomed { loadOverview() }
+            returnToOverview()
 
         default:
             print("\(element) is not able to be double tapped.")
         }
     }
 
-    //MARK: Zoom Funciton
-    ///Updates document and tries to load the new TactileMapDocument
-    public func loadMapDocument(named name: String) {
+    // MARK: Intersection layers
+    /// Loads <name>.json and <overview>__<name>_route.json in the same coordinate space.
+    /// Keep the overview visible unless both documents load successfully.
+    private func loadIntersection(named name: String) {
+        guard case .overview(let overview)? = presentation else { return }
+        let overviewName = session.currentMapName
+        guard overview.id == "overview:\(overviewName)" else {
+            loadOverview()
+            return
+        }
+        intersectionLoadError = nil
+        var resourceName = name
         do {
-            print("loading \(name)...")
-            document = try TactileMapDocument.load(from: "\(name)", bundle: .main)
-            isZoomed = true
+            let base = try TactileMapDocument.load(from: resourceName, bundle: .main)
+            resourceName = "\(overviewName)__\(name)_route"
+            let route = try TactileMapDocument.load(from: resourceName, bundle: .main)
+
+            // Publish the complete pair together. The cached overview is not rendered.
+            showMap(.intersection(
+                overview: overview,
+                base: TactileMapLayer(id: "intersection-base:\(name)", document: base, isInteractable: true),
+                route: TactileMapLayer(id: "intersection-route:\(resourceName)", document: route, isInteractable: true)
+            ))
         } catch {
-            print("\(name) does not have a json file to load")
+            intersectionLoadError = "Could not load \(resourceName).json: \(error.localizedDescription)"
         }
     }
 
+    private func returnToOverview() {
+        guard case .intersection(let overview, _, _)? = presentation else { return }
+        showMap(.overview(overview))
+        intersectionLoadError = nil
+    }
+
+    private func showMap(_ newPresentation: MapPresentation?) {
+        // Feedback and active touches belong to the map being left.
+        policy.stopAll()
+        policy.toneGen.stop()
+        presentation = newPresentation
+    }
+
     private func handleBackGesture() {
-        if isZoomed { loadOverview() }
+        returnToOverview()
     }
 }
 
