@@ -6,3 +6,9 @@ A vibrotactile wayifinding app that enables blind and low vision (BLV) users to 
 2. Connect an iPhone 8 or newer
 3. Select iPhone
 4. Build and run
+
+## Firebase and MOBO
+
+The app tests one complete, per-element burst-haptic candidate per map round.
+See [FIREBASE_MOBO_CONTRACT.md](FIREBASE_MOBO_CONTRACT.md) for the schema,
+18-round handshake, Firebase setup checklist, and optimizer integration contract.

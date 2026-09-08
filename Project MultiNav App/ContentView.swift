@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import FirebaseCore
 import TactileMapCore
 import TactileMapFeedback
@@ -13,16 +14,23 @@ import TactileMapLogging
 import TactileMapView
 
 
+final class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
+}
+
 
 @main
 struct MyApp: App {
 
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var session = StudySession()
     let hapticSettings = HapticSettings.shared
-
-    init() {
-        FirebaseApp.configure()   
-    }
 
     var body: some Scene {
         WindowGroup {
@@ -65,10 +73,23 @@ struct RootView: View {
                 Text("Uploading your answers…")
             }
 
+        case .completed:
+            VStack(spacing: 16) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 52))
+                    .foregroundStyle(.green)
+                Text("Study complete")
+                    .font(.title.bold())
+                Text("You completed all 18 map overviews. Thank you for participating.")
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+
         case .error(let message):
             VStack(spacing: 12) {
                 Text(message).multilineTextAlignment(.center)
-                Button("Retry") { session.retrySurvey() }
+                Button("Retry upload") { session.retrySubmission() }
                     .buttonStyle(.borderedProminent)
             }
             .padding()
@@ -80,7 +101,6 @@ struct RootView: View {
 
 struct WaitingView: View {
     @EnvironmentObject var session: StudySession
-    @State private var showEscapeHatch = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -89,19 +109,14 @@ struct WaitingView: View {
                  ? "Loading your vibration settings…"
                  : "Preparing the next round…")
 
-            if showEscapeHatch, session.current != nil, session.roundNumber > 0 {
-                Button("Still waiting — continue with same settings") {
-                    session.continueWithCurrentSettings()
-                }
-                .font(.footnote)
-                .accessibilityHint("Starts the next map without waiting for new vibration settings")
+            if let message = session.parameterStatusMessage {
+                Text(message)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+                    .multilineTextAlignment(.center)
             }
         }
         .padding()
-        .task {
-            try? await Task.sleep(nanoseconds: 8_000_000_000)
-            showEscapeHatch = true
-        }
     }
 }
 
@@ -429,18 +444,15 @@ extension TactileElementType {
 
 // MARK: Feedback Policy
 
-/// The round's feedback policy. The ON-ROUTE elements (the path the
-/// participant follows most of the time) vibrate with the optimizer's
-/// parameter set from Firebase; every other element keeps the shared
-/// defaults from `HapticSettings`, so intersections, landmarks, start and
-/// end stay distinguishable.
+/// The round's feedback policy. Every known element type gets its own burst
+/// profile from the optimizer's atomic parameter set. Instances share a
+/// profile only when they have the same `HapticPat` element type.
 @MainActor
 class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     
     // MARK: Speech config
     let config = SpeechConfiguration(rate: 0.65, volume: 1.0, language: "en-US", pitchMultiplier: 1.0)
 
-    let hapticSettings = HapticSettings.shared
     let toneGen = ToneGenerator()
 
     /// The parameter set under test. Swapped in at the start of every round.
@@ -454,48 +466,34 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
         onElementEntered?(element)
 
         let name = element.properties.name
+        let optimizedType = HapticPat(rawValue: element.elementType.rawValue)
+
+        if let optimizedType {
+            hapticEngine.start(pattern: parameters.hapticPattern(for: optimizedType))
+        }
 
         switch element.elementType {
-        // ── The optimized feedback: on-route path elements ──
+        // Haptics are selected independently above. This switch preserves
+        // the speech and tones associated with each semantic element.
         case .onRoute, .onRouteSidewalk:
-            hapticEngine.start(pattern: parameters.hapticPattern)
             audioEngine.speak(name, configuration: config)
 
-        // ── Everything else keeps the shared defaults ──
         case .start:
-            if let pattern = hapticSettings.patterns[.start] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 
         case .offRoute:
-            if let pattern = hapticSettings.patterns[.offRoute] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 
         case .onRouteIntersection:
-            if let pattern = hapticSettings.patterns[.onRouteIntersection] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 
         case .offRouteIntersection:
-            if let pattern = hapticSettings.patterns[.offRouteIntersection] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak("This intersection is not on your route.", configuration: config)
 
         case .landmark:
-            if let pattern = hapticSettings.patterns[.landmark] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 
         case .end:
-            if let pattern = hapticSettings.patterns[.end] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 //            if isZoomed {
 //                audioEngine.speak("Double tap to exit", configuration: config)
@@ -503,47 +501,35 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
         // ── Zoomed-in view ──
         case .street:
-            if let pattern = hapticSettings.patterns[.street] {
-                hapticEngine.start(pattern: pattern)
-            }
+            break
 
         case .offRouteSidewalk:
-            if let pattern = hapticSettings.patterns[.offRouteSidewalk] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
 
         case .onRouteCrosswalk:
-            if let pattern = hapticSettings.patterns[.onRouteCrosswalk] {
-                hapticEngine.start(pattern: pattern)
-            }
             toneGen.playRepeatingTone(frequency: 300, duration: 0.05, interval: 0.50, count: 15)
             audioEngine.speak(name, configuration: config)
 
         case .offRouteCrosswalk:
-            if let pattern = hapticSettings.patterns[.offRouteCrosswalk] {
-                hapticEngine.start(pattern: pattern)
-            }
             toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 100)
             audioEngine.speak(name, configuration: config)
             
         case .turn:
-            if let pattern = hapticSettings.patterns[.turn] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak(name, configuration: config)
             
         case .intersectionCenter:
-            if let pattern = hapticSettings.patterns[.intersectionCenter] {
-                hapticEngine.start(pattern: pattern)
-            }
             audioEngine.speak("center", configuration: config)
 
         ///Unknown element
         default:
-            hapticEngine.playSingleTap()
             audioEngine.speak(name, configuration: config)
         }
+    }
+
+    /// Taps still announce the element, but do not add the package's default
+    /// transient tap on top of the optimizer-controlled burst feedback.
+    override func onTap(element: any TactileMapElement, touchType: TouchType) {
+        audioEngine.speak(element.properties.name, configuration: config)
     }
     
     // Stops the haptic engine and tone generator when the finger exits an element
@@ -553,17 +539,15 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
         toneGen.stop()
     }
 
-    /// The optimizer can pick very short durations (0.03–2.0 s). Restart the
-    /// pattern while the finger stays on an on-route element so contact
-    /// keeps vibrating, matching the reference integration's behavior.
+    /// Restart any optimized type's own burst when its cycle finishes while
+    /// the finger remains on that element.
     override func onContinue(element: any TactileMapElement, touchType: TouchType) {
-        switch element.elementType {
-        case .onRoute, .onRouteSidewalk:
-            if !hapticEngine.isPlaying {
-                hapticEngine.start(pattern: parameters.hapticPattern)
-            }
-        default:
-            break
+        guard !hapticEngine.isPlaying,
+              let optimizedType = HapticPat(rawValue: element.elementType.rawValue)
+        else {
+            return
         }
+
+        hapticEngine.start(pattern: parameters.hapticPattern(for: optimizedType))
     }
 }

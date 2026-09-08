@@ -1,0 +1,23 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "parameterValues",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "pid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "schemaVersion",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

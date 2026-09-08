@@ -11,37 +11,12 @@ import TactileMapFeedback
 import TactileMapLogging
 import TactileMapView
 
-
-enum HapticPat: String, CaseIterable, Identifiable {
-    case start
-    case onRoute
-    case offRoute
-    case onRouteIntersection
-    case offRouteIntersection
-    case landmark
-    case end
-    
-    case street
-    case onRouteSidewalk
-    case offRouteSidewalk
-    case onRouteCrosswalk
-    case offRouteCrosswalk
-    case turn
-    case intersectionCenter
-    
-    var id: Self { self }
-}
-
-
 struct SettingsView: View {
-    let hapticModes = ["continuous", "pulsing", "burst"]
     @State public var intensity: Float = 1.0
     @State public var sharpness: Float = 0.005
-    @State public var duration: Double = 0.01
     @State public var onDuration: Double = 0.08
     @State public var offDuration: Double = 0.05
     @State public var pulseCount: Int = 10
-    @State public var hapticMode: String = "continuous"
     
     @State public var selectedPattern: HapticPat = .start
     
@@ -49,29 +24,25 @@ struct SettingsView: View {
     
     //gets the current pattern settings and saves them accordingly
     private func saveCurrentPattern(_ pattern: HapticPat) {
-        let mode: HapticPattern.HapticMode
+        let safePulseCount = min(120, max(1, pulseCount))
+        let minimumOnDuration = max(0.01, Double(safePulseCount) / 120.0)
+        let safeOnDuration = min(2.0, max(minimumOnDuration, onDuration))
+        let safeOffDuration = min(2.0, max(0.01, offDuration))
 
-        //Checks if the selected mode is continuous, otherwise sets mode to burst
-        if hapticMode == "continuous" {
-            mode = .continuous(duration: duration)
-        } else if hapticMode == "pulsing" {
-            mode = .pulsing(
-                onDuration: onDuration,
-                offDuration: offDuration,
-                count: pulseCount
-            )
-        } else {
-            mode = .burst(
-                pulseCount: pulseCount,
-                onDuration: onDuration,
-                offDuration: offDuration
-            )
-        }
+        pulseCount = safePulseCount
+        onDuration = safeOnDuration
+        offDuration = safeOffDuration
 
+        // All study and preview feedback uses the same mode. The five values
+        // remain independent for every selected element type.
         hapticSettings.patterns[pattern] = HapticPattern(
             intensity: intensity,
             sharpness: sharpness,
-            mode: mode
+            mode: .burst(
+                pulseCount: safePulseCount,
+                onDuration: safeOnDuration,
+                offDuration: safeOffDuration
+            )
         )
     }
 
@@ -84,20 +55,24 @@ struct SettingsView: View {
 
         switch settings.mode {
         case .continuous(let duration):
-            hapticMode = "continuous"
-            self.duration = duration
+            // Convert any legacy preview value into an equivalent burst edit.
+            onDuration = min(2.0, max(0.01, duration))
+            offDuration = 0.01
+            pulseCount = 1
 
         case .pulsing(let onDuration, let offDuration, let count):
-            hapticMode = "pulsing"
-            self.onDuration = onDuration
-            self.offDuration = offDuration
-            self.pulseCount = count
+            let safeCount = min(120, max(1, count))
+            let minimumOnDuration = max(0.01, Double(safeCount) / 120.0)
+            self.onDuration = min(2.0, max(minimumOnDuration, onDuration))
+            self.offDuration = min(2.0, max(0.01, offDuration))
+            pulseCount = safeCount
             
         case .burst(let pulseCount, let onDuration, let offDuration):
-            hapticMode = "burst"
-            self.onDuration = onDuration
-            self.offDuration = offDuration
-            self.pulseCount = pulseCount
+            let safeCount = min(120, max(1, pulseCount))
+            let minimumOnDuration = max(0.01, Double(safeCount) / 120.0)
+            self.onDuration = min(2.0, max(minimumOnDuration, onDuration))
+            self.offDuration = min(2.0, max(0.01, offDuration))
+            self.pulseCount = safeCount
             
         default:
             let _ = print("unhandled")
@@ -116,38 +91,16 @@ struct SettingsView: View {
                     Text("Sharpness: \(sharpness, specifier: "%.2f")")
                     Slider(value: $sharpness, in: 0...1)
                 }
-                Picker("Haptic Mode", selection: $hapticMode){
-                    ForEach(hapticModes, id: \.self) { hapticModes in
-                        Text(hapticModes)
-                    }
-                }
-                
-                switch hapticMode {
-                case "continuous":
+                Section("Burst") {
                     VStack(alignment: .leading) {
-                        Text("Duration (sec): \(duration, specifier: "%.2f")")
-                        Slider(value: $duration, in: 0...15)
-                    }
-                case "pulsing":
-                    VStack(alignment: .leading) {
-                        Text("On Duration: \(onDuration, specifier: "%.2f")")
-                        Slider(value: $onDuration, in: 0...1)
-                        Text("Off Duration: \(offDuration, specifier: "%.2f")")
-                        Slider(value: $offDuration, in: 0...1)
+                        Text("On Duration: \(onDuration, specifier: "%.2f") seconds")
+                        Slider(value: $onDuration, in: 0.01...2.0)
+                        Text("Off Duration: \(offDuration, specifier: "%.2f") seconds")
+                        Slider(value: $offDuration, in: 0.01...2.0)
                         Text("Pulse Count")
-                        TextField("Enter a number", value: $pulseCount, format: .number).keyboardType(.numberPad)
+                        TextField("Enter a number", value: $pulseCount, format: .number)
+                            .keyboardType(.numberPad)
                     }
-                case "burst":
-                    VStack(alignment: .leading) {
-                        Text("On Duration: \(onDuration, specifier: "%.2f")")
-                        Slider(value: $onDuration, in: 0...1)
-                        Text("Off Duration: \(offDuration, specifier: "%.2f")")
-                        Slider(value: $offDuration, in: 0...1)
-                        Text("Pulse Count")
-                        TextField("Enter a number", value: $pulseCount, format: .number).keyboardType(.numberPad)
-                    }
-                default:
-                    Text("Error")
                 }
             }
             Text("")
