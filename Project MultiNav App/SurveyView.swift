@@ -4,6 +4,7 @@ import SwiftUI
 
 // Displays the post-round questionnaire and calculates a subjective score.
 struct SurveyView: View {
+    @EnvironmentObject var session: StudySession
 
     // Sends the survey score, attention-check result, and raw answers to the study session.
     let onSubmit: (_ subjectiveScore: Double,
@@ -49,7 +50,7 @@ struct SurveyView: View {
             }
 
             // Calculates the survey score and submits all responses.
-            Button("Submit") {
+            Button(session.isLocalTestMode ? "Continue local test" : "Submit") {
                 let values = answers.compactMap { $0 }
                 let mean = Double(values.reduce(0, +)) / Double(values.count)
                 let score = (mean - 1) / 6   // Converts 1–7 to 0–1.
@@ -64,7 +65,9 @@ struct SurveyView: View {
             }
             .disabled(!complete)
             .accessibilityHint(complete
-                               ? "Sends your answers"
+                               ? (session.isLocalTestMode
+                                  ? "Continues without saving your answers"
+                                  : "Sends your answers")
                                : "Answer every statement first")
         }
     }

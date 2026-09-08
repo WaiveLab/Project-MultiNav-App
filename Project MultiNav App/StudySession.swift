@@ -53,6 +53,7 @@ final class StudySession: ObservableObject {
     @Published private(set) var currentMapName = ""
     @Published private(set) var targetName = ""
     @Published private(set) var isSignedIn = false
+    @Published private(set) var isLocalTestMode = false
     @Published private(set) var parameterStatusMessage: String?
     @Published var authError: String?
 
@@ -90,20 +91,7 @@ final class StudySession: ObservableObject {
         // prevents rapid repeated activations from leaving two Firestore
         // listeners feeding the same reset session.
         guard phase == .login, isSignedIn, !pid.isEmpty else { return }
-        endListening()
-        participantID = pid
-
-        mapDeck = Self.overviewMaps.shuffled()
-        deckIndex = 0
-        roundNumber = 0
-        current = nil
-        activeParameters = nil
-        pendingParameters = nil
-        pendingResult = nil
-        observedDocumentIDs.removeAll()
-        observedCandidateIDs.removeAll()
-        parameterStatusMessage = nil
-        phase = .waitingForParameters
+        prepareSession(participantID: pid, localTestMode: false)
 
         let repo = MoboRepo(participantID: pid)
         self.repo = repo
@@ -120,6 +108,48 @@ final class StudySession: ObservableObject {
         }
     }
 
+    // Starts an app-only run without requiring Firebase authentication and
+    // without candidate reads or result writes. This exists for interface and
+    // map testing only.
+    func beginLocalTest(participantID rawID: String) {
+        let pid = rawID.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard phase == .login, !pid.isEmpty else { return }
+        prepareSession(participantID: pid, localTestMode: true)
+        activateNextLocalCandidate()
+    }
+
+    // Switches a connected run to local values while it is waiting for MOBO.
+    // Previously completed Firebase rounds are left untouched.
+    func continueLocally() {
+        guard phase == .waitingForParameters,
+              roundNumber < Self.overviewMaps.count
+        else { return }
+
+        endListening()
+        isLocalTestMode = true
+        pendingParameters = nil
+        parameterStatusMessage = nil
+        activateNextLocalCandidate()
+    }
+
+    private func prepareSession(participantID: String, localTestMode: Bool) {
+        endListening()
+        self.participantID = participantID
+        isLocalTestMode = localTestMode
+
+        mapDeck = Self.overviewMaps.shuffled()
+        deckIndex = 0
+        roundNumber = 0
+        current = nil
+        activeParameters = nil
+        pendingParameters = nil
+        pendingResult = nil
+        observedDocumentIDs.removeAll()
+        observedCandidateIDs.removeAll()
+        parameterStatusMessage = nil
+        phase = .waitingForParameters
+    }
+
     // Stops listening for new parameter updates.
     func endListening() {
         listenTask?.cancel()
@@ -130,7 +160,9 @@ final class StudySession: ObservableObject {
 
     // Processes new parameters, either starting a round or saving them for later.
     private func receive(_ published: PublishedParameters) {
-        guard roundNumber < Self.overviewMaps.count else { return }
+        guard !isLocalTestMode,
+              roundNumber < Self.overviewMaps.count
+        else { return }
 
         // Validate ordering before recording identity. If MOBO accidentally
         // publishes a future step early, a corrected document with the same
@@ -173,6 +205,26 @@ final class StudySession: ObservableObject {
         activeParameters = published
         current = published.values
         startRound()
+    }
+
+    // Creates a complete local candidate with the same 14 independent burst
+    // profiles used by the app defaults and the expected round number.
+    private func activateNextLocalCandidate() {
+        let step = roundNumber + 1
+        let candidateID = "local-\(sessionID)-round-\(step)"
+        guard isLocalTestMode,
+              let values = ParameterSet(
+                haptics: ParameterSet.defaultHaptics,
+                candidateID: candidateID,
+                phase: "exploration",
+                phaseStep: step
+              )
+        else {
+            phase = .error("The local test haptic settings could not be loaded.")
+            return
+        }
+
+        activate(PublishedParameters(documentID: candidateID, values: values))
     }
 
     // Selects the next map and begins a new exploration round.
@@ -230,9 +282,17 @@ final class StudySession: ObservableObject {
                 attentionCheckPassed: Bool,
                 rawAnswers: [String: Any]) {
         guard phase == .survey,
-              let activeParameters,
-              pendingResult == nil
+              let activeParameters
         else { return }
+
+        // Local testing still displays and exercises the survey, but does not
+        // retain or upload participant responses.
+        if isLocalTestMode {
+            finishRound(completedRound: roundNumber)
+            return
+        }
+
+        guard pendingResult == nil else { return }
 
         pendingResult = PendingResult(
             tested: activeParameters.values,
@@ -273,29 +333,35 @@ final class StudySession: ObservableObject {
                     sessionID: sessionID
                 )
 
-                self.pendingResult = nil
-
-                // A study session has exactly one pass through the 18-map
-                // deck. Finishing the final write is the terminal state.
-                if pendingResult.roundNumber >= Self.overviewMaps.count {
-                    pendingParameters = nil
-                    current = nil
-                    self.activeParameters = nil
-                    endListening()
-                    phase = .completed
-                    return
-                }
-
-                current = nil
-                self.activeParameters = nil
-                phase = .waitingForParameters
-                if let pending = pendingParameters {
-                    pendingParameters = nil
-                    activate(pending)
-                }
+                finishRound(completedRound: pendingResult.roundNumber)
             } catch {
                 phase = .error("Submission failed: \(error.localizedDescription)")
             }
+        }
+    }
+
+    private func finishRound(completedRound: Int) {
+        pendingResult = nil
+
+        // A study session has exactly one pass through the 18-map deck.
+        if completedRound >= Self.overviewMaps.count {
+            pendingParameters = nil
+            current = nil
+            activeParameters = nil
+            endListening()
+            phase = .completed
+            return
+        }
+
+        current = nil
+        activeParameters = nil
+        phase = .waitingForParameters
+
+        if isLocalTestMode {
+            activateNextLocalCandidate()
+        } else if let pending = pendingParameters {
+            pendingParameters = nil
+            activate(pending)
         }
     }
 
@@ -312,5 +378,16 @@ final class StudySession: ObservableObject {
     func retrySubmission() {
         guard case .error = phase, pendingResult != nil else { return }
         submitPendingResult()
+    }
+
+    // Discards an unsent result after an upload failure and continues the
+    // remaining maps locally. No further Firebase reads or writes are made.
+    func skipFailedUploadAndContinueLocally() {
+        guard case .error = phase, let pendingResult else { return }
+        endListening()
+        isLocalTestMode = true
+        pendingParameters = nil
+        parameterStatusMessage = nil
+        finishRound(completedRound: pendingResult.roundNumber)
     }
 }

@@ -160,6 +160,19 @@ change on that deterministic document.
 MOBO may decide that two types receive equal values, but it must still write both
 type maps. Equality is an optimizer decision, never an app-side linkage.
 
+## Local app-only testing
+
+The login and Firebase waiting screens include a clearly labelled option to
+continue without Firebase or MOBO. Local test mode uses the app's complete set
+of 14 built-in per-element burst profiles, advances through the same shuffled
+18-map deck, and still displays every survey. It performs no candidate reads and
+no result writes; survey answers from a local run are intentionally discarded.
+
+If a connected result upload fails, the error screen also allows the tester to
+skip that unsent result and continue all remaining rounds locally. This escape
+hatch is for interface, JSON-layer, and haptic testing only—not participant data
+collection.
+
 ## Publishing from Python (recommended for MOBO)
 
 The MOBO machine should use a Firebase Admin SDK service account or Application

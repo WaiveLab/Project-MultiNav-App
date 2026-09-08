@@ -35,6 +35,17 @@ struct LoginView: View {
                 .disabled(!session.isSignedIn || trimmedID.isEmpty)
                 .accessibilityHint("Starts the study with your participant ID")
 
+            Button("Test without Firebase or MOBO", action: startLocalTest)
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .disabled(trimmedID.isEmpty)
+                .accessibilityHint("Runs the app locally without loading or uploading study data")
+
+            Text("Local testing uses the app's built-in per-element haptic values and does not save survey responses.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
             // Shows a loading indicator while connecting.
             if !session.isSignedIn && session.authError == nil {
                 ProgressView("Connecting…")
@@ -68,5 +79,10 @@ struct LoginView: View {
     private func logIn() {
         guard session.isSignedIn, !trimmedID.isEmpty else { return }
         session.begin(participantID: trimmedID)
+    }
+
+    private func startLocalTest() {
+        guard !trimmedID.isEmpty else { return }
+        session.beginLocalTest(participantID: trimmedID)
     }
 }

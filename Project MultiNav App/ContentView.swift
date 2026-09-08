@@ -78,9 +78,11 @@ struct RootView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 52))
                     .foregroundStyle(.green)
-                Text("Study complete")
+                Text(session.isLocalTestMode ? "Local test complete" : "Study complete")
                     .font(.title.bold())
-                Text("You completed all 18 map overviews. Thank you for participating.")
+                Text(session.isLocalTestMode
+                     ? "You tested all 18 map overviews. No data was uploaded."
+                     : "You completed all 18 map overviews. Thank you for participating.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
@@ -91,6 +93,10 @@ struct RootView: View {
                 Text(message).multilineTextAlignment(.center)
                 Button("Retry upload") { session.retrySubmission() }
                     .buttonStyle(.borderedProminent)
+                Button("Skip Firebase and continue locally") {
+                    session.skipFailedUploadAndContinueLocally()
+                }
+                .buttonStyle(.bordered)
             }
             .padding()
         }
@@ -115,6 +121,16 @@ struct WaitingView: View {
                     .foregroundStyle(.red)
                     .multilineTextAlignment(.center)
             }
+
+            Button("Skip Firebase/MOBO and use local test values") {
+                session.continueLocally()
+            }
+            .buttonStyle(.bordered)
+
+            Text("Local testing does not upload this or later rounds.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
         }
         .padding()
     }
@@ -303,6 +319,11 @@ struct MapScreen: View {
 
     private var roundHeader: some View {
         VStack(spacing: 4) {
+            if session.isLocalTestMode {
+                Text("LOCAL TEST — NO DATA UPLOAD")
+                    .font(.caption.bold())
+                    .foregroundStyle(.orange)
+            }
             Text("Round \(session.roundNumber)")
                 .font(.headline)
             if !session.targetName.isEmpty {
