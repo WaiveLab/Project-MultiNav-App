@@ -1,2 +1,8 @@
 # Local validation sources and compiler caches generated during Codex checks.
 .codex-validation/
+.firebase-tools-venv/
+
+# Firebase Admin credentials must never be committed.
+*firebase-adminsdk*.json
+*service-account*.json
+project-multinav-admin*.json

@@ -323,6 +323,22 @@
                 "level": 1,
                 "accessible": true
             }
+        },
+        {
+            "id": "center0",
+            "type": "intersectionCenter",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    800
+                ]
+            },
+            "properties": {
+                "name": "Intersection center",
+                "level": 1,
+                "accessible": true
+            }
         }
     ]
 }

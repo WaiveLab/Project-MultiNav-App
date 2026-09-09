@@ -64,8 +64,10 @@ parameterValues/{auto-generated-document-id}
     intersectionCenter:
 ```
 
-All 14 keys are required, including `intersectionCenter`. That type is supported
-by the app even though the current JSON maps do not yet contain one.
+All 14 keys are required, including `intersectionCenter`. Every base intersection
+JSON contains one circular `intersectionCenter` point at the center of its street
+geometry. The base layer is interactive, so touching that point resolves only the
+independent `haptics.intersectionCenter` profile from the active candidate.
 
 Publish only the next expected round. Do not pre-publish all 18 candidates: the
 app intentionally listens to the newest document and will not run a candidate
