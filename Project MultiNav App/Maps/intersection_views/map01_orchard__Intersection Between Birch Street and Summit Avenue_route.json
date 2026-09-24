@@ -29,6 +29,24 @@
                     [
                         600,
                         650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
                     ],
                     [
                         300,
@@ -43,7 +61,7 @@
             }
         },
         {
-            "id": "route1",
+            "id": "route2",
             "type": "onRouteCrosswalk",
             "geometry": {
                 "type": "LineString",
@@ -65,7 +83,7 @@
             }
         },
         {
-            "id": "route2",
+            "id": "route3",
             "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
@@ -113,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route Start on Summit Avenue",
+                "name": "Route enters from Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

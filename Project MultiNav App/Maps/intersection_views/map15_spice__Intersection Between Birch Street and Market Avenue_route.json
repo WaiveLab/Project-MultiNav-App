@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map03_songbird__Intersection Between Aspen Street and Garden Avenue_route",
-        "buildingName": "Intersection Between Aspen Street and Garden Avenue",
+        "name": "map15_spice__Intersection Between Birch Street and Market Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Market Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-09-24"
     },
     "bounds": {
         "width": 900,
@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Garden Avenue",
+                "name": "On-route north sidewalk of Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -55,14 +55,14 @@
                 ]
             },
             "properties": {
-                "name": "On-route north crosswalk across Aspen Street",
+                "name": "On-route north crosswalk across Birch Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route2",
-            "type": "onRouteSidewalk",
+            "type": "onRouteCrosswalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
+                "name": "On-route west crosswalk across Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -99,7 +99,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -131,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Garden Avenue",
+                "name": "Route enters from Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -147,7 +147,7 @@
                 ]
             },
             "properties": {
-                "name": "Route continues on Aspen Street",
+                "name": "Route continues on Birch Street",
                 "level": 1,
                 "accessible": true
             }

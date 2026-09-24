@@ -17,22 +17,6 @@
     },
     "features": [
         {
-            "id": "start",
-            "type": "start",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    720
-                ]
-            },
-            "properties": {
-                "name": "Route Start on Cedar Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
             "id": "str0",
             "type": "onRoute",
             "geometry": {
@@ -40,7 +24,7 @@
                 "coordinates": [
                     [
                         750,
-                        720
+                        600
                     ],
                     [
                         750,
@@ -65,7 +49,7 @@
                         1000
                     ],
                     [
-                        570,
+                        450,
                         1000
                     ]
                 ]
@@ -77,23 +61,29 @@
             }
         },
         {
-            "id": "end",
-            "type": "end",
+            "id": "str2",
+            "type": "onRoute",
             "geometry": {
-                "type": "Point",
+                "type": "LineString",
                 "coordinates": [
-                    570,
-                    1000
+                    [
+                        450,
+                        1000
+                    ],
+                    [
+                        450,
+                        1400
+                    ]
                 ]
             },
             "properties": {
-                "name": "Route End on Market Avenue",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "str2",
+            "id": "str3",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -115,7 +105,7 @@
             }
         },
         {
-            "id": "str3",
+            "id": "str4",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -126,7 +116,7 @@
                     ],
                     [
                         450,
-                        1400
+                        1000
                     ]
                 ]
             },
@@ -137,7 +127,7 @@
             }
         },
         {
-            "id": "str4",
+            "id": "str5",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -148,7 +138,7 @@
                     ],
                     [
                         750,
-                        720
+                        600
                     ]
                 ]
             },
@@ -159,7 +149,7 @@
             }
         },
         {
-            "id": "str5",
+            "id": "str6",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -181,7 +171,7 @@
             }
         },
         {
-            "id": "str6",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -203,7 +193,7 @@
             }
         },
         {
-            "id": "str7",
+            "id": "str8",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -225,7 +215,7 @@
             }
         },
         {
-            "id": "str8",
+            "id": "str9",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -235,7 +225,7 @@
                         1000
                     ],
                     [
-                        570,
+                        450,
                         1000
                     ]
                 ]
@@ -247,7 +237,7 @@
             }
         },
         {
-            "id": "str9",
+            "id": "str10",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -301,23 +291,7 @@
             }
         },
         {
-            "id": "int0",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    1000
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Market Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint0",
+            "id": "intersection-0-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -333,7 +307,7 @@
             }
         },
         {
-            "id": "offint1",
+            "id": "intersection-1-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -349,7 +323,7 @@
             }
         },
         {
-            "id": "offint2",
+            "id": "intersection-2-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -365,7 +339,7 @@
             }
         },
         {
-            "id": "offint3",
+            "id": "intersection-0-1",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -381,7 +355,7 @@
             }
         },
         {
-            "id": "offint4",
+            "id": "intersection-1-1",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -397,23 +371,7 @@
             }
         },
         {
-            "id": "offint5",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint6",
+            "id": "intersection-0-2",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -429,8 +387,8 @@
             }
         },
         {
-            "id": "offint7",
-            "type": "offRouteIntersection",
+            "id": "intersection-1-2",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -445,7 +403,23 @@
             }
         },
         {
-            "id": "offint8",
+            "id": "intersection-2-2",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "intersection-0-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -461,23 +435,7 @@
             }
         },
         {
-            "id": "offint9",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    450,
-                    1400
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Birch Street and Harbor Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint10",
+            "id": "intersection-2-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -488,6 +446,38 @@
             },
             "properties": {
                 "name": "Intersection Between Cedar Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Route Start at Intersection Between Cedar Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    1400
+                ]
+            },
+            "properties": {
+                "name": "Route End at Intersection Between Birch Street and Harbor Avenue",
                 "level": 1,
                 "accessible": true
             }

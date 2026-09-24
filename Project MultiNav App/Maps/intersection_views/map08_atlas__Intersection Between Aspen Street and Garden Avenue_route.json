@@ -73,6 +73,24 @@
                     [
                         300,
                         950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route3",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
                     ],
                     [
                         300,
@@ -129,7 +147,7 @@
                 ]
             },
             "properties": {
-                "name": "Route End on Aspen Street",
+                "name": "Route continues on Aspen Street",
                 "level": 1,
                 "accessible": true
             }

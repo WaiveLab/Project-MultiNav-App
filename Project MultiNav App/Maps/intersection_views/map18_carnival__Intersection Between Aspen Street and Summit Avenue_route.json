@@ -87,7 +87,7 @@
                 ]
             },
             "properties": {
-                "name": "Route Start on Aspen Street",
+                "name": "Route enters from Aspen Street",
                 "level": 1,
                 "accessible": true
             }

@@ -6,9 +6,8 @@ import SwiftUI
 struct SurveyView: View {
     @EnvironmentObject var session: StudySession
 
-    // Sends the survey score, attention-check result, and raw answers to the study session.
+    // Sends the survey score and raw answers to the study session.
     let onSubmit: (_ subjectiveScore: Double,
-                   _ attentionPassed: Bool,
                    _ rawAnswers: [String: Any]) -> Void
 
     // Survey questions using a 1–7 Likert scale.
@@ -19,20 +18,12 @@ struct SurveyView: View {
         ("q_comfort", "I could use this vibration for a long session without discomfort."),
     ]
 
-    // Randomly selects the correct answer for the attention-check question.
-    @State public var attentionExpected = Int.random(in: 1..<7)
-
-    public var attentionText: String {
-        "Please select “Agree” (\(attentionExpected)) for this statement."
-    }
-
     // Stores the participant's survey selections.
     @State private var answers: [Int?] = Array(repeating: nil, count: items.count)
-    @State private var attentionAnswer: Int?
 
     // The Submit button is enabled only after every question is answered.
     private var complete: Bool {
-        answers.allSatisfy { $0 != nil } && attentionAnswer != nil
+        answers.allSatisfy { $0 != nil }
     }
 
     var body: some View {
@@ -40,7 +31,6 @@ struct SurveyView: View {
             Section {
                 likertRow(text: Self.items[0].text, selection: $answers[0])
                 likertRow(text: Self.items[1].text, selection: $answers[1])
-                likertRow(text: attentionText, selection: $attentionAnswer)
                 likertRow(text: Self.items[2].text, selection: $answers[2])
                 likertRow(text: Self.items[3].text, selection: $answers[3])
             } header: {
@@ -59,9 +49,7 @@ struct SurveyView: View {
                 for (i, item) in Self.items.enumerated() {
                     raw[item.key] = answers[i] ?? 0
                 }
-                raw["q_attention"] = attentionAnswer ?? 0
-
-                onSubmit(score, attentionAnswer == attentionExpected, raw)
+                onSubmit(score, raw)
             }
             .disabled(!complete)
             .accessibilityHint(complete

@@ -17,22 +17,6 @@
     },
     "features": [
         {
-            "id": "start",
-            "type": "start",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    320
-                ]
-            },
-            "properties": {
-                "name": "Route Start on Cedar Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
             "id": "str0",
             "type": "onRoute",
             "geometry": {
@@ -40,7 +24,7 @@
                 "coordinates": [
                     [
                         750,
-                        320
+                        200
                     ],
                     [
                         750,
@@ -88,28 +72,12 @@
                     ],
                     [
                         150,
-                        880
+                        1000
                     ]
                 ]
             },
             "properties": {
                 "name": "Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "end",
-            "type": "end",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    150,
-                    880
-                ]
-            },
-            "properties": {
-                "name": "Route End on Aspen Street",
                 "level": 1,
                 "accessible": true
             }
@@ -144,7 +112,7 @@
                 "coordinates": [
                     [
                         150,
-                        880
+                        1000
                     ],
                     [
                         150,
@@ -188,28 +156,6 @@
                 "coordinates": [
                     [
                         750,
-                        200
-                    ],
-                    [
-                        750,
-                        320
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Cedar Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str7",
-            "type": "offRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        750,
                         600
                     ],
                     [
@@ -225,7 +171,7 @@
             }
         },
         {
-            "id": "str8",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -247,7 +193,7 @@
             }
         },
         {
-            "id": "str9",
+            "id": "str8",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -269,7 +215,7 @@
             }
         },
         {
-            "id": "str10",
+            "id": "str9",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -323,55 +269,7 @@
             }
         },
         {
-            "id": "int0",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "int1",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    450,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Birch Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "int2",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    150,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Aspen Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint0",
+            "id": "intersection-0-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -387,7 +285,7 @@
             }
         },
         {
-            "id": "offint1",
+            "id": "intersection-1-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -403,39 +301,55 @@
             }
         },
         {
-            "id": "offint2",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    200
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Summit Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint3",
-            "type": "offRouteIntersection",
+            "id": "intersection-0-1",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
                     150,
-                    1000
+                    600
                 ]
             },
             "properties": {
-                "name": "Intersection Between Aspen Street and Market Avenue",
+                "name": "Intersection Between Aspen Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "offint4",
+            "id": "intersection-1-1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "intersection-2-1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Cedar Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "intersection-1-2",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -451,7 +365,7 @@
             }
         },
         {
-            "id": "offint5",
+            "id": "intersection-2-2",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -467,7 +381,7 @@
             }
         },
         {
-            "id": "offint6",
+            "id": "intersection-0-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -483,7 +397,7 @@
             }
         },
         {
-            "id": "offint7",
+            "id": "intersection-1-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -499,7 +413,7 @@
             }
         },
         {
-            "id": "offint8",
+            "id": "intersection-2-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -510,6 +424,38 @@
             },
             "properties": {
                 "name": "Intersection Between Cedar Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    750,
+                    200
+                ]
+            },
+            "properties": {
+                "name": "Route Start at Intersection Between Cedar Street and Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Route End at Intersection Between Aspen Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

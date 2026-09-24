@@ -61,9 +61,8 @@ struct RootView: View {
             }
 
         case .survey:
-            SurveyView { score, attentionPassed, raw in
+            SurveyView { score, raw in
                 session.submit(subjectiveScore: score,
-                               attentionCheckPassed: attentionPassed,
                                rawAnswers: raw)
             }
 

@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map03_songbird__Intersection Between Aspen Street and Garden Avenue_route",
-        "buildingName": "Intersection Between Aspen Street and Garden Avenue",
+        "name": "map06_melody__Intersection Between Aspen Street and Summit Avenue_route",
+        "buildingName": "Intersection Between Aspen Street and Summit Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-09-24"
     },
     "bounds": {
         "width": 900,
@@ -33,14 +33,14 @@
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Garden Avenue",
+                "name": "On-route north sidewalk of Summit Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteCrosswalk",
+            "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route north crosswalk across Aspen Street",
+                "name": "On-route north sidewalk of Summit Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -131,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Garden Avenue",
+                "name": "Route enters from Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

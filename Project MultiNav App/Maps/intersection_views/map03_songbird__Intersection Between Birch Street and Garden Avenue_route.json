@@ -87,7 +87,7 @@
                 ]
             },
             "properties": {
-                "name": "Route Start on Birch Street",
+                "name": "Route enters from Birch Street",
                 "level": 1,
                 "accessible": true
             }

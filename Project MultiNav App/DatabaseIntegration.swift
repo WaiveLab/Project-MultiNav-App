@@ -159,7 +159,6 @@ final class MoboRepo {
         candidateID: String,
         subjectiveScore: Double,
         objectiveScore: Double,
-        attentionCheckPassed: Bool,
         rawQuestionnaire: [String: Any],
         mapName: String,
         roundNumber: Int,
@@ -186,7 +185,6 @@ final class MoboRepo {
             // produced the haptics tested during this round.
             "parameterDocumentId": parameterDocumentID,
             "candidateId": candidateID,
-            "attentionCheckPassed": attentionCheckPassed,
 
             // Clamp subjectiveScore to [0, 1].
             // Values below 0 become 0; values above 1 become 1.

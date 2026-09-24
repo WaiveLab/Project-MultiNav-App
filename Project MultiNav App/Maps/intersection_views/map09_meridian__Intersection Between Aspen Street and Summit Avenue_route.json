@@ -29,10 +29,6 @@
                     [
                         600,
                         650
-                    ],
-                    [
-                        300,
-                        650
                     ]
                 ]
             },
@@ -49,9 +45,49 @@
                 "type": "LineString",
                 "coordinates": [
                     [
+                        600,
+                        650
+                    ],
+                    [
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route2",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
                         300,
                         650
                     ],
+                    [
+                        300,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route3",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
                     [
                         300,
                         950
@@ -95,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route Start on Summit Avenue",
+                "name": "Route enters from Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

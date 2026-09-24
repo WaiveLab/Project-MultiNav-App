@@ -17,29 +17,13 @@
     },
     "features": [
         {
-            "id": "start",
-            "type": "start",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    330,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Route Start on Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
             "id": "str0",
             "type": "onRoute",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        330,
+                        450,
                         600
                     ],
                     [
@@ -87,29 +71,13 @@
                         1000
                     ],
                     [
-                        330,
+                        450,
                         1000
                     ]
                 ]
             },
             "properties": {
                 "name": "Market Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "end",
-            "type": "end",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    330,
-                    1000
-                ]
-            },
-            "properties": {
-                "name": "Route End on Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -231,7 +199,7 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        330,
+                        450,
                         600
                     ],
                     [
@@ -253,7 +221,7 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        330,
+                        450,
                         1000
                     ],
                     [
@@ -323,39 +291,7 @@
             }
         },
         {
-            "id": "int0",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    150,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Aspen Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "int1",
-            "type": "onRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    150,
-                    1000
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Aspen Street and Market Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "offint0",
+            "id": "intersection-0-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -371,7 +307,7 @@
             }
         },
         {
-            "id": "offint1",
+            "id": "intersection-1-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -387,7 +323,7 @@
             }
         },
         {
-            "id": "offint2",
+            "id": "intersection-2-0",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -403,23 +339,23 @@
             }
         },
         {
-            "id": "offint3",
-            "type": "offRouteIntersection",
+            "id": "intersection-0-1",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    150,
                     600
                 ]
             },
             "properties": {
-                "name": "Intersection Between Birch Street and Garden Avenue",
+                "name": "Intersection Between Aspen Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "offint4",
+            "id": "intersection-2-1",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -435,23 +371,23 @@
             }
         },
         {
-            "id": "offint5",
-            "type": "offRouteIntersection",
+            "id": "intersection-0-2",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    150,
                     1000
                 ]
             },
             "properties": {
-                "name": "Intersection Between Birch Street and Market Avenue",
+                "name": "Intersection Between Aspen Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "offint6",
+            "id": "intersection-2-2",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -467,7 +403,7 @@
             }
         },
         {
-            "id": "offint7",
+            "id": "intersection-0-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -483,7 +419,7 @@
             }
         },
         {
-            "id": "offint8",
+            "id": "intersection-1-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -499,7 +435,7 @@
             }
         },
         {
-            "id": "offint9",
+            "id": "intersection-2-3",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
@@ -510,6 +446,38 @@
             },
             "properties": {
                 "name": "Intersection Between Cedar Street and Harbor Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "start",
+            "type": "start",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Route Start at Intersection Between Birch Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "end",
+            "type": "end",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    1000
+                ]
+            },
+            "properties": {
+                "name": "Route End at Intersection Between Birch Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

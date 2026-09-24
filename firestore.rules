@@ -105,7 +105,6 @@ service cloud.firestore {
         && data.objectiveScore is number
         && data.objectiveScore >= 0
         && data.objectiveScore <= 1
-        && data.attentionCheckPassed is bool
         && data.touchedTarget is bool
         && validHaptics(data.haptics);
     }

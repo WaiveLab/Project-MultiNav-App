@@ -18,7 +18,6 @@ final class StudySession: ObservableObject {
         let candidateID: String
         let subjectiveScore: Double
         let objectiveScore: Double
-        let attentionCheckPassed: Bool
         let rawAnswers: [String: Any]
         let mapName: String
         let roundNumber: Int
@@ -279,7 +278,6 @@ final class StudySession: ObservableObject {
 
     // Submits the round's results and prepares for the next round.
     func submit(subjectiveScore: Double,
-                attentionCheckPassed: Bool,
                 rawAnswers: [String: Any]) {
         guard phase == .survey,
               let activeParameters
@@ -300,7 +298,6 @@ final class StudySession: ObservableObject {
             candidateID: resolvedCandidateID(for: activeParameters),
             subjectiveScore: subjectiveScore,
             objectiveScore: objectiveScore,
-            attentionCheckPassed: attentionCheckPassed,
             rawAnswers: rawAnswers,
             mapName: currentMapName,
             roundNumber: roundNumber,
@@ -324,7 +321,6 @@ final class StudySession: ObservableObject {
                     candidateID: pendingResult.candidateID,
                     subjectiveScore: pendingResult.subjectiveScore,
                     objectiveScore: pendingResult.objectiveScore,
-                    attentionCheckPassed: pendingResult.attentionCheckPassed,
                     rawQuestionnaire: pendingResult.rawAnswers,
                     mapName: pendingResult.mapName,
                     roundNumber: pendingResult.roundNumber,

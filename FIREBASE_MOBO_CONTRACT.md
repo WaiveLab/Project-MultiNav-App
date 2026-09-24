@@ -125,9 +125,20 @@ parameterDocumentId, candidateId, schemaVersion, phase, phaseStep
 hapticMode: "burst"
 haptics                              (the complete tested 14-profile snapshot)
 subjectiveScore, objectiveScore
-attentionCheckPassed, touchedTarget, timeToTargetSeconds
-q_pleasant, q_clear, q_distinct, q_comfort, q_attention
+touchedTarget, timeToTargetSeconds
+q_pleasant, q_clear, q_distinct, q_comfort
 ```
+
+The researcher administers the four survey questions and records the
+participant's answers. There is no attention check: results omit both
+`attentionCheckPassed` and `q_attention`. MOBO must accept results without
+these fields and process each completed round, publishing the next candidate
+until round 18. The subjective score remains the mean of the four 1–7 ratings,
+normalized to 0–1 as `(mean - 1) / 6`.
+
+Deploy the updated app-owned `firestore.rules` before using this app version
+with Firebase; the previous rules require the removed attention-check flag and
+will reject new results. This change does not require a schema-version bump.
 
 `parameterDocumentId` is the Firestore document that the app actually loaded.
 MOBO should join a result to a candidate with this field; `candidateId` is the
@@ -150,8 +161,8 @@ change on that deterministic document.
    potentially stale offline cache entry.
 3. The app freezes that complete snapshot for the round and opens one shuffled
    map overview. Every element resolves its profile by element-type key.
-4. The participant explores the overview/intersection layers and completes the
-   survey.
+4. The participant explores the overview/intersection layers, then the researcher
+   administers the four-question survey and records the participant's answers.
 5. The app writes `interventionResults` with scores, answers, the source IDs,
    and the exact profile snapshot it tested.
 6. MOBO reads that result, calculates independent values for every element type,

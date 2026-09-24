@@ -73,6 +73,24 @@
                     [
                         300,
                         650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Summit Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route3",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
                     ],
                     [
                         60,
@@ -129,7 +147,7 @@
                 ]
             },
             "properties": {
-                "name": "Route End on Summit Avenue",
+                "name": "Route continues on Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

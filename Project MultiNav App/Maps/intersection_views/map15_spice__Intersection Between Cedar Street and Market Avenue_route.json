@@ -87,7 +87,7 @@
                 ]
             },
             "properties": {
-                "name": "Route Start on Cedar Street",
+                "name": "Route enters from Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -103,7 +103,7 @@
                 ]
             },
             "properties": {
-                "name": "Route End on Market Avenue",
+                "name": "Route continues on Market Avenue",
                 "level": 1,
                 "accessible": true
             }
