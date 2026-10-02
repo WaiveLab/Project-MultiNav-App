@@ -101,7 +101,7 @@ function routeIntersections(vertices) {
     return points;
 }
 function makeOverview(original, vertices, points) {
-    const features = vertices.slice(1).map((b, i) => feature(`str${i}`, 'onRoute', [vertices[i], b], streetName(vertices[i], b)));
+    const features = vertices.slice(1).map((b, i) => feature(`str${i}`, 'onRoute', [vertices[i], b], `${streetName(vertices[i], b)}, route`));
     // Partition each street into route and non-route intervals without overlaps.
     for (const [vertical, constants, positions] of [[true, xs, ys], [false, ys, xs]]) {
         for (const fixed of constants) {
@@ -118,15 +118,15 @@ function makeOverview(original, vertices, points) {
             flush();
         }
     }
-    features.push(...original.features.filter(f => f.type === 'landmark'));
+    features.push(...original.features.filter(f => f.type === 'landmark').slice(0, 1));
     for (const y of ys) for (const x of xs) {
         const p = [x, y];
         if (same(p, vertices[0]) || same(p, vertices.at(-1))) continue;
         features.push(feature(`intersection-${xs.indexOf(x)}-${ys.indexOf(y)}`,
             points.some(q => same(p, q)) ? 'onRouteIntersection' : 'offRouteIntersection', p, intersectionName(p)));
     }
-    features.push(feature('start', 'start', vertices[0], `Route Start at ${intersectionName(vertices[0])}`),
-        feature('end', 'end', vertices.at(-1), `Route End at ${intersectionName(vertices.at(-1))}`));
+    features.push(feature('start', 'start', vertices[0], `Start of route at ${intersectionName(vertices[0])}`),
+        feature('end', 'end', vertices.at(-1), `End of route at ${intersectionName(vertices.at(-1))}`));
     return {...original, features};
 }
 const armFrom = (center, p) => p[0] < center[0] ? 'W' : p[0] > center[0] ? 'E' : p[1] < center[1] ? 'N' : 'S';
@@ -149,15 +149,15 @@ function makeDetail(mapName, p, previous, next, base) {
              (same(f.geometry.coordinates[1], a) && same(f.geometry.coordinates[0], b))));
         assert(baseFeature, `No base segment for ${mapName}: ${JSON.stringify([a, b])}`);
         features.push(feature(`route${i}`, baseFeature.type === 'offRouteCrosswalk' ? 'onRouteCrosswalk' : 'onRouteSidewalk',
-            [a, b], `On-route ${baseFeature.properties.name[0].toLowerCase()}${baseFeature.properties.name.slice(1)}`));
+            [a, b], `${baseFeature.properties.name}, route`));
     }
     for (let i = 1; i < coords.length - 1; i++) {
         const a = coords[i - 1], b = coords[i], c = coords[i + 1];
         const cross = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]);
-        if (cross) features.push(feature('turn', 'turn', b, cross > 0 ? 'Turn right' : 'Turn left'));
+        if (cross) features.push(feature('turn', 'turn', b, 'Turn'));
     }
-    features.push(feature('start', 'start', coords[0], `Route enters from ${streetName(previous, p)}`),
-        feature('end', 'end', coords.at(-1), `Route continues on ${streetName(p, next)}`));
+    features.push(feature('start', 'start', coords[0], `Start of route from ${streetName(previous, p)}`),
+        feature('end', 'end', coords.at(-1), `End of route on ${streetName(p, next)}`));
     const intersection = intersectionName(p);
     return document(`${mapName}__${intersection}_route`, intersection, features);
 }

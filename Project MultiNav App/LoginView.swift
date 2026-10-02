@@ -41,7 +41,7 @@ struct LoginView: View {
                 .disabled(trimmedID.isEmpty)
                 .accessibilityHint("Runs the app locally without loading or uploading study data")
 
-            Text("Local testing uses the app's built-in per-element haptic values and does not save survey responses.")
+            Text("Local practice uses maximum-intensity route and intersection cues and does not save survey responses. Researcher: swipe up with three fingers to finish a map.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

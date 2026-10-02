@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
+                "name": "West sidewalk of Aspen Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
+                "name": "West sidewalk of Aspen Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route south crosswalk across Aspen Street",
+                "name": "South crosswalk across Aspen Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -99,7 +99,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route south sidewalk of Garden Avenue",
+                "name": "South sidewalk of Garden Avenue, route",
                 "level": 1,
                 "accessible": true
             }
@@ -115,7 +115,7 @@
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn",
                 "level": 1,
                 "accessible": true
             }
@@ -131,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Aspen Street",
+                "name": "Start of route from Aspen Street",
                 "level": 1,
                 "accessible": true
             }
@@ -147,7 +147,7 @@
                 ]
             },
             "properties": {
-                "name": "Route continues on Garden Avenue",
+                "name": "End of route on Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

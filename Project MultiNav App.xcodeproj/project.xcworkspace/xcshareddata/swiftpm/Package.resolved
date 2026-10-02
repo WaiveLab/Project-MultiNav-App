@@ -110,15 +110,6 @@
       }
     },
     {
-      "identity" : "projectmultinav",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Hariprasath88/ProjectMultiNav",
-      "state" : {
-        "branch" : "main",
-        "revision" : "eb0de869671e9784fbc1ee1078fb984d6f2b83db"
-      }
-    },
-    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",

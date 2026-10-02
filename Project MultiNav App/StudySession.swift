@@ -213,7 +213,7 @@ final class StudySession: ObservableObject {
         let candidateID = "local-\(sessionID)-round-\(step)"
         guard isLocalTestMode,
               let values = ParameterSet(
-                haptics: ParameterSet.defaultHaptics,
+                haptics: ParameterSet.practiceHaptics,
                 candidateID: candidateID,
                 phase: "exploration",
                 phaseStep: step
@@ -264,6 +264,7 @@ final class StudySession: ObservableObject {
 
     // Ends exploration and moves to the survey.
     func foundTarget() {
+        guard phase == .exploring else { return }
         if timeToTarget == nil, let start = explorationStart {
             timeToTarget = Date().timeIntervalSince(start)
         }

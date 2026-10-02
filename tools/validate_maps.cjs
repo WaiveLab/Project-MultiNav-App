@@ -77,6 +77,10 @@ assert.deepEqual(new Set(deck), new Set(Object.keys(sketchDirections)), 'Study d
 assert.equal(deck.length, files.length);
 for (const file of files) {
     const doc = load(path.join(root, 'overviews', file)), label = doc.metadata.name;
+    assert.equal(doc.features.filter(f => f.type === 'landmark').length, 1, `${label}: one POI required`);
+    for (const f of doc.features.filter(f => f.type === 'onRoute')) assert(f.properties.name.endsWith(', route'));
+    assert(doc.features.find(f => f.type === 'start').properties.name.startsWith('Start of route at '));
+    assert(doc.features.find(f => f.type === 'end').properties.name.startsWith('End of route at '));
     const points = trace(doc, ['onRoute']);
     const directions = points.slice(1).map((p, i) => p[0] > points[i][0] ? 'E' : p[0] < points[i][0] ? 'W' : p[1] > points[i][1] ? 'S' : 'N').join('');
     assert.equal(directions, sketchDirections[label], `${label}: route differs from photo`);
@@ -121,6 +125,11 @@ for (const file of files) {
         const detail = load(path.join(detailDir, resource));
         assert.deepEqual(base.bounds, detail.bounds);
         assert.equal(detail.metadata.buildingName, name);
+        assert(detail.features.find(f => f.type === 'start').properties.name.startsWith('Start of route from '));
+        assert(detail.features.find(f => f.type === 'end').properties.name.startsWith('End of route on '));
+        for (const f of detail.features.filter(f => ['onRouteSidewalk', 'onRouteCrosswalk'].includes(f.type))) {
+            assert(f.properties.name.endsWith(', route'));
+        }
         const local = trace(detail, ['onRouteSidewalk', 'onRouteCrosswalk']);
         const localTurns = bends(local), expectedTurn = turns.find(t => same(t.point, p));
         assert.equal(localTurns.length, expectedTurn ? 1 : 0, `${resource}: wrong movement`);
@@ -128,7 +137,7 @@ for (const file of files) {
         assert.equal(turnMarkers.length, localTurns.length);
         if (expectedTurn) {
             assert.equal(localTurns[0].direction, expectedTurn.direction);
-            assert.equal(turnMarkers[0].properties.name, expectedTurn.direction);
+            assert.equal(turnMarkers[0].properties.name, 'Turn');
             assert.deepEqual(turnMarkers[0].geometry.coordinates, localTurns[0].point);
         }
         const boundary = q => q[1] === 90 ? 'N' : q[0] === 840 ? 'E' : q[1] === 1510 ? 'S' : q[0] === 60 ? 'W' : null;

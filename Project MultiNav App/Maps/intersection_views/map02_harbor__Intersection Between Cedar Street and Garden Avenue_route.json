@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route south sidewalk of Garden Avenue",
+                "name": "South sidewalk of Garden Avenue, route",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route south crosswalk across Cedar Street",
+                "name": "South crosswalk across Cedar Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Cedar Street",
+                "name": "East sidewalk of Cedar Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -99,7 +99,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Cedar Street",
+                "name": "East sidewalk of Cedar Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -115,7 +115,7 @@
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn",
                 "level": 1,
                 "accessible": true
             }
@@ -131,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Garden Avenue",
+                "name": "Start of route from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -147,7 +147,7 @@
                 ]
             },
             "properties": {
-                "name": "Route continues on Cedar Street",
+                "name": "End of route on Cedar Street",
                 "level": 1,
                 "accessible": true
             }

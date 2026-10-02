@@ -1,92 +1,86 @@
-// The comments for this .swift file have been annotated by chatGPT
-
 import SwiftUI
 
-// Displays the post-round questionnaire and calculates a subjective score.
 struct SurveyView: View {
     @EnvironmentObject var session: StudySession
+    let onSubmit: (_ subjectiveScore: Double, _ rawAnswers: [String: Any]) -> Void
 
-    // Sends the survey score and raw answers to the study session.
-    let onSubmit: (_ subjectiveScore: Double,
-                   _ rawAnswers: [String: Any]) -> Void
+    @State private var cognitiveLoad = ""
+    @State private var clarity: Int?
+    @State private var likability: Int?
+    @State private var comfort: Int?
+    @FocusState private var editingLoad: Bool
 
-    // Survey questions using a 1–7 Likert scale.
-    private static let items: [(key: String, text: String)] = [
-        ("q_pleasant", "The vibration felt pleasant."),
-        ("q_clear", "I could clearly feel when I was on the route."),
-        ("q_distinct", "The vibration was easy to tell apart from other map feedback."),
-        ("q_comfort", "I could use this vibration for a long session without discomfort."),
-    ]
-
-    // Stores the participant's survey selections.
-    @State private var answers: [Int?] = Array(repeating: nil, count: items.count)
-
-    // The Submit button is enabled only after every question is answered.
-    private var complete: Bool {
-        answers.allSatisfy { $0 != nil }
+    private let agreement = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
+    private var response: SurveyResponse? {
+        SurveyResponse(cognitiveLoad: cognitiveLoad, clarity: clarity,
+                       likability: likability, comfort: comfort)
     }
 
     var body: some View {
         Form {
             Section {
-                likertRow(text: Self.items[0].text, selection: $answers[0])
-                likertRow(text: Self.items[1].text, selection: $answers[1])
-                likertRow(text: Self.items[2].text, selection: $answers[2])
-                likertRow(text: Self.items[3].text, selection: $answers[3])
-            } header: {
-                Text("How did the route vibration feel?")
-            } footer: {
-                Text("1 = strongly disagree, 7 = strongly agree.")
-            }
-
-            // Calculates the survey score and submits all responses.
-            Button(session.isLocalTestMode ? "Continue local test" : "Submit") {
-                let values = answers.compactMap { $0 }
-                let mean = Double(values.reduce(0, +)) / Double(values.count)
-                let score = (mean - 1) / 6   // Converts 1–7 to 0–1.
-
-                var raw: [String: Any] = [:]
-                for (i, item) in Self.items.enumerated() {
-                    raw[item.key] = answers[i] ?? 0
+                Text("How much mental and perceptual activity was required (e.g., thinking, deciding, calculating, remembering, looking, searching).")
+                TextField("Enter a whole number from 1 to 21", text: $cognitiveLoad)
+                    .keyboardType(.numberPad)
+                    .focused($editingLoad)
+                    .accessibilityLabel("Cognitive load, 1 to 21")
+                if !cognitiveLoad.isEmpty && !validLoad {
+                    Text("Enter a whole number from 1 to 21.").foregroundStyle(.red)
                 }
-                onSubmit(score, raw)
+                if editingLoad {
+                    Button("Done entering cognitive load") { editingLoad = false }
+                }
+            } header: {
+                Text("1. Cognitive load")
+            } footer: {
+                Text("1 = very low, 21 = very high. Researcher: record the participant's answer.")
             }
-            .disabled(!complete)
-            .accessibilityHint(complete
-                               ? (session.isLocalTestMode
-                                  ? "Continues without saving your answers"
-                                  : "Sends your answers")
-                               : "Answer every statement first")
+
+            ratingSection("2. Clarity", question: "How clear or distinct were the vibrations",
+                          labels: ["Extremely unclear", "Somewhat unclear", "Neutral", "Clear", "Extremely clear"],
+                          selection: $clarity)
+            ratingSection("3. Likability", question: "I liked the vibrations",
+                          labels: agreement, selection: $likability)
+            ratingSection("4. Comfort", question: "I could use the vibrations without discomfort",
+                          labels: agreement, selection: $comfort)
+
+            Button(session.isLocalTestMode ? "Continue local test" : "Submit") {
+                guard let response else { return }
+                editingLoad = false
+                onSubmit(response.subjectiveScore, response.rawAnswers)
+            }
+            .disabled(response == nil)
+            .accessibilityHint(response == nil ? "Answer all four questions first" : "Completes this questionnaire")
         }
     }
 
-    // Creates a reusable row of 1–7 Likert-scale buttons.
-    private func likertRow(text: String, selection: Binding<Int?>) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(text)
-            HStack {
-                ForEach(1...7, id: \.self) { value in
-                    Button {
-                        selection.wrappedValue = value
-                    } label: {
-                        Text("\(value)")
-                            .frame(maxWidth: .infinity, minHeight: 36)
-                            .background(selection.wrappedValue == value
-                                        ? Color.accentColor : Color(.systemGray5))
-                            .foregroundStyle(selection.wrappedValue == value
-                                             ? .white : .primary)
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+    private var validLoad: Bool {
+        guard let value = Int(cognitiveLoad.trimmingCharacters(in: .whitespacesAndNewlines)) else { return false }
+        return (1...21).contains(value)
+    }
+
+    private func ratingSection(_ title: String, question: String, labels: [String],
+                               selection: Binding<Int?>) -> some View {
+        Section {
+            Text(question)
+            ForEach(1...5, id: \.self) { value in
+                Button {
+                    editingLoad = false
+                    selection.wrappedValue = value
+                } label: {
+                    HStack {
+                        Text("\(value) — \(labels[value - 1])")
+                        Spacer()
+                        if selection.wrappedValue == value {
+                            Image(systemName: "checkmark")
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("\(value) of 7")
+                    .frame(minHeight: 36)
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selection.wrappedValue == value ? [.isSelected] : [])
             }
-            HStack {
-                Text("Disagree").font(.caption2).foregroundStyle(.secondary)
-                Spacer()
-                Text("Agree").font(.caption2).foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 4)
+        } header: { Text(title) }
     }
 }

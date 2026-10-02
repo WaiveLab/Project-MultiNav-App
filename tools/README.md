@@ -3,7 +3,8 @@
 Every overview follows one cell of the supplied whiteboard photo: exactly two
 on-route intersections, with start/end at two other grid intersections. Routes
 can have zero, one, or two turns. The four consecutive grid nodes for each map
-are defined in `update_map_routes.cjs`; landmarks and overview metadata are preserved.
+are defined in `update_map_routes.cjs`; the first existing POI and overview metadata are preserved. Each map contains
+exactly one POI. The generator also owns the spoken feature labels.
 
 Map numbers match the photo's cells in row order, left to right and top to bottom.
 The crossed-out row 2, column 2 is excluded (`map05_aurora`), leaving 17 maps without

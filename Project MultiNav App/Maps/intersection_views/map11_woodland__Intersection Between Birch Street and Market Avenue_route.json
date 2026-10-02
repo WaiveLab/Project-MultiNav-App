@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Birch Street",
+                "name": "West sidewalk of Birch Street, route",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Market Avenue",
+                "name": "North sidewalk of Market Avenue, route",
                 "level": 1,
                 "accessible": true
             }
@@ -71,7 +71,7 @@
                 ]
             },
             "properties": {
-                "name": "Turn right",
+                "name": "Turn",
                 "level": 1,
                 "accessible": true
             }
@@ -87,7 +87,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Birch Street",
+                "name": "Start of route from Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -103,7 +103,7 @@
                 ]
             },
             "properties": {
-                "name": "Route continues on Market Avenue",
+                "name": "End of route on Market Avenue",
                 "level": 1,
                 "accessible": true
             }
