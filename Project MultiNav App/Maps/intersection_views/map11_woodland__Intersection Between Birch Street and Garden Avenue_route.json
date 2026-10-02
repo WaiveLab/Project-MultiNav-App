@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map15_spice__Intersection Between Cedar Street and Market Avenue_route",
-        "buildingName": "Intersection Between Cedar Street and Market Avenue",
+        "name": "map11_woodland__Intersection Between Birch Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -33,14 +33,14 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Cedar Street",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteSidewalk",
+            "type": "onRouteCrosswalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -49,29 +49,35 @@
                         650
                     ],
                     [
-                        60,
-                        650
+                        300,
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Market Avenue",
+                "name": "On-route west crosswalk across Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "turn",
-            "type": "turn",
+            "id": "route2",
+            "type": "onRouteSidewalk",
             "geometry": {
-                "type": "Point",
+                "type": "LineString",
                 "coordinates": [
-                    300,
-                    650
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        300,
+                        1510
+                    ]
                 ]
             },
             "properties": {
-                "name": "Turn right",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -87,7 +93,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Cedar Street",
+                "name": "Route enters from Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -98,12 +104,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    60,
-                    650
+                    300,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route continues on Market Avenue",
+                "name": "Route continues on Birch Street",
                 "level": 1,
                 "accessible": true
             }

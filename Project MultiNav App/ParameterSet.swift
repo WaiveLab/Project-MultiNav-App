@@ -111,7 +111,7 @@ struct BurstParameters: Equatable {
 // independent burst profile for every supported element type.
 struct ParameterSet: Equatable {
     static let currentSchemaVersion = 2
-    static let phaseStepRange = 1...18
+    static let phaseStepRange = 1...17
 
     let schemaVersion: Int
     let candidateID: String?

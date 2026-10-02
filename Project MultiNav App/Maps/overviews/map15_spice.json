@@ -27,13 +27,13 @@
                         600
                     ],
                     [
-                        750,
-                        1000
+                        450,
+                        600
                     ]
                 ]
             },
             "properties": {
-                "name": "Cedar Street",
+                "name": "Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -45,8 +45,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        750,
-                        1000
+                        450,
+                        600
                     ],
                     [
                         450,
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "Market Avenue",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -116,7 +116,7 @@
                     ],
                     [
                         450,
-                        1000
+                        600
                     ]
                 ]
             },
@@ -138,28 +138,6 @@
                     ],
                     [
                         750,
-                        600
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Cedar Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str6",
-            "type": "offRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        750,
-                        1000
-                    ],
-                    [
-                        750,
                         1400
                     ]
                 ]
@@ -171,7 +149,7 @@
             }
         },
         {
-            "id": "str7",
+            "id": "str6",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -193,7 +171,7 @@
             }
         },
         {
-            "id": "str8",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -203,7 +181,7 @@
                         600
                     ],
                     [
-                        750,
+                        450,
                         600
                     ]
                 ]
@@ -215,7 +193,7 @@
             }
         },
         {
-            "id": "str9",
+            "id": "str8",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -225,7 +203,7 @@
                         1000
                     ],
                     [
-                        450,
+                        750,
                         1000
                     ]
                 ]
@@ -237,7 +215,7 @@
             }
         },
         {
-            "id": "str10",
+            "id": "str9",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -356,7 +334,7 @@
         },
         {
             "id": "intersection-1-1",
-            "type": "offRouteIntersection",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -404,7 +382,7 @@
         },
         {
             "id": "intersection-2-2",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [

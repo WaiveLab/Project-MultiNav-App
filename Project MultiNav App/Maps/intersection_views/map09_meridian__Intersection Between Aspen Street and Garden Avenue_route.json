@@ -23,52 +23,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        90
-                    ],
-                    [
-                        300,
-                        650
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route1",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        300,
-                        650
-                    ],
-                    [
-                        300,
-                        950
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route2",
-            "type": "onRouteCrosswalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        300,
-                        950
+                        600,
+                        1510
                     ],
                     [
                         600,
@@ -77,13 +33,13 @@
                 ]
             },
             "properties": {
-                "name": "On-route south crosswalk across Aspen Street",
+                "name": "On-route east sidewalk of Aspen Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "route3",
+            "id": "route1",
             "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
@@ -110,12 +66,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
+                    600,
                     950
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn right",
                 "level": 1,
                 "accessible": true
             }
@@ -126,8 +82,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    90
+                    600,
+                    1510
                 ]
             },
             "properties": {

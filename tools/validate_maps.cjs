@@ -59,13 +59,30 @@ function bends(points) {
 }
 const expectedRoutes = new Set();
 const files = fs.readdirSync(path.join(root, 'overviews')).filter(f => f.endsWith('.json'));
-assert.equal(files.length, 18);
+assert.equal(files.length, 17);
+// Travel directions transcribed from the photo, row by row (N is up).
+// The excluded fifth cell is the crossed-out horizontal straight route.
+const sketchDirections = {
+    map01_orchard: 'SEN', map02_harbor: 'EEN', map03_songbird: 'NEN',
+    map04_gemstone: 'SEE', map06_melody: 'NEE',
+    map07_palette: 'SES', map08_atlas: 'EES', map09_meridian: 'NES',
+    map10_solstice: 'ESW', map11_woodland: 'SSW', map12_desert: 'WSW',
+    map13_alpine: 'ESS', map14_storybook: 'SSS', map15_spice: 'WSS',
+    map16_meadow: 'ESE', map17_trades: 'SSE', map18_carnival: 'WSE',
+};
+assert.deepEqual(new Set(files.map(f => f.replace('.json', ''))), new Set(Object.keys(sketchDirections)));
+const session = fs.readFileSync(path.join(root, '../StudySession.swift'), 'utf8');
+const deck = session.match(/static let overviewMaps: \[String\] = \[([\s\S]*?)\]/)[1].match(/map\d+_\w+/g);
+assert.deepEqual(new Set(deck), new Set(Object.keys(sketchDirections)), 'Study deck must match map resources');
+assert.equal(deck.length, files.length);
 for (const file of files) {
     const doc = load(path.join(root, 'overviews', file)), label = doc.metadata.name;
     const points = trace(doc, ['onRoute']);
+    const directions = points.slice(1).map((p, i) => p[0] > points[i][0] ? 'E' : p[0] < points[i][0] ? 'W' : p[1] > points[i][1] ? 'S' : 'N').join('');
+    assert.equal(directions, sketchDirections[label], `${label}: route differs from photo`);
     const turns = bends(points);
-    assert.equal(turns.length, 2, `${label}: must have exactly two turns`);
-    assert.equal(doc.features.filter(f => f.type === 'onRoute').length, 3, `${label}: must have three legs`);
+    assert.equal(doc.features.filter(f => f.type === 'onRouteIntersection').length, 2, `${label}: must have two on-route intersections`);
+    assert.equal(doc.features.filter(f => f.type === 'onRoute').length, 3, `${label}: must have three connected grid edges`);
     const start = endpoint(doc, 'start'), end = endpoint(doc, 'end');
     assert(grid.some(p => same(p, start)) && grid.some(p => same(p, end)), `${label}: endpoints must be intersections`);
     assert(doc.features.find(f => f.type === 'start').properties.name.includes(nameAt(start)));
@@ -79,6 +96,7 @@ for (const file of files) {
         expanded.push(...local.filter(p => !expanded.length || !same(p, expanded.at(-1))));
     }
     assert.equal(new Set(expanded.map(key)).size, expanded.length, `${label}: intersecting route legs`);
+    assert.equal(expanded.length, 4, `${label}: must visit start, two intersections, and end only`);
     for (const p of grid) {
         const found = markers.filter(f => same(f.geometry.coordinates, p));
         assert.equal(found.length, 1, `${label}: overlapping/missing intersection markers at ${p}`);
@@ -138,4 +156,4 @@ for (const p of grid) {
     assert.deepEqual(roads.find(f => f.properties.name === avenues[ys.indexOf(p[1])]).geometry.coordinates,
         [[p[0] > 150 ? 60 : 450, 800], [p[0] < 750 ? 840 : 450, 800]]);
 }
-console.log(`Validated ${files.length} maps: exactly two turns, intersection endpoints, complete road coverage, 12 shared bases, and ${actualRoutes.length} consistent route overlays.`);
+console.log(`Validated ${files.length} photo patterns: exactly two on-route intersections each, intersection endpoints, complete road coverage, 12 shared bases, and ${actualRoutes.length} consistent route overlays.`);

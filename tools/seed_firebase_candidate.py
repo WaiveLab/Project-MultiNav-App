@@ -155,7 +155,7 @@ def parse_args() -> argparse.Namespace:
         required=True,
         type=int,
         dest="round_number",
-        help="Expected study round, from 1 through 18",
+        help="Expected study round, from 1 through 17",
     )
     parser.add_argument(
         "--candidate-id",
@@ -180,8 +180,8 @@ def main() -> int:
     if not pid:
         print("ERROR: --pid cannot be blank", file=sys.stderr)
         return 2
-    if not 1 <= args.round_number <= 18:
-        print("ERROR: --round must be between 1 and 18", file=sys.stderr)
+    if not 1 <= args.round_number <= 17:
+        print("ERROR: --round must be between 1 and 17", file=sys.stderr)
         return 2
 
     candidate_id = args.candidate_id

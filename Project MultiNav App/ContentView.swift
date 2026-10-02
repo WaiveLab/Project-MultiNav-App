@@ -80,8 +80,8 @@ struct RootView: View {
                 Text(session.isLocalTestMode ? "Local test complete" : "Study complete")
                     .font(.title.bold())
                 Text(session.isLocalTestMode
-                     ? "You tested all 18 map overviews. No data was uploaded."
-                     : "You completed all 18 map overviews. Thank you for participating.")
+                     ? "You tested all \(StudySession.overviewMaps.count) map overviews. No data was uploaded."
+                     : "You completed all \(StudySession.overviewMaps.count) map overviews. Thank you for participating.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }

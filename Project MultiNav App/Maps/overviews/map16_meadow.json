@@ -23,11 +23,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         600
                     ],
                     [
-                        750,
+                        450,
                         600
                     ]
                 ]
@@ -45,17 +45,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        750,
+                        450,
                         600
                     ],
                     [
-                        750,
+                        450,
                         1000
                     ]
                 ]
             },
             "properties": {
-                "name": "Cedar Street",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -67,11 +67,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        750,
+                        450,
                         1000
                     ],
                     [
-                        450,
+                        750,
                         1000
                     ]
                 ]
@@ -116,7 +116,7 @@
                     ],
                     [
                         450,
-                        1400
+                        600
                     ]
                 ]
             },
@@ -133,17 +133,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        750,
-                        200
+                        450,
+                        1000
                     ],
                     [
-                        750,
-                        600
+                        450,
+                        1400
                     ]
                 ]
             },
             "properties": {
-                "name": "Cedar Street",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -156,7 +156,7 @@
                 "coordinates": [
                     [
                         750,
-                        1000
+                        200
                     ],
                     [
                         750,
@@ -199,11 +199,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
+                        450,
                         600
                     ],
                     [
-                        450,
+                        750,
                         600
                     ]
                 ]
@@ -339,24 +339,24 @@
             }
         },
         {
-            "id": "intersection-0-1",
-            "type": "offRouteIntersection",
+            "id": "intersection-1-1",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    150,
+                    450,
                     600
                 ]
             },
             "properties": {
-                "name": "Intersection Between Aspen Street and Garden Avenue",
+                "name": "Intersection Between Birch Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "intersection-2-1",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -387,17 +387,17 @@
             }
         },
         {
-            "id": "intersection-2-2",
+            "id": "intersection-1-2",
             "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    750,
+                    450,
                     1000
                 ]
             },
             "properties": {
-                "name": "Intersection Between Cedar Street and Market Avenue",
+                "name": "Intersection Between Birch Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -456,12 +456,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    150,
                     600
                 ]
             },
             "properties": {
-                "name": "Route Start at Intersection Between Birch Street and Garden Avenue",
+                "name": "Route Start at Intersection Between Aspen Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -472,12 +472,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    750,
                     1000
                 ]
             },
             "properties": {
-                "name": "Route End at Intersection Between Birch Street and Market Avenue",
+                "name": "Route End at Intersection Between Cedar Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

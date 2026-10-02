@@ -13,7 +13,7 @@ app publishes the result for MOBO to consume.
 - Profiles for different element types are never implicitly shared.
 - A candidate document contains the complete profile set. The app either accepts
   the whole candidate or rejects it; it never mixes values from two candidates.
-- The app runs exactly 18 rounds and then stops.
+- The app runs exactly 17 rounds and then stops.
 
 The five values for each element type are:
 
@@ -69,7 +69,7 @@ JSON contains one circular `intersectionCenter` point at the center of its stree
 geometry. The base layer is interactive, so touching that point resolves only the
 independent `haptics.intersectionCenter` profile from the active candidate.
 
-Publish only the next expected round. Do not pre-publish all 18 candidates: the
+Publish only the next expected round. Do not pre-publish all 17 candidates: the
 app intentionally listens to the newest document and will not run a candidate
 whose `phaseStep` is not exactly the next round.
 
@@ -133,7 +133,7 @@ The researcher administers the four survey questions and records the
 participant's answers. There is no attention check: results omit both
 `attentionCheckPassed` and `q_attention`. MOBO must accept results without
 these fields and process each completed round, publishing the next candidate
-until round 18. The subjective score remains the mean of the four 1–7 ratings,
+until round 17. The subjective score remains the mean of the four 1–7 ratings,
 normalized to 0–1 as `(mean - 1) / 6`.
 
 Deploy the updated app-owned `firestore.rules` before using this app version
@@ -167,7 +167,7 @@ change on that deterministic document.
    and the exact profile snapshot it tested.
 6. MOBO reads that result, calculates independent values for every element type,
    and adds the next complete candidate with `phaseStep = previous + 1`.
-7. Repeat through `phaseStep = 18`. After result 18 is saved, the app displays
+7. Repeat through `phaseStep = 17`. After result 17 is saved, the app displays
    completion and stops listening.
 
 MOBO may decide that two types receive equal values, but it must still write both
@@ -178,7 +178,7 @@ type maps. Equality is an optimizer decision, never an app-side linkage.
 The login and Firebase waiting screens include a clearly labelled option to
 continue without Firebase or MOBO. Local test mode uses the app's complete set
 of 14 built-in per-element burst profiles, advances through the same shuffled
-18-map deck, and still displays every survey. It performs no candidate reads and
+17-map deck, and still displays every survey. It performs no candidate reads and
 no result writes; survey answers from a local run are intentionally discarded.
 
 If a connected result upload fails, the error screen also allows the tester to

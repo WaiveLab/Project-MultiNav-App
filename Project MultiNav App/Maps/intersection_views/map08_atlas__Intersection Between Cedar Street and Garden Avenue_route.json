@@ -23,17 +23,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        90
+                        60,
+                        950
                     ],
                     [
                         300,
-                        650
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Cedar Street",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -46,16 +46,16 @@
                 "coordinates": [
                     [
                         300,
-                        650
+                        950
                     ],
                     [
-                        60,
-                        650
+                        300,
+                        1510
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Garden Avenue",
+                "name": "On-route west sidewalk of Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -67,7 +67,7 @@
                 "type": "Point",
                 "coordinates": [
                     300,
-                    650
+                    950
                 ]
             },
             "properties": {
@@ -82,12 +82,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    90
+                    60,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route enters from Cedar Street",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -98,12 +98,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    60,
-                    650
+                    300,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route continues on Garden Avenue",
+                "name": "Route continues on Cedar Street",
                 "level": 1,
                 "accessible": true
             }

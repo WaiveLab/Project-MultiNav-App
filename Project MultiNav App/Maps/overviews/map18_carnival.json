@@ -23,17 +23,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
+                        750,
                         600
                     ],
                     [
-                        150,
-                        200
+                        450,
+                        600
                     ]
                 ]
             },
             "properties": {
-                "name": "Aspen Street",
+                "name": "Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -45,17 +45,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
-                        200
+                        450,
+                        600
                     ],
                     [
                         450,
-                        200
+                        1000
                     ]
                 ]
             },
             "properties": {
-                "name": "Summit Avenue",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -68,16 +68,16 @@
                 "coordinates": [
                     [
                         450,
-                        200
+                        1000
                     ],
                     [
-                        450,
-                        600
+                        750,
+                        1000
                     ]
                 ]
             },
             "properties": {
-                "name": "Birch Street",
+                "name": "Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -90,7 +90,7 @@
                 "coordinates": [
                     [
                         150,
-                        600
+                        200
                     ],
                     [
                         150,
@@ -112,7 +112,29 @@
                 "coordinates": [
                     [
                         450,
+                        200
+                    ],
+                    [
+                        450,
                         600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        1000
                     ],
                     [
                         450,
@@ -127,7 +149,7 @@
             }
         },
         {
-            "id": "str5",
+            "id": "str6",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -149,13 +171,13 @@
             }
         },
         {
-            "id": "str6",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         200
                     ],
                     [
@@ -171,7 +193,7 @@
             }
         },
         {
-            "id": "str7",
+            "id": "str8",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -181,7 +203,7 @@
                         600
                     ],
                     [
-                        750,
+                        450,
                         600
                     ]
                 ]
@@ -193,7 +215,7 @@
             }
         },
         {
-            "id": "str8",
+            "id": "str9",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -203,7 +225,7 @@
                         1000
                     ],
                     [
-                        750,
+                        450,
                         1000
                     ]
                 ]
@@ -215,7 +237,7 @@
             }
         },
         {
-            "id": "str9",
+            "id": "str10",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -270,7 +292,7 @@
         },
         {
             "id": "intersection-0-0",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -286,7 +308,7 @@
         },
         {
             "id": "intersection-1-0",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -317,17 +339,33 @@
             }
         },
         {
-            "id": "intersection-2-1",
+            "id": "intersection-0-1",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    750,
+                    150,
                     600
                 ]
             },
             "properties": {
-                "name": "Intersection Between Cedar Street and Garden Avenue",
+                "name": "Intersection Between Aspen Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "intersection-1-1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -350,7 +388,7 @@
         },
         {
             "id": "intersection-1-2",
-            "type": "offRouteIntersection",
+            "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -360,22 +398,6 @@
             },
             "properties": {
                 "name": "Intersection Between Birch Street and Market Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "intersection-2-2",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    750,
-                    1000
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -434,12 +456,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    150,
+                    750,
                     600
                 ]
             },
             "properties": {
-                "name": "Route Start at Intersection Between Aspen Street and Garden Avenue",
+                "name": "Route Start at Intersection Between Cedar Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -450,12 +472,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
-                    600
+                    750,
+                    1000
                 ]
             },
             "properties": {
-                "name": "Route End at Intersection Between Birch Street and Garden Avenue",
+                "name": "Route End at Intersection Between Cedar Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

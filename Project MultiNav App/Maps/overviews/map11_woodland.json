@@ -24,16 +24,16 @@
                 "coordinates": [
                     [
                         450,
-                        600
+                        200
                     ],
                     [
-                        150,
+                        450,
                         600
                     ]
                 ]
             },
             "properties": {
-                "name": "Garden Avenue",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -45,17 +45,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
+                        450,
                         600
                     ],
                     [
-                        150,
+                        450,
                         1000
                     ]
                 ]
             },
             "properties": {
-                "name": "Aspen Street",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -67,11 +67,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
+                        450,
                         1000
                     ],
                     [
-                        450,
+                        150,
                         1000
                     ]
                 ]
@@ -94,7 +94,7 @@
                     ],
                     [
                         150,
-                        600
+                        1400
                     ]
                 ]
             },
@@ -111,30 +111,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        150,
-                        1000
-                    ],
-                    [
-                        150,
-                        1400
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str5",
-            "type": "offRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
                         450,
-                        200
+                        1000
                     ],
                     [
                         450,
@@ -149,7 +127,7 @@
             }
         },
         {
-            "id": "str6",
+            "id": "str5",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -171,7 +149,7 @@
             }
         },
         {
-            "id": "str7",
+            "id": "str6",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -193,13 +171,13 @@
             }
         },
         {
-            "id": "str8",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         600
                     ],
                     [
@@ -215,7 +193,7 @@
             }
         },
         {
-            "id": "str9",
+            "id": "str8",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -237,7 +215,7 @@
             }
         },
         {
-            "id": "str10",
+            "id": "str9",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -307,22 +285,6 @@
             }
         },
         {
-            "id": "intersection-1-0",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    450,
-                    200
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Birch Street and Summit Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
             "id": "intersection-2-0",
             "type": "offRouteIntersection",
             "geometry": {
@@ -340,7 +302,7 @@
         },
         {
             "id": "intersection-0-1",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -350,6 +312,22 @@
             },
             "properties": {
                 "name": "Intersection Between Aspen Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "intersection-1-1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    450,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Birch Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -371,17 +349,17 @@
             }
         },
         {
-            "id": "intersection-0-2",
+            "id": "intersection-1-2",
             "type": "onRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    150,
+                    450,
                     1000
                 ]
             },
             "properties": {
-                "name": "Intersection Between Aspen Street and Market Avenue",
+                "name": "Intersection Between Birch Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -457,11 +435,11 @@
                 "type": "Point",
                 "coordinates": [
                     450,
-                    600
+                    200
                 ]
             },
             "properties": {
-                "name": "Route Start at Intersection Between Birch Street and Garden Avenue",
+                "name": "Route Start at Intersection Between Birch Street and Summit Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -472,12 +450,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    150,
                     1000
                 ]
             },
             "properties": {
-                "name": "Route End at Intersection Between Birch Street and Market Avenue",
+                "name": "Route End at Intersection Between Aspen Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

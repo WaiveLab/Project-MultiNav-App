@@ -23,17 +23,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
-                        1510
+                        60,
+                        950
                     ],
                     [
-                        600,
+                        300,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Birch Street",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -45,17 +45,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        300,
                         950
                     ],
                     [
                         600,
-                        650
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east crosswalk across Garden Avenue",
+                "name": "On-route south crosswalk across Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -68,16 +68,16 @@
                 "coordinates": [
                     [
                         600,
-                        650
+                        950
                     ],
                     [
-                        600,
-                        90
+                        840,
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Birch Street",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -88,12 +88,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    1510
+                    60,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route enters from Birch Street",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -104,12 +104,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    90
+                    840,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route continues on Birch Street",
+                "name": "Route continues on Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

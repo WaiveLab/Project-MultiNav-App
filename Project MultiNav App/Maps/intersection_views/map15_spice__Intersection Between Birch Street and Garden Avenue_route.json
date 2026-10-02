@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map02_harbor__Intersection Between Birch Street and Market Avenue_route",
-        "buildingName": "Intersection Between Birch Street and Market Avenue",
+        "name": "map15_spice__Intersection Between Birch Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -23,8 +23,30 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        90
+                        840,
+                        650
+                    ],
+                    [
+                        600,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north sidewalk of Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route1",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        650
                     ],
                     [
                         300,
@@ -33,13 +55,13 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Birch Street",
+                "name": "On-route north crosswalk across Birch Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "route1",
+            "id": "route2",
             "type": "onRouteCrosswalk",
             "geometry": {
                 "type": "LineString",
@@ -55,13 +77,13 @@
                 ]
             },
             "properties": {
-                "name": "On-route west crosswalk across Market Avenue",
+                "name": "On-route west crosswalk across Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
-            "id": "route2",
+            "id": "route3",
             "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
@@ -83,17 +105,33 @@
             }
         },
         {
+            "id": "turn",
+            "type": "turn",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Turn left",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
             "id": "start",
             "type": "start",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    90
+                    840,
+                    650
                 ]
             },
             "properties": {
-                "name": "Route enters from Birch Street",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

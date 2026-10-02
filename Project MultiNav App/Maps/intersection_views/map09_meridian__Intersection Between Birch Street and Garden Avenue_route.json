@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map05_aurora__Intersection Between Birch Street and Garden Avenue_route",
+        "name": "map09_meridian__Intersection Between Birch Street and Garden Avenue_route",
         "buildingName": "Intersection Between Birch Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,

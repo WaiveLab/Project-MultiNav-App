@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map18_carnival__Intersection Between Aspen Street and Summit Avenue_route",
-        "buildingName": "Intersection Between Aspen Street and Summit Avenue",
+        "name": "map18_carnival__Intersection Between Birch Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -23,39 +23,83 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
-                        1510
+                        840,
+                        650
                     ],
                     [
                         600,
-                        950
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Aspen Street",
+                "name": "On-route north sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteSidewalk",
+            "type": "onRouteCrosswalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
                         600,
-                        950
+                        650
                     ],
                     [
-                        840,
+                        300,
+                        650
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route north crosswalk across Birch Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route2",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        650
+                    ],
+                    [
+                        300,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route south sidewalk of Summit Avenue",
+                "name": "On-route west crosswalk across Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route3",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        300,
+                        1510
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -66,12 +110,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    950
+                    300,
+                    650
                 ]
             },
             "properties": {
-                "name": "Turn right",
+                "name": "Turn left",
                 "level": 1,
                 "accessible": true
             }
@@ -82,12 +126,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    1510
+                    840,
+                    650
                 ]
             },
             "properties": {
-                "name": "Route enters from Aspen Street",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -98,12 +142,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
-                    950
+                    300,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route continues on Summit Avenue",
+                "name": "Route continues on Birch Street",
                 "level": 1,
                 "accessible": true
             }

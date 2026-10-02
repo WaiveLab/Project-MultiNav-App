@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map02_harbor__Intersection Between Birch Street and Harbor Avenue_route",
-        "buildingName": "Intersection Between Birch Street and Harbor Avenue",
+        "name": "map13_alpine__Intersection Between Birch Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-24"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -23,45 +23,23 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
-                        90
+                        60,
+                        950
                     ],
                     [
                         300,
-                        650
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Birch Street",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteCrosswalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        300,
-                        650
-                    ],
-                    [
-                        300,
-                        950
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route west crosswalk across Harbor Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route2",
             "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
@@ -71,35 +49,13 @@
                         950
                     ],
                     [
-                        600,
-                        950
+                        300,
+                        1510
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route south sidewalk of Harbor Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route3",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        600,
-                        950
-                    ],
-                    [
-                        840,
-                        950
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route south sidewalk of Harbor Avenue",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -115,7 +71,7 @@
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn right",
                 "level": 1,
                 "accessible": true
             }
@@ -126,12 +82,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    90
+                    60,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route enters from Birch Street",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -142,12 +98,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
-                    950
+                    300,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route continues on Harbor Avenue",
+                "name": "Route continues on Birch Street",
                 "level": 1,
                 "accessible": true
             }

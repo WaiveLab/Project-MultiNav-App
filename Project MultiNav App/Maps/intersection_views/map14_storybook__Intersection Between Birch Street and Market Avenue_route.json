@@ -62,7 +62,7 @@
         },
         {
             "id": "route2",
-            "type": "onRouteCrosswalk",
+            "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -71,51 +71,13 @@
                         950
                     ],
                     [
-                        600,
-                        950
+                        300,
+                        1510
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route south crosswalk across Birch Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route3",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        600,
-                        950
-                    ],
-                    [
-                        840,
-                        950
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route south sidewalk of Market Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "turn",
-            "type": "turn",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    300,
-                    950
-                ]
-            },
-            "properties": {
-                "name": "Turn left",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -142,12 +104,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
-                    950
+                    300,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route continues on Market Avenue",
+                "name": "Route continues on Birch Street",
                 "level": 1,
                 "accessible": true
             }

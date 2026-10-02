@@ -9,26 +9,29 @@ const detailDir = path.join(mapsDir, 'intersection_views');
 const xs = [150, 450, 750], ys = [200, 600, 1000, 1400];
 const streets = ['Aspen Street', 'Birch Street', 'Cedar Street'];
 const avenues = ['Summit Avenue', 'Garden Avenue', 'Market Avenue', 'Harbor Avenue'];
-// Start, first turn, second turn, end. All four vertices are intersections.
+// Start, first on-route intersection, second on-route intersection, end.
+// Straight-through intersections are vertices too; every leg joins adjacent nodes.
 const routes = {
-    map01_orchard: [[750, 200], [450, 200], [450, 1400], [150, 1400]],
-    map02_harbor: [[150, 200], [450, 200], [450, 1400], [750, 1400]],
-    map03_songbird: [[450, 200], [450, 600], [150, 600], [150, 1000]],
-    map04_gemstone: [[750, 600], [450, 600], [450, 1000], [750, 1000]],
-    map05_aurora: [[150, 600], [450, 600], [450, 1000], [750, 1000]],
-    map06_melody: [[450, 1000], [450, 200], [150, 200], [150, 600]],
-    map07_palette: [[750, 600], [450, 600], [450, 200], [150, 200]],
-    map08_atlas: [[750, 200], [750, 600], [150, 600], [150, 1000]],
-    map09_meridian: [[450, 200], [150, 200], [150, 600], [450, 600]],
-    map10_solstice: [[150, 600], [450, 600], [450, 200], [150, 200]],
-    map11_woodland: [[450, 600], [150, 600], [150, 1000], [450, 1000]],
-    map12_desert: [[450, 200], [450, 600], [750, 600], [750, 1000]],
-    map13_alpine: [[150, 200], [750, 200], [750, 1000], [450, 1000]],
-    map14_storybook: [[450, 200], [450, 1000], [750, 1000], [750, 1400]],
-    map15_spice: [[750, 600], [750, 1000], [450, 1000], [450, 1400]],
-    map16_meadow: [[450, 600], [750, 600], [750, 1000], [450, 1000]],
-    map17_trades: [[450, 1000], [150, 1000], [150, 200], [450, 200]],
-    map18_carnival: [[150, 600], [150, 200], [450, 200], [450, 600]],
+    // Photo rows 1–3: traverse the middle segment from left to right.
+    map01_orchard: [[150, 200], [150, 600], [450, 600], [450, 200]],
+    map02_harbor: [[150, 600], [450, 600], [750, 600], [750, 200]],
+    map03_songbird: [[150, 1000], [150, 600], [450, 600], [450, 200]],
+    map04_gemstone: [[150, 200], [150, 600], [450, 600], [750, 600]],
+    // Row 2, column 2 (map05_aurora) is crossed out and excluded.
+    map06_melody: [[150, 1000], [150, 600], [450, 600], [750, 600]],
+    map07_palette: [[150, 200], [150, 600], [450, 600], [450, 1000]],
+    map08_atlas: [[150, 600], [450, 600], [750, 600], [750, 1000]],
+    map09_meridian: [[150, 1000], [150, 600], [450, 600], [450, 1000]],
+    // Photo rows 4–6: traverse the middle segment from top to bottom.
+    map10_solstice: [[150, 600], [450, 600], [450, 1000], [150, 1000]],
+    map11_woodland: [[450, 200], [450, 600], [450, 1000], [150, 1000]],
+    map12_desert: [[750, 600], [450, 600], [450, 1000], [150, 1000]],
+    map13_alpine: [[150, 600], [450, 600], [450, 1000], [450, 1400]],
+    map14_storybook: [[450, 200], [450, 600], [450, 1000], [450, 1400]],
+    map15_spice: [[750, 600], [450, 600], [450, 1000], [450, 1400]],
+    map16_meadow: [[150, 600], [450, 600], [450, 1000], [750, 1000]],
+    map17_trades: [[450, 200], [450, 600], [450, 1000], [750, 1000]],
+    map18_carnival: [[750, 600], [450, 600], [450, 1000], [750, 1000]],
 };
 const same = (a, b) => a[0] === b[0] && a[1] === b[1];
 const onSegment = (p, a, b) => (a[0] === b[0] ? p[0] === a[0] : p[1] === a[1]) &&
@@ -45,7 +48,7 @@ function document(name, buildingName, features) {
     const prior = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
     return {version: '1.0', type: 'TactileMapDocument', metadata: {
         name, buildingName, floor: 1, scale: '1 unit = 1 foot', coordinate_unit: 'feet',
-        coordinateOrigin: 'top-left', author: 'WaiveLab', created: prior?.metadata.created ?? '2026-09-24',
+        coordinateOrigin: 'top-left', author: 'WaiveLab', created: prior?.metadata.created ?? '2026-10-02',
     }, bounds: {width: 900, height: 1600}, features};
 }
 const write = (file, doc) => fs.writeFileSync(file, JSON.stringify(doc, null, 4) + '\n');
@@ -169,8 +172,8 @@ for (const [name, vertices] of Object.entries(routes)) {
     assert(vertices.length === 4);
     for (const p of vertices) assert(xs.includes(p[0]) && ys.includes(p[1]));
     for (let i = 1; i < vertices.length; i++) assert((vertices[i][0] === vertices[i - 1][0]) !== (vertices[i][1] === vertices[i - 1][1]));
-    for (let i = 1; i < vertices.length - 1; i++) assert((vertices[i - 1][0] === vertices[i][0]) !== (vertices[i][0] === vertices[i + 1][0]));
     const points = routeIntersections(vertices);
+    assert.deepEqual(points, vertices, `${name}: route must visit exactly two intermediate intersections`);
     assert(new Set(points.map(p => p.join(','))).size === points.length, `${name}: repeated intersection`);
     const file = path.join(overviewDir, name + '.json');
     outputs.set(file, makeOverview(JSON.parse(fs.readFileSync(file, 'utf8')), vertices, points));
@@ -181,8 +184,11 @@ for (const [name, vertices] of Object.entries(routes)) {
 }
 for (const [file, doc] of outputs) write(file, doc);
 // Only remove generated route overlays for these maps which are no longer referenced.
+const managedMaps = new Set([...Object.keys(routes), 'map05_aurora']);
 for (const file of fs.readdirSync(detailDir)) {
     const full = path.join(detailDir, file);
-    if (file.endsWith('_route.json') && Object.hasOwn(routes, file.split('__')[0]) && !outputs.has(full)) fs.unlinkSync(full);
+    if (file.endsWith('_route.json') && managedMaps.has(file.split('__')[0]) && !outputs.has(full)) fs.unlinkSync(full);
 }
+const removedOverview = path.join(overviewDir, 'map05_aurora.json');
+if (fs.existsSync(removedOverview)) fs.unlinkSync(removedOverview);
 console.log(`Updated ${Object.keys(routes).length} overviews, ${bases.size} shared bases, and ${outputs.size - bases.size - Object.keys(routes).length} route overlays.`);

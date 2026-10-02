@@ -40,7 +40,7 @@
         },
         {
             "id": "route1",
-            "type": "onRouteCrosswalk",
+            "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -49,57 +49,13 @@
                         950
                     ],
                     [
-                        600,
-                        950
+                        300,
+                        1510
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route south crosswalk across Birch Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route2",
-            "type": "onRouteCrosswalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        600,
-                        950
-                    ],
-                    [
-                        600,
-                        650
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route east crosswalk across Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route3",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        600,
-                        650
-                    ],
-                    [
-                        600,
-                        90
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route east sidewalk of Birch Street",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -110,12 +66,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
+                    300,
                     950
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn right",
                 "level": 1,
                 "accessible": true
             }
@@ -142,8 +98,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    90
+                    300,
+                    1510
                 ]
             },
             "properties": {

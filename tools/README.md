@@ -1,8 +1,14 @@
 # Map routes
 
-Every overview has exactly two turns (three straight legs). Start and end replace
-two grid-intersection markers. The four route vertices for each map are defined
-in `update_map_routes.cjs`; landmarks and overview metadata are preserved.
+Every overview follows one cell of the supplied whiteboard photo: exactly two
+on-route intersections, with start/end at two other grid intersections. Routes
+can have zero, one, or two turns. The four consecutive grid nodes for each map
+are defined in `update_map_routes.cjs`; landmarks and overview metadata are preserved.
+
+Map numbers match the photo's cells in row order, left to right and top to bottom.
+The crossed-out row 2, column 2 is excluded (`map05_aurora`), leaving 17 maps without
+renumbering the others. Rows 1–3 travel left to right between the marked dots;
+rows 4–6 travel top to bottom. The existing three-street/four-avenue grid is retained.
 
 After changing those vertices, regenerate and validate from the project root:
 
@@ -11,8 +17,8 @@ node tools/update_map_routes.cjs
 node tools/validate_maps.cjs
 ```
 
-The generator updates the 18 overviews, the 12 shared intersection bases, and
-the route overlays for all remaining on-route intersections. It removes obsolete
+The generator updates the 17 overviews, the 12 shared intersection bases, and
+34 route overlays (two per map). It removes the excluded overview and obsolete
 overlays for these maps. Straight-through intersections retain their overlays;
 start/end intersections have no overlay because the app does not zoom into those
 overview marker types. Local detail start/end dots mark entry/exit at the edge

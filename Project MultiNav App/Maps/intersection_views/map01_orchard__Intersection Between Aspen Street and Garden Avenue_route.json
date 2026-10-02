@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map16_meadow__Intersection Between Cedar Street and Market Avenue_route",
-        "buildingName": "Intersection Between Cedar Street and Market Avenue",
+        "name": "map01_orchard__Intersection Between Aspen Street and Garden Avenue_route",
+        "buildingName": "Intersection Between Aspen Street and Garden Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Cedar Street",
+                "name": "On-route west sidewalk of Aspen Street",
                 "level": 1,
                 "accessible": true
             }
@@ -49,13 +49,57 @@
                         650
                     ],
                     [
-                        60,
-                        650
+                        300,
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Market Avenue",
+                "name": "On-route west sidewalk of Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route2",
+            "type": "onRouteCrosswalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        300,
+                        950
+                    ],
+                    [
+                        600,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route south crosswalk across Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "route3",
+            "type": "onRouteSidewalk",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        600,
+                        950
+                    ],
+                    [
+                        840,
+                        950
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -67,11 +111,11 @@
                 "type": "Point",
                 "coordinates": [
                     300,
-                    650
+                    950
                 ]
             },
             "properties": {
-                "name": "Turn right",
+                "name": "Turn left",
                 "level": 1,
                 "accessible": true
             }
@@ -87,7 +131,7 @@
                 ]
             },
             "properties": {
-                "name": "Route enters from Cedar Street",
+                "name": "Route enters from Aspen Street",
                 "level": 1,
                 "accessible": true
             }
@@ -98,12 +142,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    60,
-                    650
+                    840,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route continues on Market Avenue",
+                "name": "Route continues on Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

@@ -23,52 +23,8 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         1000
-                    ],
-                    [
-                        450,
-                        200
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Birch Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str1",
-            "type": "onRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        450,
-                        200
-                    ],
-                    [
-                        150,
-                        200
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Summit Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str2",
-            "type": "onRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        150,
-                        200
                     ],
                     [
                         150,
@@ -83,8 +39,8 @@
             }
         },
         {
-            "id": "str3",
-            "type": "offRoute",
+            "id": "str1",
+            "type": "onRoute",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -93,8 +49,52 @@
                         600
                     ],
                     [
+                        450,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str2",
+            "type": "onRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        600
+                    ],
+                    [
+                        750,
+                        600
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str3",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
                         150,
-                        1400
+                        200
+                    ],
+                    [
+                        150,
+                        600
                     ]
                 ]
             },
@@ -111,8 +111,30 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         1000
+                    ],
+                    [
+                        150,
+                        1400
+                    ]
+                ]
+            },
+            "properties": {
+                "name": "Aspen Street",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "str5",
+            "type": "offRoute",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        450,
+                        200
                     ],
                     [
                         450,
@@ -127,7 +149,7 @@
             }
         },
         {
-            "id": "str5",
+            "id": "str6",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
@@ -149,13 +171,13 @@
             }
         },
         {
-            "id": "str6",
+            "id": "str7",
             "type": "offRoute",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        150,
                         200
                     ],
                     [
@@ -166,28 +188,6 @@
             },
             "properties": {
                 "name": "Summit Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "str7",
-            "type": "offRoute",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        150,
-                        600
-                    ],
-                    [
-                        750,
-                        600
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -270,7 +270,7 @@
         },
         {
             "id": "intersection-0-0",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -286,7 +286,7 @@
         },
         {
             "id": "intersection-1-0",
-            "type": "onRouteIntersection",
+            "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -317,6 +317,22 @@
             }
         },
         {
+            "id": "intersection-0-1",
+            "type": "onRouteIntersection",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150,
+                    600
+                ]
+            },
+            "properties": {
+                "name": "Intersection Between Aspen Street and Garden Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
             "id": "intersection-1-1",
             "type": "onRouteIntersection",
             "geometry": {
@@ -333,33 +349,17 @@
             }
         },
         {
-            "id": "intersection-2-1",
+            "id": "intersection-1-2",
             "type": "offRouteIntersection",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    750,
-                    600
-                ]
-            },
-            "properties": {
-                "name": "Intersection Between Cedar Street and Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "intersection-0-2",
-            "type": "offRouteIntersection",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    150,
+                    450,
                     1000
                 ]
             },
             "properties": {
-                "name": "Intersection Between Aspen Street and Market Avenue",
+                "name": "Intersection Between Birch Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -434,12 +434,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    150,
                     1000
                 ]
             },
             "properties": {
-                "name": "Route Start at Intersection Between Birch Street and Market Avenue",
+                "name": "Route Start at Intersection Between Aspen Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -450,12 +450,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    150,
+                    750,
                     600
                 ]
             },
             "properties": {
-                "name": "Route End at Intersection Between Aspen Street and Garden Avenue",
+                "name": "Route End at Intersection Between Cedar Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

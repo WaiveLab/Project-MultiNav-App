@@ -97,7 +97,7 @@ service cloud.firestore {
         && data.phaseStep is int
         && data.roundNumber is int
         && data.roundNumber >= 1
-        && data.roundNumber <= 18
+        && data.roundNumber <= 17
         && data.phaseStep == data.roundNumber
         && data.subjectiveScore is number
         && data.subjectiveScore >= 0

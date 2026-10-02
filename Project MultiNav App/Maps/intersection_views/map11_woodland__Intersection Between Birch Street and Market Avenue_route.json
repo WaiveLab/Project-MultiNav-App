@@ -2,14 +2,14 @@
     "version": "1.0",
     "type": "TactileMapDocument",
     "metadata": {
-        "name": "map17_trades__Intersection Between Aspen Street and Garden Avenue_route",
-        "buildingName": "Intersection Between Aspen Street and Garden Avenue",
+        "name": "map11_woodland__Intersection Between Birch Street and Market Avenue_route",
+        "buildingName": "Intersection Between Birch Street and Market Avenue",
         "floor": 1,
         "scale": "1 unit = 1 foot",
         "coordinate_unit": "feet",
         "coordinateOrigin": "top-left",
         "author": "WaiveLab",
-        "created": "2026-09-07"
+        "created": "2026-10-02"
     },
     "bounds": {
         "width": 900,
@@ -23,61 +23,55 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
-                        1510
+                        300,
+                        90
                     ],
                     [
-                        600,
-                        950
+                        300,
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Aspen Street",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteCrosswalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        600,
-                        950
-                    ],
-                    [
-                        600,
-                        650
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route east crosswalk across Garden Avenue",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route2",
             "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        300,
                         650
                     ],
                     [
-                        600,
-                        90
+                        60,
+                        650
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Aspen Street",
+                "name": "On-route north sidewalk of Market Avenue",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "turn",
+            "type": "turn",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    300,
+                    650
+                ]
+            },
+            "properties": {
+                "name": "Turn right",
                 "level": 1,
                 "accessible": true
             }
@@ -88,12 +82,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    1510
+                    300,
+                    90
                 ]
             },
             "properties": {
-                "name": "Route enters from Aspen Street",
+                "name": "Route enters from Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -104,12 +98,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    90
+                    60,
+                    650
                 ]
             },
             "properties": {
-                "name": "Route continues on Aspen Street",
+                "name": "Route continues on Market Avenue",
                 "level": 1,
                 "accessible": true
             }

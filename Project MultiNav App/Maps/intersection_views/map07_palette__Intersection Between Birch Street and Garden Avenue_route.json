@@ -23,17 +23,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        840,
-                        650
+                        60,
+                        950
                     ],
                     [
-                        600,
-                        650
+                        300,
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Garden Avenue",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -45,17 +45,17 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
-                        650
+                        300,
+                        950
                     ],
                     [
-                        600,
-                        90
+                        300,
+                        1510
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route east sidewalk of Birch Street",
+                "name": "On-route west sidewalk of Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -66,8 +66,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    650
+                    300,
+                    950
                 ]
             },
             "properties": {
@@ -82,8 +82,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
-                    650
+                    60,
+                    950
                 ]
             },
             "properties": {
@@ -98,8 +98,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    600,
-                    90
+                    300,
+                    1510
                 ]
             },
             "properties": {

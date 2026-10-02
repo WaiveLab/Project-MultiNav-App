@@ -16,4 +16,4 @@ being uploaded.
 
 The app tests one complete, per-element burst-haptic candidate per map round.
 See [FIREBASE_MOBO_CONTRACT.md](FIREBASE_MOBO_CONTRACT.md) for the schema,
-18-round handshake, Firebase setup checklist, and optimizer integration contract.
+17-round handshake, Firebase setup checklist, and optimizer integration contract.

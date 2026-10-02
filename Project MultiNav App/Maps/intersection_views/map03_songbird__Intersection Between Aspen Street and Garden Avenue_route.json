@@ -23,83 +23,39 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        840,
-                        650
+                        600,
+                        1510
                     ],
                     [
                         600,
-                        650
+                        950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route north sidewalk of Garden Avenue",
+                "name": "On-route east sidewalk of Aspen Street",
                 "level": 1,
                 "accessible": true
             }
         },
         {
             "id": "route1",
-            "type": "onRouteCrosswalk",
+            "type": "onRouteSidewalk",
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
                         600,
-                        650
+                        950
                     ],
                     [
-                        300,
-                        650
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route north crosswalk across Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route2",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        300,
-                        650
-                    ],
-                    [
-                        300,
+                        840,
                         950
                     ]
                 ]
             },
             "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
-                "level": 1,
-                "accessible": true
-            }
-        },
-        {
-            "id": "route3",
-            "type": "onRouteSidewalk",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        300,
-                        950
-                    ],
-                    [
-                        300,
-                        1510
-                    ]
-                ]
-            },
-            "properties": {
-                "name": "On-route west sidewalk of Aspen Street",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -110,12 +66,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    650
+                    600,
+                    950
                 ]
             },
             "properties": {
-                "name": "Turn left",
+                "name": "Turn right",
                 "level": 1,
                 "accessible": true
             }
@@ -126,12 +82,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
-                    650
+                    600,
+                    1510
                 ]
             },
             "properties": {
-                "name": "Route enters from Garden Avenue",
+                "name": "Route enters from Aspen Street",
                 "level": 1,
                 "accessible": true
             }
@@ -142,12 +98,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    300,
-                    1510
+                    840,
+                    950
                 ]
             },
             "properties": {
-                "name": "Route continues on Aspen Street",
+                "name": "Route continues on Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

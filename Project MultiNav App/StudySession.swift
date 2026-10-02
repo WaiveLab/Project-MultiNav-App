@@ -34,7 +34,7 @@ final class StudySession: ObservableObject {
     // Maps available for study rounds.
     static let overviewMaps: [String] = [
         "map01_orchard", "map02_harbor", "map03_songbird", "map04_gemstone",
-        "map05_aurora", "map06_melody", "map07_palette", "map08_atlas",
+        "map06_melody", "map07_palette", "map08_atlas",
         "map09_meridian", "map10_solstice", "map11_woodland", "map12_desert",
         "map13_alpine", "map14_storybook", "map15_spice", "map16_meadow",
         "map17_trades", "map18_carnival",
@@ -339,7 +339,7 @@ final class StudySession: ObservableObject {
     private func finishRound(completedRound: Int) {
         pendingResult = nil
 
-        // A study session has exactly one pass through the 18-map deck.
+        // A study session has exactly one pass through the 17-map deck.
         if completedRound >= Self.overviewMaps.count {
             pendingParameters = nil
             current = nil
