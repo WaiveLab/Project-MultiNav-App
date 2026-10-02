@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "Birch Street, route",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "Birch Street, route",
+                "name": "Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "Market Avenue, route",
+                "name": "Market Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -253,6 +253,22 @@
             }
         },
         {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    1200
+                ]
+            },
+            "properties": {
+                "name": "Fountain Plaza",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
             "id": "intersection-0-0",
             "type": "offRouteIntersection",
             "geometry": {
@@ -423,7 +439,7 @@
                 ]
             },
             "properties": {
-                "name": "Start of route at Intersection Between Birch Street and Summit Avenue",
+                "name": "Route Start at Intersection Between Birch Street and Summit Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -439,7 +455,7 @@
                 ]
             },
             "properties": {
-                "name": "End of route at Intersection Between Aspen Street and Market Avenue",
+                "name": "Route End at Intersection Between Aspen Street and Market Avenue",
                 "level": 1,
                 "accessible": true
             }

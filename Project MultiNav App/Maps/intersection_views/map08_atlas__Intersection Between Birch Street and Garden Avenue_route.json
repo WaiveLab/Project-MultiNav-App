@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "South sidewalk of Garden Avenue, route",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "South crosswalk across Birch Street, route",
+                "name": "On-route south crosswalk across Birch Street",
                 "level": 1,
                 "accessible": true
             }
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "South sidewalk of Garden Avenue, route",
+                "name": "On-route south sidewalk of Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -93,7 +93,7 @@
                 ]
             },
             "properties": {
-                "name": "Start of route from Garden Avenue",
+                "name": "Route enters from Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -109,7 +109,7 @@
                 ]
             },
             "properties": {
-                "name": "End of route on Garden Avenue",
+                "name": "Route continues on Garden Avenue",
                 "level": 1,
                 "accessible": true
             }

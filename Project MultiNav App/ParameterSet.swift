@@ -267,22 +267,6 @@ private enum FirestoreNumber {
 }
 
 extension ParameterSet {
-    /// Fixed practice values, independent of remote study candidates.
-    /// Preserve pulse timing and sharpness; use full intensity for the route
-    /// and intersection cues in both overview and detail maps.
-    static var practiceHaptics: [HapticPat: BurstParameters] {
-        var profiles = defaultHaptics
-        let fullIntensity: [HapticPat] = [.start, .end, .onRoute, .onRouteIntersection,
-            .offRouteIntersection, .onRouteSidewalk, .onRouteCrosswalk, .turn, .intersectionCenter]
-        for type in fullIntensity {
-            let profile = profiles[type]!
-            profiles[type] = BurstParameters(intensity: 1.0, sharpness: profile.sharpness,
-                pulseCount: profile.pulseCount, onDuration: profile.onDuration,
-                offDuration: profile.offDuration)
-        }
-        return profiles
-    }
-
     static let defaultHaptics: [HapticPat: BurstParameters] = [
         .onRoute: BurstParameters(intensity: 1.0, sharpness: 0.5, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),
         .offRoute: BurstParameters(intensity: 0.25, sharpness: 0.25, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),

@@ -33,7 +33,7 @@
                 ]
             },
             "properties": {
-                "name": "Garden Avenue, route",
+                "name": "Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -55,7 +55,7 @@
                 ]
             },
             "properties": {
-                "name": "Garden Avenue, route",
+                "name": "Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -77,7 +77,7 @@
                 ]
             },
             "properties": {
-                "name": "Cedar Street, route",
+                "name": "Cedar Street",
                 "level": 1,
                 "accessible": true
             }
@@ -226,6 +226,22 @@
             },
             "properties": {
                 "name": "Clock Tower",
+                "level": 1,
+                "accessible": true
+            }
+        },
+        {
+            "id": "lmk1",
+            "type": "landmark",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    600,
+                    1200
+                ]
+            },
+            "properties": {
+                "name": "Fountain Plaza",
                 "level": 1,
                 "accessible": true
             }
@@ -401,7 +417,7 @@
                 ]
             },
             "properties": {
-                "name": "Start of route at Intersection Between Aspen Street and Garden Avenue",
+                "name": "Route Start at Intersection Between Aspen Street and Garden Avenue",
                 "level": 1,
                 "accessible": true
             }
@@ -417,7 +433,7 @@
                 ]
             },
             "properties": {
-                "name": "End of route at Intersection Between Cedar Street and Summit Avenue",
+                "name": "Route End at Intersection Between Cedar Street and Summit Avenue",
                 "level": 1,
                 "accessible": true
             }

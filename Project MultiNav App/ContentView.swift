@@ -171,10 +171,6 @@ struct MapScreen: View {
 
     private var config: TactileMapViewConfiguration {
         var config = TactileMapViewConfiguration.default
-        config.canvasFitsFeatures = true
-        // Fit coordinates while retaining room for fixed-size markers, road
-        // caps and borders, including devices with different pixel densities.
-        config.canvasPadding = PhysicalDimensions.mmToPoints(isZoomed ? 5 : 4) + 4
 
         config.typeStyles[.start] = ElementStyle(
             color: .systemGreen,
@@ -261,7 +257,6 @@ struct MapScreen: View {
                     configuration: config,
                     feedbackPolicy: policy,
                     onBackGesture: { handleBackGesture() },
-                    onCompletionGesture: { completeExploration() },
                     onDoubleTap: { element in
                         doubleTap(on: element)
                     }
@@ -276,6 +271,7 @@ struct MapScreen: View {
                 Spacer()
             }
 
+            foundButton
         }
         
         //Toolbar with navigation buttons
@@ -309,15 +305,6 @@ struct MapScreen: View {
         }
         .onAppear { loadOverview() }
         .onChange(of: session.currentMapName) { _, _ in loadOverview() }
-        .task(id: presentation?.layers.map(\.id)) {
-            guard let presentation else { return }
-            // Let the old map finish cancelling its touch feedback first.
-            do { try await Task.sleep(for: .milliseconds(250)) }
-            catch { return }
-            guard !Task.isCancelled else { return }
-            policy.audioEngine.speak(presentation.isZoomed ? "Intersection view" : "Route overview",
-                                     configuration: policy.config)
-        }
         .onDisappear { policy.stopAll() }
         .alert("Could not open intersection", isPresented: Binding(
             get: { intersectionLoadError != nil },
@@ -353,10 +340,18 @@ struct MapScreen: View {
         .accessibilityLabel("Round \(session.roundNumber). Your task: find \(session.targetName)")
     }
 
-    private func completeExploration() {
-        guard presentation != nil, session.phase == .exploring else { return }
-        policy.stopAll()
-        session.foundTarget()
+    private var foundButton: some View {
+        Button {
+            policy.stopAll()
+            session.foundTarget()
+        } label: {
+            Text("I found the target")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        .padding()
+        .accessibilityHint("Ends this round and opens the survey")
     }
 
     private func loadOverview() {
@@ -487,11 +482,6 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     /// finger reaches the round's destination).
     var onElementEntered: ((any TactileMapElement) -> Void)?
 
-    override func stopAll() {
-        super.stopAll()
-        toneGen.stop()
-    }
-
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
         onElementEntered?(element)
 
@@ -515,7 +505,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             audioEngine.speak(name, configuration: config)
 
         case .onRouteIntersection:
-            audioEngine.speak("\(name), route", configuration: config)
+            audioEngine.speak(name, configuration: config)
 
         case .offRouteIntersection:
             audioEngine.speak("This intersection is not on your route.", configuration: config)
@@ -559,9 +549,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     /// Taps still announce the element, but do not add the package's default
     /// transient tap on top of the optimizer-controlled burst feedback.
     override func onTap(element: any TactileMapElement, touchType: TouchType) {
-        let name = element.properties.name
-        audioEngine.speak(element.elementType == .onRouteIntersection ? "\(name), route" : name,
-                          configuration: config)
+        audioEngine.speak(element.properties.name, configuration: config)
     }
     
     // Stops the haptic engine and tone generator when the finger exits an element

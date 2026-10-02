@@ -126,26 +126,15 @@ hapticMode: "burst"
 haptics                              (the complete tested 14-profile snapshot)
 subjectiveScore, objectiveScore
 touchedTarget, timeToTargetSeconds
-questionnaireVersion: 2
-q_cognitive_load, q_clear, q_likability, q_comfort
+q_pleasant, q_clear, q_distinct, q_comfort
 ```
 
 The researcher administers the four survey questions and records the
 participant's answers. There is no attention check: results omit both
 `attentionCheckPassed` and `q_attention`. MOBO must accept results without
 these fields and process each completed round, publishing the next candidate
-until round 17. Questionnaire version 2 asks cognitive load (integer 1–21),
-clarity, likability and comfort (each integer 1–5), in that order. The four
-normalized dimensions have equal weight:
-
-`subjectiveScore = ((21 - q_cognitive_load) / 20 + (q_clear - 1) / 4 + (q_likability - 1) / 4 + (q_comfort - 1) / 4) / 4`
-
-Lower cognitive load scores better; higher values score better for the other
-three questions. The document specifies the questions and scales but not a
-composite formula; this preserves the existing equal-weight, 0–1 objective.
-Raw answers and `questionnaireVersion` preserve the ability to re-score later.
-Do not pool version-2 ratings with the previous 1–7 questionnaire without an
-explicit analysis decision. The haptic candidate schema remains version 2.
+until round 17. The subjective score remains the mean of the four 1–7 ratings,
+normalized to 0–1 as `(mean - 1) / 6`.
 
 Deploy the updated app-owned `firestore.rules` before using this app version
 with Firebase; the previous rules require the removed attention-check flag and
