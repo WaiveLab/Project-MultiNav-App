@@ -276,7 +276,7 @@ struct MapScreen: View {
                             StudyMapLayout.fittedLayers(presentation.layers)
                         ),
                         configuration: config,
-                        feedbackPolicy: policy,
+                        feedbackPolicy: ExplorationTouchFeedback(policy: policy),
                         onBackGesture: { handleBackGesture() },
                         onDoubleTap: { element in
                             doubleTap(on: element)
@@ -488,6 +488,32 @@ extension TactileElementType {
 
 // MARK: Feedback Policy
 
+/// The package calls stopAll on finger lift. End touch-driven vibration there,
+/// but let the current audio cue finish. Map/screen exits still call the real
+/// policy's stopAll to silence every channel.
+@MainActor
+private final class ExplorationTouchFeedback: FeedbackPolicy {
+    let policy: OptimizedSpatialPolicy
+
+    init(policy: OptimizedSpatialPolicy) { self.policy = policy }
+
+    func onEnter(element: any TactileMapElement, touchType: TouchType) {
+        policy.onEnter(element: element, touchType: touchType)
+    }
+
+    func onContinue(element: any TactileMapElement, touchType: TouchType) {
+        policy.onContinue(element: element, touchType: touchType)
+    }
+
+    func onExit(element: any TactileMapElement) { policy.onExit(element: element) }
+
+    func onTap(element: any TactileMapElement, touchType: TouchType) {
+        policy.onTap(element: element, touchType: touchType)
+    }
+
+    func stopAll() { policy.hapticEngine.stopAll() }
+}
+
 /// The round's feedback policy. Every known element type gets its own burst
 /// profile from the optimizer's atomic parameter set. Instances share a
 /// profile only when they have the same `HapticPat` element type.
@@ -507,6 +533,9 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     var onElementEntered: ((any TactileMapElement) -> Void)?
 
     override func onEnter(element: any TactileMapElement, touchType: TouchType) {
+        // Replace the previous cue even when the new element has no speech.
+        audioEngine.stopAll()
+        toneGen.stop()
         onElementEntered?(element)
 
         let name = StudyMapSpeech.label(type: element.elementType.rawValue,
@@ -546,7 +575,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
         // ── Zoomed-in view ──
         case .street:
-            break
+            audioEngine.speak(name, configuration: config)
 
         case .offRouteSidewalk:
             audioEngine.speak(name, configuration: config)
@@ -574,6 +603,8 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     /// Taps still announce the element, but do not add the package's default
     /// transient tap on top of the optimizer-controlled burst feedback.
     override func onTap(element: any TactileMapElement, touchType: TouchType) {
+        audioEngine.stopAll()
+        toneGen.stop()
         audioEngine.speak(StudyMapSpeech.label(type: element.elementType.rawValue,
                                               name: element.properties.name), configuration: config)
     }
@@ -583,11 +614,10 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
         toneGen.stop()
     }
     
-    // Stops the haptic engine and tone generator when the finger exits an element
+    // Audio is one-shot per entry and may finish across empty space/finger lift.
+    // Only vibration stops here; the next entry or map/screen exit stops audio.
     override func onExit(element: any TactileMapElement) {
-        audioEngine.stopAll()
         hapticEngine.stopAll()
-        toneGen.stop()
     }
 
     /// Restart any optimized type's own burst when its cycle finishes while

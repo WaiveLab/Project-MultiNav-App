@@ -49,4 +49,22 @@ with tempfile.TemporaryDirectory(prefix="multinav-checks-") as temporary:
     executable = directory / ("study-checks.exe" if os.name == "nt" else "study-checks")
     run([swift, "-module-cache-path", directory / "module-cache", *copied, "-o", executable])
     run([executable, app / "Maps"])
+
+    # Exercise the actual app policy and its private touch adapter with recording
+    # engines. Extract only the non-SwiftUI tail; production sources stay intact.
+    policy_text = (app / "ContentView.swift").read_text(encoding="utf-8-sig")
+    policy_text = policy_text.split("// MARK: Custom Element Types", 1)[1]
+    # In the app this shadows an imported module's street; in this single test
+    # module use the package's identical definition instead of redeclaring it.
+    policy_text = policy_text.replace('    static let street = TactileElementType(rawValue: "street")', '')
+    policy_file = directory / "AudioPolicyChecks.swift"
+    policy_file.write_text(policy_text + "\n" + (root / "tools/tests/AudioPolicyTests.swift").read_text(), encoding="utf-8")
+    feedback_file = directory / "FeedbackPolicy.swift"
+    feedback_text = (args.library / "Sources/TactileMapFeedback/FeedbackPolicy.swift").read_text(encoding="utf-8-sig")
+    feedback_file.write_text(feedback_text.replace("import TactileMapCore\n", "").replace("import AVFoundation\n", ""), encoding="utf-8")
+    audio_sources = [path for path in copied if path.name != "StudyUpdateTests.swift"]
+    audio_sources += [feedback_file, policy_file, root / "tools/tests/AudioPolicyTestDoubles.swift"]
+    audio_executable = directory / ("audio-checks.exe" if os.name == "nt" else "audio-checks")
+    run([swift, "-module-cache-path", directory / "module-cache", *audio_sources, "-o", audio_executable])
+    run([audio_executable])
 print("All app Swift sources parsed. Portable study checks passed; iOS build/device verification still required.")
