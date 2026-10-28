@@ -33,7 +33,7 @@ sources = [core / (name + ".swift") for name in [
 ]]
 sources += [args.library / "Sources/TactileMapFeedback/HapticPattern.swift"]
 sources += [app / (name + ".swift") for name in [
-    "ParameterSet", "PracticeHaptics", "SurveyResponse", "StudyMapLayout", "StudyMapSpeech",
+    "ParameterSet", "PracticeHaptics", "SurveyResponse", "StudyPerformance", "StudyMapLayout", "StudyMapSpeech",
 ]]
 sources += [root / "tools/tests/StudyUpdateTests.swift"]
 with tempfile.TemporaryDirectory(prefix="multinav-checks-") as temporary:

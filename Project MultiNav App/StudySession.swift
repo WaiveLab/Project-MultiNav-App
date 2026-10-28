@@ -40,10 +40,6 @@ final class StudySession: ObservableObject {
         "map17_trades", "map18_carnival",
     ]
 
-    // Used to convert time-to-target into an objective score.
-    private let tBest: TimeInterval = 5
-    private let tWorst: TimeInterval = 90
-
     // Published values allow SwiftUI views to react to session changes.
     @Published var phase: Phase = .login
     @Published private(set) var current: ParameterSet?
@@ -271,10 +267,11 @@ final class StudySession: ObservableObject {
         phase = .survey
     }
 
-    // Converts completion time into a normalized 0–1 objective score.
+    // An unfinished target-finding task earns no speed credit. Finishing the
+    // exploration screen alone is not evidence that the target was reached.
     var objectiveScore: Double {
-        guard let t = timeToTarget else { return 0 }
-        return min(1, max(0, (tWorst - t) / (tWorst - tBest)))
+        StudyPerformance.objectiveScore(touchedTarget: touchedTarget,
+                                        timeToTarget: timeToTarget)
     }
 
     // Submits the round's results and prepares for the next round.

@@ -4,9 +4,22 @@ import Foundation
 struct StudyUpdateTests {
     static func main() throws {
         try survey()
+        performance()
         try haptics()
         try maps(root: URL(fileURLWithPath: CommandLine.arguments[1]))
-        print("Passed questionnaire, haptic preservation, spoken cue and map alignment checks.")
+        print("Passed questionnaire, performance scoring, haptic preservation, spoken cue and map alignment checks.")
+    }
+
+    static func performance() {
+        precondition(StudyPerformance.objectiveScore(touchedTarget: false, timeToTarget: 5) == 0)
+        precondition(StudyPerformance.objectiveScore(touchedTarget: false, timeToTarget: 40) == 0)
+        precondition(StudyPerformance.objectiveScore(touchedTarget: true, timeToTarget: nil) == 0)
+        for invalid in [-1.0, Double.nan, Double.infinity] {
+            precondition(StudyPerformance.objectiveScore(touchedTarget: true, timeToTarget: invalid) == 0)
+        }
+        for (time, expected) in [(0.0, 1.0), (5, 1), (47.5, 0.5), (90, 0), (120, 0)] {
+            precondition(StudyPerformance.objectiveScore(touchedTarget: true, timeToTarget: time) == expected)
+        }
     }
 
     static func survey() throws {
@@ -64,6 +77,21 @@ struct StudyUpdateTests {
         let fields = remote.asResultFields
         let parsed = ParameterSet(document: fields)!
         precondition(parsed == remote)
+        // The app must reject candidates that Firestore's exact haptic-map
+        // rules reject, rather than silently dropping optimizer fields.
+        var extraCue = fields
+        var extraCueHaptics = fields["haptics"] as! [String: Any]
+        extraCueHaptics["unknownCue"] = profiles[.start]!.asFirestoreFields
+        extraCue["haptics"] = extraCueHaptics
+        precondition(ParameterSet(document: extraCue) == nil)
+        var extraField = profiles[.start]!.asFirestoreFields
+        extraField["duration"] = 0.2
+        precondition(BurstParameters(document: extraField) == nil)
+        var missingCue = fields
+        var missingCueHaptics = fields["haptics"] as! [String: Any]
+        missingCueHaptics.removeValue(forKey: "intersectionCenter")
+        missingCue["haptics"] = missingCueHaptics
+        precondition(ParameterSet(document: missingCue) == nil)
         let before = try JSONSerialization.data(withJSONObject: fields, options: .sortedKeys)
         let after = try JSONSerialization.data(withJSONObject: parsed.asResultFields, options: .sortedKeys)
         precondition(before == after)

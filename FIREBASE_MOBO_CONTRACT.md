@@ -73,7 +73,11 @@ Publish only the next expected round. Do not pre-publish all 17 candidates: the
 app intentionally listens to the newest document and will not run a candidate
 whose `phaseStep` is not exactly the next round.
 
-Here is a complete round-one example using the app's current per-type defaults:
+Here is a complete round-one example using the expert seed profiles also kept in
+`tools/seed_firebase_candidate.py`. These remote seed profiles retain their
+original intensities. The app's built-in defaults and local practice profiles
+use intensity 1 for every cue; local practice does not redefine the optimizer
+seed or modify received remote candidates.
 
 ```json
 {
@@ -126,19 +130,43 @@ hapticMode: "burst"
 haptics                              (the complete tested 14-profile snapshot)
 subjectiveScore, objectiveScore
 touchedTarget, timeToTargetSeconds
-q_pleasant, q_clear, q_distinct, q_comfort
+questionnaireVersion: 2
+q_cognitive_load, q_clear, q_likability, q_comfort
 ```
 
 The researcher administers the four survey questions and records the
 participant's answers. There is no attention check: results omit both
 `attentionCheckPassed` and `q_attention`. MOBO must accept results without
 these fields and process each completed round, publishing the next candidate
-until round 17. The subjective score remains the mean of the four 1–7 ratings,
-normalized to 0–1 as `(mean - 1) / 6`.
+until round 17. Questionnaire version 2 uses cognitive load from 1–21 (lower is
+better) and clarity, likability and comfort from 1–5 (higher is better). The four
+normalized responses contribute equally:
 
-Deploy the updated app-owned `firestore.rules` before using this app version
-with Firebase; the previous rules require the removed attention-check flag and
-will reject new results. This change does not require a schema-version bump.
+```text
+subjectiveScore = ((21 - q_cognitive_load) / 20
+                 + (q_clear - 1) / 4
+                 + (q_likability - 1) / 4
+                 + (q_comfort - 1) / 4) / 4
+```
+
+`schemaVersion` describes haptics; `questionnaireVersion` describes the survey.
+Legacy results lack `questionnaireVersion` and use different questions/scales.
+Keep them distinct in training and analysis. The current repository rules allow
+extra questionnaire fields and do not require an attention-check flag. The
+app-owned live rules must be inspected separately before a connected study;
+changing the questionnaire does not itself require a haptic schema bump.
+
+The objective records destination contact, not the participant's ability to
+describe the route. The first touch of the overview destination sets
+`touchedTarget = true` and `timeToTargetSeconds`; successful contact earns
+`clamp((90 - timeToTargetSeconds) / 85, 0, 1)`. Without destination contact the
+objective is zero. If the researcher ends exploration before contact, the
+recorded elapsed time is time until stopping, not a successful target time;
+interpret it together with `touchedTarget`. There is no automatic timeout or
+route-recall assessment. The researcher can open the survey with a three-finger
+upward swipe or the **Finish exploration** accessibility action. A study timeout
+and recall outcome must be defined in the protocol rather than inferred from
+the 90-second score floor.
 
 `parameterDocumentId` is the Firestore document that the app actually loaded.
 MOBO should join a result to a candidate with this field; `candidateId` is the
@@ -165,8 +193,10 @@ change on that deterministic document.
    administers the four-question survey and records the participant's answers.
 5. The app writes `interventionResults` with scores, answers, the source IDs,
    and the exact profile snapshot it tested.
-6. MOBO reads that result, calculates independent values for every element type,
-   and adds the next complete candidate with `phaseStep = previous + 1`.
+6. MOBO reads that result and adds the next complete candidate with
+   `phaseStep = previous + 1`. The service currently varies four shared JND
+   offsets around the seed and expands them into all 14 profiles; one round's
+   pair of scores does not identify 70 independently optimized values.
 7. Repeat through `phaseStep = 17`. After result 17 is saved, the app displays
    completion and stops listening.
 
@@ -222,8 +252,9 @@ Firestore Security Rules and are controlled by Google Cloud IAM.
    target file currently points to Firebase project `project-multinav`.
 3. Enable Anonymous sign-in under Authentication > Sign-in method.
 4. Create the default Cloud Firestore database.
-5. Publish `firestore.rules` from this repository.
-6. Create/deploy the composite index in `firestore.indexes.json`.
+5. Coordinate rule changes with the app team, which owns the live rules. Check
+   that they accept this result schema and the 17-round app budget.
+6. Check the live composite indexes and create any missing required index.
 7. Add one complete schema-v2 `parameterValues` document for a test `pid`.
 8. Run on a physical iPhone, enter the same `pid`, and confirm round 1 starts.
 9. Complete its survey and confirm one `interventionResults` document appears
@@ -235,18 +266,14 @@ Use a new `pid` for each real study session. If a participant must restart under
 the same `pid`, MOBO must publish a fresh round-one candidate after the restart;
 otherwise the newest document may still belong to the earlier session.
 
-If the Firebase CLI is installed, run the following from the repository root
-after signing in. `.firebaserc` pins these files to `project-multinav`, which
-helps avoid deploying the rules to the old Firebase project.
+Do not blindly deploy Firestore rules from either repository: the app team owns
+the live rules and this file does not establish that the checked-in rules are
+the deployed version. `.firebaserc` selects `project-multinav` but is not a
+deployment approval. Index deployment is also declarative and can delete live
+indexes omitted from `firestore.indexes.json`; list and merge existing indexes
+before any such deployment.
 
-```shell
-firebase login
-firebase use project-multinav
-firebase deploy --only firestore:rules,firestore:indexes
-```
-
-Without the CLI, copy `firestore.rules` into Firestore > Rules and publish it,
-then create the index in Firestore > Indexes with collection ID
+The required candidate index has collection ID
 `parameterValues`, field `pid` ascending, field `schemaVersion` ascending, and
 field `createdAt` descending.
 

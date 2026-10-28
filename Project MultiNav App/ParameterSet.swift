@@ -75,7 +75,10 @@ struct BurstParameters: Equatable {
     }
 
     init?(document data: [String: Any]) {
-        guard let intensity = FirestoreNumber.double(data["intensity"]),
+        guard Set(data.keys) == Set([
+                "intensity", "sharpness", "pulseCount", "onDuration", "offDuration"
+              ]),
+              let intensity = FirestoreNumber.double(data["intensity"]),
               let sharpness = FirestoreNumber.double(data["sharpness"]),
               let pulseCount = FirestoreNumber.integer(
                 data["pulseCount"],
@@ -170,7 +173,8 @@ extension ParameterSet {
                 data["schemaVersion"],
                 in: Self.currentSchemaVersion...Self.currentSchemaVersion
               ) == Self.currentSchemaVersion,
-              let rawHaptics = data["haptics"] as? [String: Any]
+              let rawHaptics = data["haptics"] as? [String: Any],
+              Set(rawHaptics.keys) == Set(HapticPat.allCases.map(\.rawValue))
         else { return nil }
 
         var decodedHaptics: [HapticPat: BurstParameters] = [:]

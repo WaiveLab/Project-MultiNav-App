@@ -36,7 +36,9 @@ subjectiveScore = (
 ```
 
 Use floating-point division. A score of 1 is best, 0 is worst. All dimensions
-carry equal weight. The existing `objectiveScore` calculation is unchanged.
+carry equal weight. The objective measures destination contact, not route
+description. A round without destination contact scores zero; a successful
+contact uses `clamp((90 - timeToTargetSeconds) / 85, 0, 1)`.
 
 Example of just the questionnaire portion of an uploaded result:
 
