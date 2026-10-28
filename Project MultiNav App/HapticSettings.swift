@@ -16,22 +16,22 @@ class HapticSettings: ObservableObject {
     @Published var patterns: [HapticPat: HapticPattern] = [
         //Overview Elements
         .onRoute: HapticPattern(intensity: 1.0, sharpness: 0.5, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
-        .offRoute: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
-        .onRouteIntersection: HapticPattern(intensity: 0.75, sharpness: 0.25, mode: .burst(pulseCount: 15, onDuration: 0.25, offDuration: 0.05)),
-        .offRouteIntersection: HapticPattern(intensity: 0.75, sharpness: 0.25, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
+        .offRoute: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
+        .onRouteIntersection: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 15, onDuration: 0.25, offDuration: 0.05)),
+        .offRouteIntersection: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
         
         //Intersection elements
-        .street: HapticPattern(intensity: 0.33, sharpness: 0.33, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.15)),
-        .onRouteSidewalk: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .offRouteSidewalk: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .onRouteCrosswalk:HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .offRouteCrosswalk: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .turn: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .intersectionCenter: HapticPattern(intensity: 0.25, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .street: HapticPattern(intensity: 1.0, sharpness: 0.33, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.15)),
+        .onRouteSidewalk: HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .offRouteSidewalk: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .onRouteCrosswalk:HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .offRouteCrosswalk: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .turn: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
+        .intersectionCenter: HapticPattern(intensity: 1.0, sharpness: 0.25, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
         
         //All applicaiton elements
-        .start: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 10, onDuration: 0.25, offDuration: 0.50)),
+        .start: HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .burst(pulseCount: 10, onDuration: 0.25, offDuration: 0.50)),
         .landmark: HapticPattern(intensity: 1.0, sharpness: 0.15, mode: .burst(pulseCount: 60, onDuration: 1.00, offDuration: 0.01)),
-        .end: HapticPattern(intensity: 0.75, sharpness: 1.0, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
+        .end: HapticPattern(intensity: 1.0, sharpness: 1.0, mode: .burst(pulseCount: 120, onDuration: 1.00, offDuration: 0.01)),
     ]
 }
