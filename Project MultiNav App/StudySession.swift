@@ -51,12 +51,17 @@ final class StudySession: ObservableObject {
     @Published private(set) var isLocalTestMode = false
     @Published private(set) var parameterStatusMessage: String?
     @Published var authError: String?
+    @Published private(set) var isRegistering = false
+    @Published private(set) var registrationError: String?
+    @Published private(set) var parameterWaitTimedOut = false
 
     // Tracks maps, Firebase updates, and the current round.
     private var mapDeck: [String] = []
     private var deckIndex = 0
     private var repo: MoboRepo?
     private var listenTask: Task<Void, Never>?
+    private var registrationTask: Task<Void, Never>?
+    private var parameterTimeoutTask: Task<Void, Never>?
     private var activeParameters: PublishedParameters?
     private var pendingParameters: PublishedParameters?
     private var pendingResult: PendingResult?
@@ -66,12 +71,19 @@ final class StudySession: ObservableObject {
     private var timeToTarget: TimeInterval?
     private var touchedTarget = false
     private let sessionID = UUID().uuidString
+    private let parameterWaitNanoseconds: UInt64
+
+    init(parameterWaitNanoseconds: UInt64 = 90_000_000_000) {
+        self.parameterWaitNanoseconds = parameterWaitNanoseconds
+    }
 
     // Signs the participant into Firebase anonymously.
     func signIn() async {
         guard !isSignedIn else { return }
         do {
-            _ = try await Auth.auth().signInAnonymously()
+            if Auth.auth().currentUser == nil {
+                _ = try await Auth.auth().signInAnonymously()
+            }
             isSignedIn = true
             authError = nil
         } catch {
@@ -86,21 +98,86 @@ final class StudySession: ObservableObject {
         // prevents rapid repeated activations from leaving two Firestore
         // listeners feeding the same reset session.
         guard phase == .login, isSignedIn, !pid.isEmpty else { return }
+        guard Self.isValidParticipantID(pid) else {
+            registrationError = "Use 1–100 letters, digits, hyphens or underscores; start with a letter or digit."
+            return
+        }
         prepareSession(participantID: pid, localTestMode: false)
+        connectParticipant()
+    }
 
-        let repo = MoboRepo(participantID: pid)
+    static func isValidParticipantID(_ pid: String) -> Bool {
+        pid.range(of: "^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$", options: .regularExpression) != nil
+            && !pid.contains("\n") && !pid.contains("\r")
+    }
+
+    private func connectParticipant() {
+        let repo = MoboRepo(participantID: participantID)
         self.repo = repo
+        registrationError = nil
+        parameterWaitTimedOut = false
+        if roundNumber > 0 {
+            listenForParameters(using: repo)
+            return
+        }
+        isRegistering = true
+        parameterStatusMessage = "Registering participant \(participantID)…"
+        registrationTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await repo.registerParticipant(sessionID: sessionID)
+                guard !Task.isCancelled, !isLocalTestMode, self.repo === repo else { return }
+                isRegistering = false
+                parameterStatusMessage = "Participant registered. Waiting for MOBO's first vibration settings…"
+                listenForParameters(using: repo)
+            } catch {
+                guard !Task.isCancelled, self.repo === repo else { return }
+                isRegistering = false
+                registrationError = "Could not register participant: \(error.localizedDescription)"
+                parameterStatusMessage = nil
+            }
+        }
+    }
+
+    private func listenForParameters(using repo: MoboRepo) {
+        beginParameterWait()
         listenTask = Task { [weak self] in
             for await update in repo.parameterUpdates() {
+                guard !Task.isCancelled, let self, self.repo === repo else { return }
                 switch update {
                 case .parameters(let published):
-                    self?.parameterStatusMessage = nil
-                    self?.receive(published)
+                    self.receive(published)
                 case .issue(let message):
-                    self?.parameterStatusMessage = message
+                    self.parameterStatusMessage = message
                 }
             }
         }
+    }
+
+    private func beginParameterWait() {
+        parameterTimeoutTask?.cancel()
+        parameterWaitTimedOut = false
+        let wait = parameterWaitNanoseconds
+        parameterTimeoutTask = Task { [weak self] in
+            do { try await Task.sleep(nanoseconds: wait) }
+            catch { return }
+            guard !Task.isCancelled, let self, phase == .waitingForParameters else { return }
+            parameterWaitTimedOut = true
+        }
+    }
+
+    func retryConnection() {
+        guard phase == .waitingForParameters, !isLocalTestMode, !isRegistering else { return }
+        endListening()
+        connectParticipant()
+    }
+
+    func returnToLogin() {
+        guard phase == .waitingForParameters, roundNumber == 0 else { return }
+        endListening()
+        registrationError = nil
+        parameterStatusMessage = nil
+        phase = .login
     }
 
     // Starts an app-only run without requiring Firebase authentication and
@@ -142,11 +219,18 @@ final class StudySession: ObservableObject {
         observedDocumentIDs.removeAll()
         observedCandidateIDs.removeAll()
         parameterStatusMessage = nil
+        registrationError = nil
         phase = .waitingForParameters
     }
 
     // Stops listening for new parameter updates.
     func endListening() {
+        registrationTask?.cancel()
+        registrationTask = nil
+        parameterTimeoutTask?.cancel()
+        parameterTimeoutTask = nil
+        isRegistering = false
+        parameterWaitTimedOut = false
         listenTask?.cancel()
         listenTask = nil
         repo?.stop()
@@ -163,9 +247,13 @@ final class StudySession: ObservableObject {
         // publishes a future step early, a corrected document with the same
         // candidate ID can still be accepted once that step is expected.
         let expectedStep = roundNumber + 1
-        guard published.values.phaseStep == expectedStep,
-              observedDocumentIDs.insert(published.documentID).inserted
-        else { return }
+        guard published.values.phaseStep == expectedStep else {
+            if phase == .waitingForParameters {
+                parameterStatusMessage = "Waiting for round \(expectedStep); Firebase's newest candidate is round \(published.values.phaseStep)."
+            }
+            return
+        }
+        guard observedDocumentIDs.insert(published.documentID).inserted else { return }
 
         // `candidateID` is the optimizer's stable identity for a candidate.
         // Fall back to the Firestore document ID so older schema-v2 writers
@@ -199,6 +287,10 @@ final class StudySession: ObservableObject {
 
         activeParameters = published
         current = published.values
+        parameterTimeoutTask?.cancel()
+        parameterTimeoutTask = nil
+        parameterWaitTimedOut = false
+        parameterStatusMessage = nil
         startRound()
     }
 
@@ -356,6 +448,9 @@ final class StudySession: ObservableObject {
         } else if let pending = pendingParameters {
             pendingParameters = nil
             activate(pending)
+        } else {
+            parameterStatusMessage = "Answers saved. Waiting for round \(roundNumber + 1) vibration settings…"
+            beginParameterWait()
         }
     }
 

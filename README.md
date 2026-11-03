@@ -14,6 +14,11 @@ being uploaded.
 
 ## Firebase and MOBO
 
+Enter a new participant ID and tap **Connect** to register it and request the
+first MOBO candidate automatically. Deploy the new registration function before
+installing this app update; see [Participant-registration.md](docs/Participant-registration.md)
+for deployment, ID reuse behavior and device verification.
+
 The app tests one complete, per-element burst-haptic candidate per map round.
 See [FIREBASE_MOBO_CONTRACT.md](FIREBASE_MOBO_CONTRACT.md) for the schema,
 17-round handshake, Firebase setup checklist, and optimizer integration contract.

@@ -181,6 +181,13 @@ change on that deterministic document.
 
 ## Round-by-round handshake
 
+Before step 1, the phone calls the authenticated `registerParticipant` callable
+in `us-central1`. It creates `users/{pid}` once, causing the existing
+`registerUserOnCreate` trigger to request the first candidate from MOBO.
+Registration retries are idempotent within the same app session. Used IDs and
+IDs registered to another session are rejected instead of resetting study data.
+See [deployment and existing-ID behavior](docs/Participant-registration.md).
+
 1. MOBO creates the complete candidate for participant `pid`, with
    `phaseStep = 1`, using a new document and a server timestamp.
 2. The app's listener selects the newest document for that `pid` and accepts it

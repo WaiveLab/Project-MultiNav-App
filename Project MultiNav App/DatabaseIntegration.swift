@@ -2,6 +2,7 @@
 
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseFunctions
 import Foundation
 
 private enum MoboRepoError: LocalizedError {
@@ -32,6 +33,15 @@ final class MoboRepo {
 
     init(participantID: String) {
         self.pid = participantID
+    }
+
+    /// Only the backend creates users. Its existing Firestore trigger asks
+    /// MOBO for round one; the app never supplies its own connected defaults.
+    func registerParticipant(sessionID: String) async throws {
+        let registration = Functions.functions(region: "us-central1")
+            .httpsCallable("registerParticipant")
+        registration.timeoutInterval = 30
+        _ = try await registration.call(["pid": pid, "sessionId": sessionID])
     }
 
     /// Creates an AsyncStream that emits either the newest valid parameter

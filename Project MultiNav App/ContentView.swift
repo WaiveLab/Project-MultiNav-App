@@ -109,16 +109,41 @@ struct WaitingView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            ProgressView()
-            Text(session.roundNumber == 0
-                 ? "Loading your vibration settings…"
-                 : "Preparing the next round…")
+            if session.registrationError == nil && !session.parameterWaitTimedOut {
+                ProgressView()
+            }
+            Text(session.isRegistering
+                 ? "Registering your participant ID…"
+                 : session.roundNumber == 0
+                    ? "Loading your first vibration settings…"
+                    : "Preparing round \(session.roundNumber + 1)…")
+
+            if let error = session.registrationError {
+                Text(error)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+                    .multilineTextAlignment(.center)
+            }
+
+            if session.parameterWaitTimedOut {
+                Text("Vibration settings have not arrived after 90 seconds. Check your connection and try again. Late settings can still arrive automatically.")
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+            }
 
             if let message = session.parameterStatusMessage {
                 Text(message)
                     .font(.footnote)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+            }
+
+            Button("Try connecting again") { session.retryConnection() }
+                .buttonStyle(.borderedProminent)
+                .disabled(session.isRegistering)
+
+            if session.roundNumber == 0 {
+                Button("Use a different participant ID") { session.returnToLogin() }
             }
 
             Button("Skip Firebase/MOBO and use local test values") {

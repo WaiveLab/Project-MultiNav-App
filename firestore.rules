@@ -6,80 +6,28 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function validBurst(profile) {
-      return profile is map
-        && profile.keys().hasAll([
-          'intensity', 'sharpness', 'pulseCount', 'onDuration', 'offDuration'
+    // Candidates are written only by trusted administrators/MOBO. The app
+    // validates all numeric bounds before accepting a candidate. Compare the
+    // submitted snapshot to that trusted source instead of evaluating the
+    // 70 numeric fields again (which exceeds Firestore's expression budget).
+    function matchesCandidate(data) {
+      let candidate = get(/databases/$(database)/documents/parameterValues/$(data.parameterDocumentId)).data;
+      return candidate.pid == data.pid
+        && candidate.schemaVersion == data.schemaVersion
+        && candidate.phase == data.phase
+        && candidate.phaseStep == data.phaseStep
+        && candidate.candidateId == data.candidateId
+        && data.haptics is map
+        && data.haptics.size() == 14
+        && data.haptics.keys().hasAll([
+          'start', 'onRoute', 'offRoute', 'onRouteIntersection',
+          'offRouteIntersection', 'landmark', 'end', 'street',
+          'onRouteSidewalk', 'offRouteSidewalk', 'onRouteCrosswalk',
+          'offRouteCrosswalk', 'turn', 'intersectionCenter'
         ])
-        && profile.keys().hasOnly([
-          'intensity', 'sharpness', 'pulseCount', 'onDuration', 'offDuration'
-        ])
-        && profile.intensity is number
-        && profile.intensity >= 0
-        && profile.intensity <= 1
-        && profile.sharpness is number
-        && profile.sharpness >= 0
-        && profile.sharpness <= 1
-        && profile.pulseCount is int
-        && profile.pulseCount >= 1
-        && profile.pulseCount <= 120
-        && profile.onDuration is number
-        && profile.onDuration >= 0.01
-        && profile.onDuration <= 2.0
-        && profile.pulseCount <= profile.onDuration * 120
-        && profile.offDuration is number
-        && profile.offDuration >= 0.01
-        && profile.offDuration <= 2.0;
-    }
-
-    function validHaptics(haptics) {
-      return haptics is map
-        && haptics.keys().hasAll([
-          'start',
-          'onRoute',
-          'offRoute',
-          'onRouteIntersection',
-          'offRouteIntersection',
-          'landmark',
-          'end',
-          'street',
-          'onRouteSidewalk',
-          'offRouteSidewalk',
-          'onRouteCrosswalk',
-          'offRouteCrosswalk',
-          'turn',
-          'intersectionCenter'
-        ])
-        && haptics.keys().hasOnly([
-          'start',
-          'onRoute',
-          'offRoute',
-          'onRouteIntersection',
-          'offRouteIntersection',
-          'landmark',
-          'end',
-          'street',
-          'onRouteSidewalk',
-          'offRouteSidewalk',
-          'onRouteCrosswalk',
-          'offRouteCrosswalk',
-          'turn',
-          'intersectionCenter'
-        ])
-        && validBurst(haptics.start)
-        && validBurst(haptics.onRoute)
-        && validBurst(haptics.offRoute)
-        && validBurst(haptics.onRouteIntersection)
-        && validBurst(haptics.offRouteIntersection)
-        && validBurst(haptics.landmark)
-        && validBurst(haptics.end)
-        && validBurst(haptics.street)
-        && validBurst(haptics.onRouteSidewalk)
-        && validBurst(haptics.offRouteSidewalk)
-        && validBurst(haptics.onRouteCrosswalk)
-        && validBurst(haptics.offRouteCrosswalk)
-        && validBurst(haptics.turn)
-        && validBurst(haptics.intersectionCenter);
+        // MapDiff compares nested numeric values across Int/Double encodings.
+        // Plain map == rejects some equivalent values normalized by the app.
+        && data.haptics.diff(candidate.haptics).affectedKeys().size() == 0;
     }
 
     function validResult(data) {
@@ -106,7 +54,7 @@ service cloud.firestore {
         && data.objectiveScore >= 0
         && data.objectiveScore <= 1
         && data.touchedTarget is bool
-        && validHaptics(data.haptics);
+        && matchesCandidate(data);
     }
 
     match /parameterValues/{documentId} {
@@ -126,17 +74,9 @@ service cloud.firestore {
       // Retrying an ambiguous network write replaces the same logical result,
       // but cannot change its owner, candidate, round, or tested haptic values.
       allow update: if signedIn()
-        && validResult(request.resource.data)
         && resource.data.authUid == request.auth.uid
-        && request.resource.data.authUid == resource.data.authUid
-        && request.resource.data.resultId == resource.data.resultId
-        && request.resource.data.resultId == documentId
-        && request.resource.data.pid == resource.data.pid
-        && request.resource.data.sessionId == resource.data.sessionId
-        && request.resource.data.roundNumber == resource.data.roundNumber
-        && request.resource.data.parameterDocumentId == resource.data.parameterDocumentId
-        && request.resource.data.candidateId == resource.data.candidateId
-        && request.resource.data.haptics == resource.data.haptics
+        && resource.data.resultId == documentId
+        && request.resource.data.createdAt is timestamp
         && request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['createdAt']);
 

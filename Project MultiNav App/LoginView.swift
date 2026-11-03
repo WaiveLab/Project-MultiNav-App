@@ -14,8 +14,9 @@ struct LoginView: View {
             Text("MultiNav Study")
                 .font(.largeTitle.bold())
 
-            Text("Enter your participant ID to begin.")
+            Text("Enter your participant ID. Connect will register it and request your first vibration settings.")
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
 
             // Allows the participant to enter their ID.
             TextField("Participant ID", text: $participantID)
@@ -26,14 +27,21 @@ struct LoginView: View {
                 .frame(maxWidth: 260)
                 .accessibilityLabel("Participant ID")
                 .onSubmit(logIn)
-                .keyboardType(.numberPad)
+                .keyboardType(.asciiCapable)
 
             // Starts the study once authentication and ID are valid.
-            Button("Log in", action: logIn)
+            Button("Connect", action: logIn)
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(!session.isSignedIn || trimmedID.isEmpty)
-                .accessibilityHint("Starts the study with your participant ID")
+                .accessibilityHint("Registers your participant ID and requests the first study settings")
+
+            if let error = session.registrationError {
+                Text(error)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+                    .multilineTextAlignment(.center)
+            }
 
             Button("Test without Firebase or MOBO", action: startLocalTest)
                 .buttonStyle(.bordered)

@@ -19,6 +19,7 @@
 		CDECC2533017DCC1002E410B /* TactileMapView in Frameworks */ = {isa = PBXBuildFile; productRef = CDECC2523017DCC1002E410B /* TactileMapView */; };
 		E263A0102FE5971D00BD2ED9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E263A00F2FE5971D00BD2ED9 /* FirebaseAuth */; };
 		E263A0122FE5971D00BD2ED9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E263A0112FE5971D00BD2ED9 /* FirebaseFirestore */; };
+		AB0310010000000000000001 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = AB0310010000000000000002 /* FirebaseFunctions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 				847D9E6E302B87B9007BCF67 /* TactileMapCore in Frameworks */,
 				847D9E70302B87B9007BCF67 /* TactileMapFeedback in Frameworks */,
 				E263A0122FE5971D00BD2ED9 /* FirebaseFirestore in Frameworks */,
+				AB0310010000000000000001 /* FirebaseFunctions in Frameworks */,
 				CDECC24B3017DCC1002E410B /* TactileMapCore in Frameworks */,
 				CDECC24F3017DCC1002E410B /* TactileMapKit in Frameworks */,
 				CDECC24D3017DCC1002E410B /* TactileMapFeedback in Frameworks */,
@@ -94,6 +96,7 @@
 			packageProductDependencies = (
 				E263A00F2FE5971D00BD2ED9 /* FirebaseAuth */,
 				E263A0112FE5971D00BD2ED9 /* FirebaseFirestore */,
+				AB0310010000000000000002 /* FirebaseFunctions */,
 				CDECC24A3017DCC1002E410B /* TactileMapCore */,
 				CDECC24C3017DCC1002E410B /* TactileMapFeedback */,
 				CDECC24E3017DCC1002E410B /* TactileMapKit */,
@@ -414,6 +417,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AB0310010000000000000002 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E263A0132FE5971D00BD2ED9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
 		847D9E6D302B87B9007BCF67 /* TactileMapCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 847D9E6C302B87B9007BCF67 /* XCRemoteSwiftPackageReference "ProjectMultiNav" */;

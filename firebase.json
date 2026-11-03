@@ -1,4 +1,9 @@
 {
+  "functions": [{
+    "source": "registration-functions",
+    "codebase": "participant-registration",
+    "ignore": ["node_modules", ".git", "test", "*.log"]
+  }],
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
