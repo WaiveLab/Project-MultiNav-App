@@ -24,21 +24,15 @@ COLLECTION = "parameterValues"
 SCHEMA_VERSION = 2
 
 # Tuple order: intensity, sharpness, pulseCount, onDuration, offDuration.
-DEFAULT_PROFILES: dict[str, tuple[float, float, int, float, float]] = {
-    "start": (0.75, 1.00, 10, 0.25, 0.50),
-    "onRoute": (1.00, 0.50, 120, 1.00, 0.01),
-    "offRoute": (0.25, 0.25, 120, 1.00, 0.01),
-    "onRouteIntersection": (0.75, 0.25, 15, 0.25, 0.05),
-    "offRouteIntersection": (0.75, 0.25, 120, 1.00, 0.01),
-    "landmark": (1.00, 0.15, 60, 1.00, 0.01),
-    "end": (0.75, 1.00, 120, 1.00, 0.01),
-    "street": (0.33, 0.33, 60, 1.00, 0.15),
-    "onRouteSidewalk": (0.75, 1.00, 60, 1.00, 0.01),
-    "offRouteSidewalk": (0.25, 0.25, 60, 1.00, 0.01),
-    "onRouteCrosswalk": (0.75, 1.00, 60, 1.00, 0.01),
-    "offRouteCrosswalk": (0.25, 0.25, 60, 1.00, 0.01),
-    "turn": (0.25, 0.25, 60, 1.00, 0.01),
-    "intersectionCenter": (0.25, 0.25, 60, 1.00, 0.01),
+# Match ParameterSet.defaultHaptics for the schema-v2 round-one publisher.
+LINE = (1.0, 0.5, 120, 1.0, 0.01)
+MARKER = (1.0, 0.5, 1, 0.01, 0.01)
+DEFAULT_PROFILES = {
+    "onRoute": LINE, "offRoute": LINE, "street": LINE,
+    "onRouteSidewalk": LINE, "offRouteSidewalk": LINE,
+    "onRouteCrosswalk": LINE, "offRouteCrosswalk": LINE,
+    "start": MARKER, "end": MARKER, "turn": MARKER, "landmark": MARKER,
+    "onRouteIntersection": MARKER, "offRouteIntersection": MARKER, "intersectionCenter": MARKER,
 }
 
 

@@ -271,21 +271,24 @@ private enum FirestoreNumber {
 }
 
 extension ParameterSet {
+    // Palani, Fink & Giudice, Experiment 5 (p. 1405). The line stimulus was
+    // continuous at 250 Hz and full power. Burst playback emits transients,
+    // so use its densest train and shortest rest. Sharpness is an app choice.
+    private static let line = BurstParameters(
+        intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01
+    )
+    // One transient every 20 ms approximates the onset timing of the study's
+    // 10 ms wide-band pulse. Core Haptics determines the transient waveform.
+    private static let marker = BurstParameters(
+        intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.01, offDuration: 0.01
+    )
+
     static let defaultHaptics: [HapticPat: BurstParameters] = [
-        .onRoute: BurstParameters(intensity: 1.0, sharpness: 0.5, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),
-        .offRoute: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),
-        .onRouteIntersection: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 15, onDuration: 0.25, offDuration: 0.05),
-        .offRouteIntersection: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),
-        .street: BurstParameters(intensity: 1.0, sharpness: 0.33, pulseCount: 60, onDuration: 1.00, offDuration: 0.15),
-        .onRouteSidewalk: BurstParameters(intensity: 1.0, sharpness: 1.0, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .offRouteSidewalk: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .onRouteCrosswalk: BurstParameters(intensity: 1.0, sharpness: 1.0, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .offRouteCrosswalk: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .turn: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .intersectionCenter: BurstParameters(intensity: 1.0, sharpness: 0.25, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .start: BurstParameters(intensity: 1.0, sharpness: 1.0, pulseCount: 10, onDuration: 0.25, offDuration: 0.50),
-        .landmark: BurstParameters(intensity: 1.0, sharpness: 0.15, pulseCount: 60, onDuration: 1.00, offDuration: 0.01),
-        .end: BurstParameters(intensity: 1.0, sharpness: 1.0, pulseCount: 120, onDuration: 1.00, offDuration: 0.01),
+        .onRoute: line, .offRoute: line, .street: line,
+        .onRouteSidewalk: line, .offRouteSidewalk: line,
+        .onRouteCrosswalk: line, .offRouteCrosswalk: line,
+        .start: marker, .end: marker, .turn: marker, .landmark: marker,
+        .onRouteIntersection: marker, .offRouteIntersection: marker, .intersectionCenter: marker,
     ]
 }
 

@@ -340,14 +340,6 @@ struct MapScreen: View {
                     .accessibilityLabel("Haptic settings")
                 }
             }
-            
-            ToolbarItem(placement: .topBarLeading) {
-                if isZoomed {
-                    Button(action: returnToOverview) {
-                        Label("Back to Overview", systemImage: "arrow.left")
-                    }
-                }
-            }
         }
         .onAppear { loadOverview() }
         .onChange(of: session.currentMapName) { _, _ in loadOverview() }
@@ -613,13 +605,6 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
             toneGen.playRepeatingTone(frequency: 200, duration: 0.05, interval: 0.17, count: 100)
             audioEngine.speak(name, configuration: config)
             
-        case .turn:
-            audioEngine.speak(name, configuration: config)
-            
-        case .intersectionCenter:
-            audioEngine.speak("center", configuration: config)
-
-        ///Unknown element
         default:
             audioEngine.speak(name, configuration: config)
         }

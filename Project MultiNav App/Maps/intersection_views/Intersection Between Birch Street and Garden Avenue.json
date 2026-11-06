@@ -12,7 +12,7 @@
         "created": "2026-09-07"
     },
     "bounds": {
-        "width": 900,
+        "width": 1600,
         "height": 1600
     },
     "features": [
@@ -23,11 +23,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        450,
+                        800,
                         90
                     ],
                     [
-                        450,
+                        800,
                         1510
                     ]
                 ]
@@ -45,11 +45,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        60,
+                        90,
                         800
                     ],
                     [
-                        840,
+                        1510,
                         800
                     ]
                 ]
@@ -67,11 +67,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         90
                     ],
                     [
-                        300,
+                        650,
                         650
                     ]
                 ]
@@ -89,11 +89,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         90
                     ],
                     [
-                        600,
+                        950,
                         650
                     ]
                 ]
@@ -111,11 +111,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         950
                     ],
                     [
-                        300,
+                        650,
                         1510
                     ]
                 ]
@@ -133,11 +133,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         950
                     ],
                     [
-                        600,
+                        950,
                         1510
                     ]
                 ]
@@ -155,11 +155,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        60,
+                        90,
                         650
                     ],
                     [
-                        300,
+                        650,
                         650
                     ]
                 ]
@@ -177,11 +177,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        60,
+                        90,
                         950
                     ],
                     [
-                        300,
+                        650,
                         950
                     ]
                 ]
@@ -199,11 +199,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         650
                     ],
                     [
-                        840,
+                        1510,
                         650
                     ]
                 ]
@@ -221,11 +221,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         950
                     ],
                     [
-                        840,
+                        1510,
                         950
                     ]
                 ]
@@ -243,11 +243,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         650
                     ],
                     [
-                        600,
+                        950,
                         650
                     ]
                 ]
@@ -265,11 +265,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         650
                     ],
                     [
-                        600,
+                        950,
                         950
                     ]
                 ]
@@ -287,11 +287,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         950
                     ],
                     [
-                        600,
+                        950,
                         950
                     ]
                 ]
@@ -309,11 +309,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         650
                     ],
                     [
-                        300,
+                        650,
                         950
                     ]
                 ]
@@ -330,12 +330,12 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    450,
+                    800,
                     800
                 ]
             },
             "properties": {
-                "name": "Intersection center",
+                "name": "center of intersection",
                 "level": 1,
                 "accessible": true
             }

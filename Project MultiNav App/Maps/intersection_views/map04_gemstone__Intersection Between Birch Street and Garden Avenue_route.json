@@ -12,7 +12,7 @@
         "created": "2026-09-07"
     },
     "bounds": {
-        "width": 900,
+        "width": 1600,
         "height": 1600
     },
     "features": [
@@ -23,11 +23,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        60,
+                        90,
                         950
                     ],
                     [
-                        300,
+                        650,
                         950
                     ]
                 ]
@@ -45,11 +45,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        300,
+                        650,
                         950
                     ],
                     [
-                        600,
+                        950,
                         950
                     ]
                 ]
@@ -67,11 +67,11 @@
                 "type": "LineString",
                 "coordinates": [
                     [
-                        600,
+                        950,
                         950
                     ],
                     [
-                        840,
+                        1510,
                         950
                     ]
                 ]
@@ -88,7 +88,7 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    60,
+                    90,
                     950
                 ]
             },
@@ -104,7 +104,7 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    840,
+                    1510,
                     950
                 ]
             },

@@ -294,14 +294,13 @@ final class StudySession: ObservableObject {
         startRound()
     }
 
-    // Creates a local practice candidate with maximum route/intersection
-    // intensity, all 14 burst profiles, and the expected round number.
+    // Use the same starting profiles for each local practice round.
     private func activateNextLocalCandidate() {
         let step = roundNumber + 1
         let candidateID = "local-\(sessionID)-round-\(step)"
         guard isLocalTestMode,
               let values = ParameterSet(
-                haptics: PracticeHaptics.profiles,
+                haptics: ParameterSet.defaultHaptics,
                 candidateID: candidateID,
                 phase: "exploration",
                 phaseStep: step

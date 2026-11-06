@@ -17,7 +17,7 @@ if not swift:
 env = {k.upper(): v for k, v in os.environ.items()} if os.name == "nt" else dict(os.environ)
 staging = root / ".codex-validation"
 staging.mkdir(exist_ok=True)
-sources = [app / (name + ".swift") for name in ["ParameterSet", "PracticeHaptics", "StudyPerformance", "StudySession"]]
+sources = [app / (name + ".swift") for name in ["ParameterSet", "StudyPerformance", "StudySession"]]
 sources += [root.parent / "Library/TactileMapPackageCode/Sources/TactileMapFeedback/HapticPattern.swift"]
 sources += [root / "tools/tests/RegistrationSessionDoubles.swift", root / "tools/tests/RegistrationSessionTests.swift"]
 with tempfile.TemporaryDirectory(prefix="registration-", dir=staging) as tmp:

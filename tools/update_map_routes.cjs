@@ -49,18 +49,18 @@ function document(name, buildingName, features) {
     return {version: '1.0', type: 'TactileMapDocument', metadata: {
         name, buildingName, floor: 1, scale: '1 unit = 1 foot', coordinate_unit: 'feet',
         coordinateOrigin: 'top-left', author: 'WaiveLab', created: prior?.metadata.created ?? '2026-10-02',
-    }, bounds: {width: 900, height: 1600}, features};
+    }, bounds: {width: 1600, height: 1600}, features};
 }
 const write = (file, doc) => fs.writeFileSync(file, JSON.stringify(doc, null, 4) + '\n');
 
 // The corner ring has a crossing wherever a road arm exists, and a continuous
 // sidewalk wherever that arm is absent (T junctions and outer grid corners).
-const corners = {NW: [300, 650], NE: [600, 650], SE: [600, 950], SW: [300, 950]};
+const corners = {NW: [650, 650], NE: [950, 650], SE: [950, 950], SW: [650, 950]};
 const arms = {
-    N: [['NW', [300, 90], 'West'], ['NE', [600, 90], 'East']],
-    E: [['NE', [840, 650], 'North'], ['SE', [840, 950], 'South']],
-    S: [['SW', [300, 1510], 'West'], ['SE', [600, 1510], 'East']],
-    W: [['NW', [60, 650], 'North'], ['SW', [60, 950], 'South']],
+    N: [['NW', [650, 90], 'West'], ['NE', [950, 90], 'East']],
+    E: [['NE', [1510, 650], 'North'], ['SE', [1510, 950], 'South']],
+    S: [['SW', [650, 1510], 'West'], ['SE', [950, 1510], 'East']],
+    W: [['NW', [90, 650], 'North'], ['SW', [90, 950], 'South']],
 };
 const ring = [['NW', 'NE', 'N', 'North'], ['NE', 'SE', 'E', 'East'],
     ['SW', 'SE', 'S', 'South'], ['NW', 'SW', 'W', 'West']];
@@ -68,8 +68,8 @@ function makeBase(p) {
     const [x, y] = p, vertical = streets[xs.indexOf(x)], horizontal = avenues[ys.indexOf(y)];
     const present = {N: y > ys[0], E: x < xs.at(-1), S: y < ys.at(-1), W: x > xs[0]};
     const features = [
-        feature('street0', 'street', [[450, present.N ? 90 : 800], [450, present.S ? 1510 : 800]], vertical),
-        feature('street1', 'street', [[present.W ? 60 : 450, 800], [present.E ? 840 : 450, 800]], horizontal),
+        feature('street0', 'street', [[800, present.N ? 90 : 800], [800, present.S ? 1510 : 800]], vertical),
+        feature('street1', 'street', [[present.W ? 90 : 800, 800], [present.E ? 1510 : 800, 800]], horizontal),
     ];
     const sidewalks = [], crosswalks = [];
     for (const arm of ['N', 'S', 'W', 'E']) if (present[arm]) {
@@ -86,7 +86,7 @@ function makeBase(p) {
         else sidewalks.push(feature(`offsw${sidewalks.length}`, 'offRouteSidewalk', coords,
             `${side} sidewalk of ${['N', 'S'].includes(arm) ? horizontal : vertical}`));
     }
-    features.push(...sidewalks, ...crosswalks, feature('center0', 'intersectionCenter', [450, 800], 'Intersection center'));
+    features.push(...sidewalks, ...crosswalks, feature('center0', 'intersectionCenter', [800, 800], 'center of intersection'));
     const name = intersectionName(p);
     return document(name, name, features);
 }

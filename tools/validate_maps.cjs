@@ -132,7 +132,7 @@ for (const file of files) {
             assert.equal(turnMarkers[0].properties.name, expectedTurn.direction);
             assert.deepEqual(turnMarkers[0].geometry.coordinates, localTurns[0].point);
         }
-        const boundary = q => q[1] === 90 ? 'N' : q[0] === 840 ? 'E' : q[1] === 1510 ? 'S' : q[0] === 60 ? 'W' : null;
+        const boundary = q => q[1] === 90 ? 'N' : q[0] === 1510 ? 'E' : q[1] === 1510 ? 'S' : q[0] === 90 ? 'W' : null;
         const arm = q => q[0] < p[0] ? 'W' : q[0] > p[0] ? 'E' : q[1] < p[1] ? 'N' : 'S';
         assert.equal(boundary(local[0]), arm(expanded[i - 1]), `${resource}: wrong entry arm`);
         assert.equal(boundary(local.at(-1)), arm(expanded[i + 1]), `${resource}: wrong exit arm`);
@@ -153,8 +153,8 @@ for (const p of grid) {
     assert.equal(base.features.filter(f => f.type === 'offRouteCrosswalk').length, armCount);
     assert.equal(base.features.filter(f => f.type === 'intersectionCenter').length, 1);
     assert.deepEqual(roads.find(f => f.properties.name === streets[xs.indexOf(p[0])]).geometry.coordinates,
-        [[450, p[1] > 200 ? 90 : 800], [450, p[1] < 1400 ? 1510 : 800]]);
+        [[800, p[1] > 200 ? 90 : 800], [800, p[1] < 1400 ? 1510 : 800]]);
     assert.deepEqual(roads.find(f => f.properties.name === avenues[ys.indexOf(p[1])]).geometry.coordinates,
-        [[p[0] > 150 ? 60 : 450, 800], [p[0] < 750 ? 840 : 450, 800]]);
+        [[p[0] > 150 ? 90 : 800, 800], [p[0] < 750 ? 1510 : 800, 800]]);
 }
 console.log(`Validated ${files.length} photo patterns: exactly two on-route intersections each, intersection endpoints, complete road coverage, 12 shared bases, and ${actualRoutes.length} consistent route overlays.`);

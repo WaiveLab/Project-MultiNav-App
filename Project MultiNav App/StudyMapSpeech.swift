@@ -17,8 +17,6 @@ enum StudyMapSpeech {
             return "End of route"
         case "onRoute", "onRouteIntersection", "onRouteSidewalk", "onRouteCrosswalk":
             return name + ", route"
-        case "turn":
-            return "Turn"
         default:
             return name
         }

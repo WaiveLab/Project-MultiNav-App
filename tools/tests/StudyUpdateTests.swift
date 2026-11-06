@@ -54,20 +54,19 @@ struct StudyUpdateTests {
 
     static func haptics() throws {
         let defaults = ParameterSet.defaultHaptics
-        let practice = PracticeHaptics.profiles
-        let maximum: Set<HapticPat> = [.start, .end, .onRoute, .onRouteIntersection,
-            .offRouteIntersection, .onRouteSidewalk, .onRouteCrosswalk, .turn, .intersectionCenter]
-        precondition(practice.count == 14)
+        let seedURL = URL(fileURLWithPath: CommandLine.arguments[2])
+        let seed = try JSONSerialization.jsonObject(with: Data(contentsOf: seedURL)) as! [String: Any]
+        precondition(ParameterSet(document: seed)?.haptics == defaults)
+        precondition(defaults == ParameterSet().haptics)
+        let markers: Set<HapticPat> = [.start, .end, .turn, .landmark, .onRouteIntersection,
+                                      .offRouteIntersection, .intersectionCenter]
         for type in HapticPat.allCases {
-            let old = defaults[type]!, new = practice[type]!
-            precondition(new.isValid)
-            precondition(new.intensity == (maximum.contains(type) ? 1 : old.intensity))
-            precondition(new.sharpness == old.sharpness && new.pulseCount == old.pulseCount)
-            precondition(new.onDuration == old.onDuration && new.offDuration == old.offDuration)
+            let cue = defaults[type]!
+            precondition(cue.isValid && cue.intensity == 1 && cue.sharpness == 0.5)
+            precondition(cue.pulseCount == (markers.contains(type) ? 1 : 120))
+            precondition(cue.onDuration == (markers.contains(type) ? 0.01 : 1) && cue.offDuration == 0.01)
         }
-        precondition(defaults == ParameterSet.defaultHaptics && defaults == ParameterSet().haptics)
-        // Distinct remote values must survive parsing/playback/result serialization,
-        // even after local practice profiles have been requested.
+        // Distinct remote values must survive parsing, playback and serialization.
         var profiles: [HapticPat: BurstParameters] = [:]
         for (index, type) in HapticPat.allCases.enumerated() {
             profiles[type] = BurstParameters(intensity: Double(index + 1) / 20, sharpness: 0.43,
@@ -182,6 +181,8 @@ struct StudyUpdateTests {
                 guard type == "onRouteIntersection" else { continue }
                 let directory = root.appendingPathComponent("intersection_views")
                 let base = try load(directory.appendingPathComponent(name + ".json"))
+                let center = base.features.first { $0.elementType.rawValue == "intersectionCenter" }!
+                precondition(StudyMapSpeech.label(type: "intersectionCenter", name: center.properties.name) == "center of intersection")
                 let routeName = file.deletingPathExtension().lastPathComponent + "__" + name + "_route.json"
                 let route = try load(directory.appendingPathComponent(routeName))
                 checkFit([TactileMapLayer(id: "base", document: base), TactileMapLayer(id: "route", document: route)])
@@ -190,7 +191,7 @@ struct StudyUpdateTests {
                     let speech = StudyMapSpeech.label(type: type, name: marker.properties.name)
                     if type == "start" { precondition(speech.hasPrefix("Start of route from ")) }
                     if type == "end" { precondition(speech.hasPrefix("End of route on ")) }
-                    if type == "turn" { precondition(speech == "Turn") }
+                    if type == "turn" { precondition(["Turn left", "Turn right"].contains(speech) && speech == marker.properties.name) }
                 }
                 overlays += 1
             }

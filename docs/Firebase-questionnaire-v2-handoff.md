@@ -97,18 +97,15 @@ no MOBO implementation is included here.
   three legs, two intermediate intersections, and intersection endpoints remain.
 - On-route cues end with “route”; endpoint speech says “Start of route” and
   “End of route”. Detail endpoints include “from [street]” / “on [street]”.
-  Turn speech is “Turn”. Internal resource names and turn geometry remain intact.
+  Detail turns say "Turn left" or "Turn right" and the center says "center of intersection".
 - The visible completion button is removed. The experimenter performs a
   **three-finger swipe up on the map** to finish exploration and open the survey.
   Existing back gestures remain. A VoiceOver **Finish exploration** custom
   action is also available on the map/round header.
 - The map fits its occupied area with room for marker edges; removing the
   completion button frees vertical space. Stroke and marker sizes are unchanged.
-- All app default and local test/practice cues use maximum intensity 1,
-  preserving sharpness and timings. This
-  applies to existing local test mode, which uploads no responses. It does not
-  add a separate practice phase to the connected study. Remote candidates are
-  played and recorded exactly as received.
+- Local practice uses dense bursts for lines and a tap every 20 ms for points.
+  For connected rounds the app plays and records the candidate published by MOBO.
 - All segments of the same type continue using the same candidate profile;
   there is no distance-to-destination intensity adjustment. Physical differences
   between segments still need assessment on the study device.

@@ -5,11 +5,14 @@ These checks use the supplied package source copy for portable models, not an
 iOS SDK or a substitute for an Xcode build against the resolved dependency.
 """
 import argparse
+import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+
+from seed_firebase_candidate import build_candidate
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
@@ -33,7 +36,7 @@ sources = [core / (name + ".swift") for name in [
 ]]
 sources += [args.library / "Sources/TactileMapFeedback/HapticPattern.swift"]
 sources += [app / (name + ".swift") for name in [
-    "ParameterSet", "PracticeHaptics", "SurveyResponse", "StudyPerformance", "StudyMapLayout", "StudyMapSpeech",
+    "ParameterSet", "SurveyResponse", "StudyPerformance", "StudyMapLayout", "StudyMapSpeech",
 ]]
 sources += [root / "tools/tests/StudyUpdateTests.swift"]
 with tempfile.TemporaryDirectory(prefix="multinav-checks-") as temporary:
@@ -48,7 +51,9 @@ with tempfile.TemporaryDirectory(prefix="multinav-checks-") as temporary:
         copied.append(destination)
     executable = directory / ("study-checks.exe" if os.name == "nt" else "study-checks")
     run([swift, "-module-cache-path", directory / "module-cache", *copied, "-o", executable])
-    run([executable, app / "Maps"])
+    seed = directory / "first-candidate.json"
+    seed.write_text(json.dumps(build_candidate("test", 1, "test-step-1")), encoding="utf-8")
+    run([executable, app / "Maps", seed])
 
     # Exercise the actual app policy and its private touch adapter with recording
     # engines. Extract only the non-SwiftUI tail; production sources stay intact.

@@ -14,6 +14,17 @@ perform that deployment. It is still sufficient for the PC tester's trusted
 registration helper. No live function, rules or indexes were changed while
 implementing this feature.
 
+## Starting vibrations for new participants
+
+In the deployed schema-v2 MOBO service, use the 14-entry `haptics` map from
+`tools/seed_firebase_candidate.py` when registration requests the first
+candidate for a new participant. Preview the complete payload from the app
+repository with `python tools/seed_firebase_candidate.py --pid preview --round 1`.
+Keep the publisher's own candidate ID, participant ID and server timestamp.
+Apply this seed once at round 1 and use the optimizer for rounds 2 through 17.
+This requires updating the first-candidate publisher. Installing the iOS app
+alone applies these defaults only to local practice and the settings preview.
+
 ## Deploy the registration function once
 
 Use a Firebase CLI session/account with permission to deploy Functions in
