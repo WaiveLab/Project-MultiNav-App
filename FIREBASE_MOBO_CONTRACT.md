@@ -73,11 +73,9 @@ Publish only the next expected round. Do not pre-publish all 17 candidates: the
 app intentionally listens to the newest document and will not run a candidate
 whose `phaseStep` is not exactly the next round.
 
-Here is a complete round-one example using the expert seed profiles also kept in
-`tools/seed_firebase_candidate.py`. These remote seed profiles retain their
-original intensities. The app's built-in defaults and local practice profiles
-use intensity 1 for every cue; local practice does not redefine the optimizer
-seed or modify received remote candidates.
+The example below uses the 14 haptic profiles from `parameterValues/001_step_1`.
+The offline learning map uses a bundled copy of those profiles. Each connected
+study round uses the candidate MOBO publishes for that participant and round.
 
 ```json
 {

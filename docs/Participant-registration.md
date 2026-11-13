@@ -23,7 +23,8 @@ repository with `python tools/seed_firebase_candidate.py --pid preview --round 1
 Keep the publisher's own candidate ID, participant ID and server timestamp.
 Apply this seed once at round 1 and use the optimizer for rounds 2 through 17.
 This requires updating the first-candidate publisher. Installing the iOS app
-alone applies these defaults only to local practice and the settings preview.
+alone applies these defaults to local test rounds and the settings preview.
+The learning map uses a separate bundled copy of `parameterValues/001_step_1`.
 
 ## Deploy the registration function once
 

@@ -8,7 +8,7 @@ A vibrotactile wayifinding app that enables blind and low vision (BLV) users to 
 4. Build and run
 
 Enter a participant ID and tap **Start practice**. Every participant explores the
-same practice route using the built-in vibrations. Practice runs offline with
+same practice route using a bundled copy of PID `001`'s round-one vibrations. Practice runs offline with
 no measurements or questionnaire. Tap **Finish practice** on the overview or
 swipe up with three fingers on either map view.
 

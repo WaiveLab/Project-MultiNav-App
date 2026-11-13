@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import UIKit
 import AVFAudio
 import TactileMapCore
@@ -592,7 +593,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
     init(studyParameters: ParameterSet?, hapticEngine: HapticEngine, audioEngine: SpatialAudioEngine) {
         isPractice = studyParameters == nil
-        parameters = studyParameters ?? ParameterSet()
+        parameters = studyParameters ?? .learning
         super.init(hapticEngine: hapticEngine, audioEngine: audioEngine)
     }
 

@@ -15,7 +15,7 @@ struct AudioPolicyTests {
         precondition(policy.onElementEntered == nil)
         for type in HapticPat.allCases {
             let feature = element(type)
-            let expected = ParameterSet.defaultHaptics[type]!
+            let expected = ParameterSet.learning.burstParameters(for: type)
             touch.onEnter(element: feature, touchType: .direct)
             let pattern = haptics.patterns.last!
             guard case .burst(let count, let on, let off) = pattern.mode else { preconditionFailure("Missing practice burst") }
@@ -57,6 +57,11 @@ struct AudioPolicyTests {
             let cue = element(type)
             let oldEvents = audio.events.count
             touch.onEnter(element: cue, touchType: .direct)
+            let expected = candidate.burstParameters(for: type)
+            let pattern = haptics.patterns.last!
+            guard case .burst(let count, let on, let off) = pattern.mode else { preconditionFailure("Missing study burst") }
+            precondition(count == expected.pulseCount && on == expected.onDuration && off == expected.offDuration)
+            precondition(pattern.intensity == Float(expected.intensity) && pattern.sharpness == Float(expected.sharpness))
             precondition(audio.events.count == oldEvents + 2)
             precondition(audio.events[oldEvents] == "stop", "New entry must interrupt before speaking")
             precondition(audio.current != nil, "Every study cue, including street, should speak")

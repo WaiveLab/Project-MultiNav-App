@@ -104,7 +104,7 @@ no MOBO implementation is included here.
   action is also available on the map/round header.
 - The overview has room for marker edges. Intersection layers fill the screen
   horizontally and vertically, with the round label overlaid in the corner.
-- Local practice uses dense bursts for lines and a tap every 20 ms for points.
+- The offline learning map uses PID `001`'s round-one profile for each element.
   For connected rounds the app plays and records the candidate published by MOBO.
 - All segments of the same type continue using the same candidate profile;
   there is no distance-to-destination intensity adjustment. Physical differences
@@ -138,8 +138,8 @@ Before a study run, build in Xcode with the existing resolved packages and check
   action; confirm ordinary exploration never completes a round accidentally.
 - Map marker visibility and touch alignment on the study device, including edges.
 - New question order, keyboard dismissal, validation, and submission.
-- Sustained/restarted vibrations on all three route segments and maximum local
-  practice intensity. Confirm leaving the map stops haptics and crosswalk tones.
+- Sustained vibrations on all three route segments and the distinct on-route
+  and off-route intensities in practice. Confirm leaving the map stops haptics and crosswalk tones.
 - A complete connected upload/next-candidate cycle after the Firebase work.
 
 Windows checks do not establish an iOS build or physical-device readiness.
