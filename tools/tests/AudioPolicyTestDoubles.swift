@@ -27,9 +27,18 @@ public final class RecordingAudio {
 @MainActor
 public final class RecordingHaptics {
     public var isPlaying = false
-    var starts = 0
+    var patterns: [HapticPattern] = []
+    var starts: Int { patterns.count }
+    var rejectBursts = false
     public init() {}
-    public func start(pattern: HapticPattern) { isPlaying = true; starts += 1 }
+    public func start(pattern: HapticPattern) {
+        patterns.append(pattern)
+        switch pattern.mode {
+        case .transient: break // A one-shot does not occupy the looping player.
+        case .burst: isPlaying = !rejectBursts
+        default: isPlaying = true
+        }
+    }
     public func stopAll() { isPlaying = false }
     public func playSingleTap() {}
 }

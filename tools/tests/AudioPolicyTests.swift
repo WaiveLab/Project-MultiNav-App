@@ -8,10 +8,47 @@ struct AudioPolicyTests {
                    properties: TactileProperties(name: type.rawValue + " example"))
     }
 
+    static func practiceHaptics() {
+        let haptics = RecordingHaptics()
+        let policy = OptimizedSpatialPolicy(studyParameters: nil, hapticEngine: haptics, audioEngine: RecordingAudio())
+        let touch = ExplorationTouchFeedback(policy: policy)
+        precondition(policy.onElementEntered == nil)
+        for type in HapticPat.allCases {
+            let feature = element(type)
+            let expected = ParameterSet.defaultHaptics[type]!
+            touch.onEnter(element: feature, touchType: .direct)
+            let pattern = haptics.patterns.last!
+            guard case .burst(let count, let on, let off) = pattern.mode else { preconditionFailure("Missing practice burst") }
+            precondition(count == expected.pulseCount && on == expected.onDuration && off == expected.offDuration)
+            precondition(pattern.intensity == Float(expected.intensity) && pattern.sharpness == Float(expected.sharpness))
+            let starts = haptics.starts
+            touch.onContinue(element: feature, touchType: .direct)
+            touch.onTap(element: feature, touchType: .direct)
+            precondition(haptics.starts == starts && haptics.isPlaying)
+            touch.stopAll()
+            touch.onTap(element: feature, touchType: .direct)
+            let tap = haptics.patterns.last!
+            guard case .transient = tap.mode else { preconditionFailure("Silent practice tap or lingering loop") }
+            precondition(tap.intensity == pattern.intensity && tap.sharpness == pattern.sharpness)
+            precondition(haptics.starts == starts + 1 && !haptics.isPlaying)
+        }
+        haptics.rejectBursts = true
+        let starts = haptics.starts
+        touch.onEnter(element: element(.onRoute), touchType: .direct)
+        precondition(haptics.starts == starts + 2)
+        guard case .transient = haptics.patterns.last!.mode else { preconditionFailure("Missing practice fallback") }
+        haptics.rejectBursts = false
+        touch.onContinue(element: element(.onRoute), touchType: .direct)
+        precondition(haptics.isPlaying)
+        policy.stopAll()
+    }
+
     static func main() {
+        practiceHaptics()
         let audio = RecordingAudio()
         let haptics = RecordingHaptics()
-        let policy = OptimizedSpatialPolicy(hapticEngine: haptics, audioEngine: audio)
+        let candidate = ParameterSet(haptics: ParameterSet.defaultHaptics, candidateID: "test", phaseStep: 1)!
+        let policy = OptimizedSpatialPolicy(studyParameters: candidate, hapticEngine: haptics, audioEngine: audio)
         let touch = ExplorationTouchFeedback(policy: policy)
         var entries = 0
         policy.onElementEntered = { _ in entries += 1 }
@@ -61,6 +98,7 @@ struct AudioPolicyTests {
         // Explicit tap replaces the preceding cue without an extra haptic start.
         touch.onEnter(element: crossing, touchType: .direct)
         let starts = haptics.starts
+        touch.stopAll()
         touch.onTap(element: street, touchType: .direct)
         precondition(policy.toneGen.currentFrequency == nil && audio.current == "street example")
         precondition(haptics.starts == starts)
@@ -69,6 +107,6 @@ struct AudioPolicyTests {
         touch.onEnter(element: crossing, touchType: .direct)
         policy.stopAll()
         precondition(audio.current == nil && policy.toneGen.currentFrequency == nil && !haptics.isPlaying)
-        print("Passed audio policy: all 14 cues, exit/lift persistence, no automatic replay, interruption, haptics and map-exit cleanup.")
+        print("Passed fixed practice haptics for all 14 cues, discrete taps, failed burst recovery, and study audio/haptics.")
     }
 }

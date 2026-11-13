@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import AVFAudio
 import TactileMapCore
 import TactileMapFeedback
 import TactileMapView
@@ -58,7 +59,7 @@ struct RootView: View {
 
         case .learning, .exploring:
             NavigationStack {
-                MapScreen()
+                MapScreen(studyParameters: session.current)
             }
 
         case .survey:
@@ -193,7 +194,11 @@ struct MapScreen: View {
     @State private var presentation: MapPresentation?
     @State private var loadError: String?
     @State private var intersectionLoadError: String?
-    @State private var policy = OptimizedSpatialPolicy()
+    @StateObject private var policy: OptimizedSpatialPolicy
+
+    init(studyParameters: ParameterSet?) {
+        _policy = StateObject(wrappedValue: OptimizedSpatialPolicy(studyParameters: studyParameters))
+    }
 
     private var isZoomed: Bool { presentation?.isZoomed ?? false }
 
@@ -423,7 +428,6 @@ struct MapScreen: View {
 
     private func loadOverview() {
         intersectionLoadError = nil
-        policy.parameters = session.current ?? ParameterSet()
         if session.phase == .learning {
             policy.onElementEntered = nil
         } else {
@@ -508,7 +512,19 @@ struct MapScreen: View {
     }
 }
 
-
+extension OptimizedSpatialPolicy: ObservableObject {
+    convenience init(studyParameters: ParameterSet?) {
+        // The speech engine configures the shared audio session for play-and-record.
+        // Allow haptics on that session before starting the map's haptic engine.
+        let audio = AVSpatialAudioEngine()
+        do {
+            try AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
+        } catch {
+            NSLog("Could not enable map haptics on the audio session: %@", error.localizedDescription)
+        }
+        self.init(studyParameters: studyParameters, hapticEngine: CoreHapticsEngine(), audioEngine: audio)
+    }
+}
 
 // MARK: Custom Element Types
 extension TactileElementType {
@@ -571,8 +587,14 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
     let toneGen = ToneGenerator()
 
-    /// The parameter set under test. Swapped in at the start of every round.
-    var parameters = ParameterSet()
+    private let parameters: ParameterSet
+    private let isPractice: Bool
+
+    init(studyParameters: ParameterSet?, hapticEngine: HapticEngine, audioEngine: SpatialAudioEngine) {
+        isPractice = studyParameters == nil
+        parameters = studyParameters ?? ParameterSet()
+        super.init(hapticEngine: hapticEngine, audioEngine: audioEngine)
+    }
 
     /// Hook for the session (behavioral measurement — detects when the
     /// finger reaches the round's destination).
@@ -590,6 +612,10 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
         if let optimizedType {
             hapticEngine.start(pattern: parameters.hapticPattern(for: optimizedType))
+            if isPractice && !hapticEngine.isPlaying {
+                // Give the first touch feedback even if the looping player failed.
+                playPracticeTap(for: optimizedType)
+            }
         }
 
         switch element.elementType {
@@ -639,13 +665,22 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
         }
     }
 
-    /// Taps still announce the element, but do not add the package's default
-    /// transient tap on top of the optimizer-controlled burst feedback.
+    /// A discrete tap can arrive after finger lift. Give it one pulse from the
+    /// practice profile, so it cannot leave a repeating vibration running.
     override func onTap(element: any TactileMapElement, touchType: TouchType) {
         audioEngine.stopAll()
         toneGen.stop()
+        if isPractice, !hapticEngine.isPlaying, let type = HapticPat(rawValue: element.elementType.rawValue) {
+            playPracticeTap(for: type)
+        }
         audioEngine.speak(StudyMapSpeech.label(type: element.elementType.rawValue,
                                               name: element.properties.name), configuration: config)
+    }
+
+    private func playPracticeTap(for type: HapticPat) {
+        let cue = parameters.burstParameters(for: type)
+        hapticEngine.start(pattern: HapticPattern(intensity: Float(cue.intensity),
+                                                  sharpness: Float(cue.sharpness), mode: .transient))
     }
 
     override func stopAll() {
