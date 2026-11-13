@@ -220,7 +220,8 @@ struct MapScreen: View {
         config.crosswalkWidthMM = 2.8
         config.crosswalkStripeWidthMM = 1.0
         config.crosswalkStripeGapMM = 1.0
-        config.canvasPadding = isZoomed ? 0 : PhysicalDimensions.mmToPoints(4) + 4
+        // Reserve room for fixed-size end markers/road caps at the cropped edge.
+        config.canvasPadding = PhysicalDimensions.mmToPoints(isZoomed ? 6 : 4) + 4
 
         config.typeStyles[.start] = ElementStyle(
             color: endpointYellow,
@@ -298,40 +299,34 @@ struct MapScreen: View {
     // MARK: .json Handling
     var body: some View {
         VStack(spacing: 0) {
-            if !isZoomed {
-                HStack {
-                    roundLabel
-                    if session.phase == .learning {
-                        Spacer()
-                        Button("Finish practice", action: completeExploration)
-                            .buttonStyle(.bordered)
-                    }
+            HStack {
+                roundLabel
+                if session.phase == .learning && !isZoomed {
+                    Spacer()
+                    Button("Finish practice", action: completeExploration)
+                        .buttonStyle(.bordered)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .background(.thinMaterial)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(.thinMaterial)
 
             if let presentation {
-                GeometryReader { viewport in
-                    let layers = StudyMapLayout.fittedLayers(
-                        presentation.layers, filling: presentation.isZoomed ? viewport.size : nil
+                ResearcherMapContainer(onComplete: completeExploration) {
+                    TactileMapView(
+                        layers: StudyMapLayout.withCrosswalkStripes(
+                            StudyMapLayout.fittedLayers(presentation.layers)
+                        ),
+                        configuration: config,
+                        feedbackPolicy: ExplorationTouchFeedback(policy: policy),
+                        onBackGesture: { handleBackGesture() },
+                        onDoubleTap: doubleTap
                     )
-                    ResearcherMapContainer(onComplete: completeExploration) {
-                        TactileMapView(
-                            layers: StudyMapLayout.withCrosswalkStripes(layers),
-                            configuration: config,
-                            feedbackPolicy: ExplorationTouchFeedback(policy: policy),
-                            onBackGesture: { handleBackGesture() },
-                            onDoubleTap: doubleTap
-                        )
-                        .accessibilityAction(named: Text("Finish exploration"), completeExploration)
-                    }
-                    .frame(width: viewport.size.width, height: viewport.size.height)
-                    .id(presentation.layers.map(\.id))
+                    .accessibilityAction(named: Text("Finish exploration"), completeExploration)
                 }
-                .ignoresSafeArea(edges: isZoomed ? .all : .horizontal)
+                .id(presentation.layers.map(\.id))
+                .ignoresSafeArea(edges: .horizontal)
             } else {
                 Spacer()
                 Text(loadError ?? "Loading map…")
@@ -340,22 +335,11 @@ struct MapScreen: View {
                 Spacer()
             }
         }
-        .overlay(alignment: .topTrailing) {
-            if isZoomed {
-                roundLabel
-                    .padding(6)
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 6))
-                    .padding(.horizontal, 8)
-                    .allowsHitTesting(false)
-            }
-        }
-        .statusBarHidden(isZoomed)
-        .persistentSystemOverlays(isZoomed ? .hidden : .automatic)
-        .toolbar(isZoomed || !showsResearcherTools ? .hidden : .visible, for: .navigationBar)
+        .toolbar(showsResearcherTools ? .visible : .hidden, for: .navigationBar)
         
         //Toolbar with navigation buttons
         .toolbar {
-            if showsResearcherTools && !isZoomed {
+            if showsResearcherTools {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         MapSwitcherView()

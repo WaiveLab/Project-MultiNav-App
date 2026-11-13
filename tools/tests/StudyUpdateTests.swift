@@ -187,7 +187,6 @@ struct StudyUpdateTests {
                 let route = try load(directory.appendingPathComponent(routeName))
                 let layers = [TactileMapLayer(id: "base", document: base), TactileMapLayer(id: "route", document: route)]
                 checkFit(layers)
-                checkIntersectionFill(layers)
                 for marker in route.features {
                     let type = marker.elementType.rawValue
                     let speech = StudyMapSpeech.label(type: type, name: marker.properties.name)
@@ -203,27 +202,6 @@ struct StudyUpdateTests {
         precondition(StudyMapLayout.withCrosswalkStripes([]).isEmpty)
         precondition(StudyMapSpeech.label(type: "offRoute", name: "Birch Street") == "Birch Street")
         precondition(StudyMapSpeech.label(type: "landmark", name: "Library") == "Library")
-        print("Checked practice and all 17 study maps, including 36 edge-to-edge intersection layouts in portrait and landscape.")
-    }
-
-    static func checkIntersectionFill(_ layers: [TactileMapLayer]) {
-        let original = StudyMapLayout.fittedLayers(layers)
-        let bounds = original[0].document.bounds
-        for size in [CGSize(width: 390, height: 844), CGSize(width: 1024, height: 768)] {
-            let filled = StudyMapLayout.fittedLayers(layers, filling: size)
-            let points = filled.flatMap { $0.document.features }.flatMap { coordinates($0.geometry) }
-            precondition(points.map(\.x).min() == 0 && points.map(\.y).min() == 0)
-            precondition(abs(points.map(\.x).max()! - size.width) < 0.000001)
-            precondition(abs(points.map(\.y).max()! - size.height) < 0.000001)
-            for (layer, projected) in zip(original, filled) {
-                precondition(projected.document.bounds == TactileMapBounds(width: size.width, height: size.height))
-                for (before, after) in zip(layer.document.features, projected.document.features) {
-                    for (p, q) in zip(coordinates(before.geometry), coordinates(after.geometry)) {
-                        precondition(abs(q.x / size.width - p.x / bounds.width) < 0.000001)
-                        precondition(abs(q.y / size.height - p.y / bounds.height) < 0.000001)
-                    }
-                }
-            }
-        }
+        print("Checked practice and all 17 study maps, including geometry and touch-layer alignment for 36 intersection views.")
     }
 }
