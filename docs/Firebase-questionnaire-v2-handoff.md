@@ -102,8 +102,9 @@ no MOBO implementation is included here.
   **three-finger swipe up on the map** to finish exploration and open the survey.
   Existing back gestures remain. A VoiceOver **Finish exploration** custom
   action is also available on the map/round header.
-- Intersections keep their original proportions and fit below the map header
-  with padding around the edge markers.
+- The center crossing keeps its proportions. On tall screens, the vertical
+  streets, sidewalks, and route endpoints extend toward the top and bottom of
+  the map, with the same edge padding used on the sides.
 - The offline learning map uses PID `001`'s round-one profile for each element.
   For connected rounds the app plays and records the candidate published by MOBO.
 - All segments of the same type continue using the same candidate profile;

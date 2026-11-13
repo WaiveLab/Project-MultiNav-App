@@ -161,6 +161,44 @@ struct StudyUpdateTests {
         }
     }
 
+    static func checkVerticalArms(_ layers: [TactileMapLayer]) {
+        let original = StudyMapLayout.fittedLayers(layers)
+        let source = original[0].document.bounds
+        let streets = original[0].document.features.filter { $0.elementType.rawValue == "street" }
+        let verticalRoad = streets.map { coordinates($0.geometry) }.first { $0.first!.x == $0.last!.x }!
+        let ends = Set(verticalRoad.map(\.y))
+        let padding = 42.0 // Both axes reserve space for physical road caps and markers.
+        for size in [CGSize(width: 375, height: 620), CGSize(width: 430, height: 800),
+                     CGSize(width: 800, height: 375)] {
+            let inner = CGSize(width: size.width - 2 * padding, height: size.height - 2 * padding)
+            let adjusted = StudyMapLayout.fittedLayers(layers, intersectionContentSize: inner)
+            let bounds = adjusted[0].document.bounds
+            let width = Double(inner.width), height = Double(inner.height)
+            let canvasHeight = Double(size.height)
+            let scale = min(width / bounds.width, height / bounds.height)
+            let oldScale = min(width / source.width, height / source.height)
+            precondition(abs(scale - oldScale) < 1e-8 && bounds.width == source.width)
+            for (before, after) in zip(original, adjusted) {
+                precondition(after.document.bounds == bounds)
+                for (feature, mapped) in zip(before.document.features, after.document.features) {
+                    let points = zip(coordinates(feature.geometry), coordinates(mapped.geometry))
+                    for (p, q) in points {
+                        precondition(p.x == q.x)
+                        let y = (canvasHeight - bounds.height * scale) / 2 + q.y * scale
+                        let oldY = (canvasHeight - source.height * oldScale) / 2 + p.y * oldScale
+                        if p.y == 0 && ends.contains(p.y) {
+                            precondition(abs(y - padding) < 1e-8)
+                        } else if p.y == source.height && ends.contains(p.y) {
+                            precondition(abs(y - (canvasHeight - padding)) < 1e-8)
+                        } else {
+                            precondition(abs(y - oldY) < 1e-8, "The center crossing moved")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     static func maps(root: URL) throws {
         func load(_ file: URL) throws -> TactileMapDocument {
             try JSONDecoder().decode(TactileMapDocument.self, from: Data(contentsOf: file))
@@ -187,6 +225,7 @@ struct StudyUpdateTests {
                 let route = try load(directory.appendingPathComponent(routeName))
                 let layers = [TactileMapLayer(id: "base", document: base), TactileMapLayer(id: "route", document: route)]
                 checkFit(layers)
+                checkVerticalArms(layers)
                 for marker in route.features {
                     let type = marker.elementType.rawValue
                     let speech = StudyMapSpeech.label(type: type, name: marker.properties.name)
@@ -198,6 +237,12 @@ struct StudyUpdateTests {
             }
         }
         precondition(overlays == 36)
+        // Also exercise single-arm junctions on the map boundary, outside today's routes.
+        let baseFiles = try FileManager.default.contentsOfDirectory(at: root.appendingPathComponent("intersection_views"), includingPropertiesForKeys: nil)
+            .filter { $0.lastPathComponent.hasPrefix("Intersection Between ") && $0.pathExtension == "json" }
+        for file in baseFiles {
+            checkVerticalArms([TactileMapLayer(id: "base", document: try load(file))])
+        }
         precondition(StudyMapLayout.fittedLayers([]).isEmpty)
         precondition(StudyMapLayout.withCrosswalkStripes([]).isEmpty)
         precondition(StudyMapSpeech.label(type: "offRoute", name: "Birch Street") == "Birch Street")

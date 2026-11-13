@@ -44,15 +44,31 @@ enum StudyMapLayout {
         )]
     }
 
-    static func fittedLayers(_ layers: [TactileMapLayer]) -> [TactileMapLayer] {
+    /// For a detail view, supply the canvas size inside its existing edge padding.
+    static func fittedLayers(_ layers: [TactileMapLayer], intersectionContentSize: CGSize? = nil) -> [TactileMapLayer] {
         let points = layers.flatMap { $0.document.features }.flatMap { coordinates($0.geometry) }
         guard let minX = points.map(\.x).min(), let maxX = points.map(\.x).max(),
               let minY = points.map(\.y).min(), let maxY = points.map(\.y).max(),
               points.allSatisfy({ $0.x.isFinite && $0.y.isFinite }),
               maxX > minX, maxY > minY else { return layers }
-        let bounds = TactileMapBounds(width: maxX - minX, height: maxY - minY)
+        let width = maxX - minX, height = maxY - minY
+        var extensionPerEnd = 0.0
+        if let size = intersectionContentSize, size.width > 0, size.height > 0 {
+            // At the existing horizontal scale, split unused height above and below the junction.
+            let availableHeight = width * Double(size.height / size.width)
+            extensionPerEnd = max(0, (availableHeight - height) / 2)
+        }
+        let bounds = TactileMapBounds(width: width, height: height + 2 * extensionPerEnd)
+        // Boundary intersections can have a missing arm. Only move an outer row
+        // when an actual vertical street reaches it, including its sidewalk and route endpoints.
+        let streetEnds = extensionPerEnd > 0 ? verticalStreetEnds(in: layers) : []
         func shift(_ point: TactileCoordinate) -> TactileCoordinate {
-            TactileCoordinate(x: point.x - minX, y: point.y - minY)
+            var y = point.y - minY + extensionPerEnd
+            if streetEnds.contains(point.y) {
+                if point.y == minY { y = 0 }
+                if point.y == maxY { y = bounds.height }
+            }
+            return TactileCoordinate(x: point.x - minX, y: y)
         }
         return layers.map { layer in
             let features = layer.document.features.map { feature in
@@ -70,6 +86,20 @@ enum StudyMapLayout {
                 metadata: layer.document.metadata
             ), isInteractable: layer.isInteractable)
         }
+    }
+
+    private static func verticalStreetEnds(in layers: [TactileMapLayer]) -> Set<Double> {
+        var ends = Set<Double>()
+        for layer in layers {
+            for feature in layer.document.features where feature.elementType.rawValue == "street" {
+                guard case .lineString(let points) = feature.geometry,
+                      let first = points.first, let last = points.last,
+                      first.x == last.x, first.y != last.y else { continue }
+                ends.insert(first.y)
+                ends.insert(last.y)
+            }
+        }
+        return ends
     }
 
     private static func coordinates(_ geometry: TactileGeometry) -> [TactileCoordinate] {

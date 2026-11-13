@@ -313,17 +313,24 @@ struct MapScreen: View {
             .background(.thinMaterial)
 
             if let presentation {
+                let configuration = config
                 ResearcherMapContainer(onComplete: completeExploration) {
-                    TactileMapView(
-                        layers: StudyMapLayout.withCrosswalkStripes(
-                            StudyMapLayout.fittedLayers(presentation.layers)
-                        ),
-                        configuration: config,
-                        feedbackPolicy: ExplorationTouchFeedback(policy: policy),
-                        onBackGesture: { handleBackGesture() },
-                        onDoubleTap: doubleTap
-                    )
-                    .accessibilityAction(named: Text("Finish exploration"), completeExploration)
+                    GeometryReader { canvas in
+                        let padding = configuration.canvasPadding
+                        let contentSize = CGSize(width: canvas.size.width - 2 * padding,
+                                                 height: canvas.size.height - 2 * padding)
+                        let layers = StudyMapLayout.fittedLayers(
+                            presentation.layers, intersectionContentSize: presentation.isZoomed ? contentSize : nil
+                        )
+                        TactileMapView(
+                            layers: StudyMapLayout.withCrosswalkStripes(layers),
+                            configuration: configuration,
+                            feedbackPolicy: ExplorationTouchFeedback(policy: policy),
+                            onBackGesture: { handleBackGesture() },
+                            onDoubleTap: doubleTap
+                        )
+                        .accessibilityAction(named: Text("Finish exploration"), completeExploration)
+                    }
                 }
                 .id(presentation.layers.map(\.id))
                 .ignoresSafeArea(edges: .horizontal)
