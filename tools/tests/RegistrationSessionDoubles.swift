@@ -3,13 +3,27 @@ import Foundation
 protocol ObservableObject {}
 @propertyWrapper struct Published<Value> { var wrappedValue: Value }
 
+@MainActor final class FirebaseApp {
+    private static var configured: FirebaseApp?
+    static func app() -> FirebaseApp? { configured }
+    static func configure() {
+        precondition(configured == nil)
+        configured = FirebaseApp()
+    }
+}
+
 @MainActor final class Auth {
     static let instance = Auth()
-    static func auth() -> Auth { instance }
+    static func auth() -> Auth {
+        precondition(FirebaseApp.app() != nil)
+        return instance
+    }
     var currentUser: Int? = nil
     var signs = 0
+    var signInFails = false
     func signInAnonymously() async throws -> Int {
         signs += 1
+        if signInFails { throw TestFailure.authentication }
         currentUser = 1
         return 1
     }
@@ -20,7 +34,7 @@ enum ParameterUpdate {
     case issue(String)
 }
 
-enum TestFailure: Error { case registration }
+enum TestFailure: Error { case authentication, registration, submission }
 
 @MainActor final class MoboRepo {
     static var instances: [MoboRepo] = []
@@ -28,6 +42,7 @@ enum TestFailure: Error { case registration }
     static var registrationDelay: UInt64 = 0
     var registrations: [String] = []
     var stopped = false
+    var submissionFails = false
     var submitted: [String] = []
     var continuation: AsyncStream<ParameterUpdate>.Continuation?
     init(participantID: String) { Self.instances.append(self) }
@@ -48,6 +63,7 @@ enum TestFailure: Error { case registration }
                       subjectiveScore: Double, objectiveScore: Double, rawQuestionnaire: [String: Any],
                       mapName: String, roundNumber: Int, timeToTargetSeconds: TimeInterval?,
                       touchedTarget: Bool, sessionID: String) async throws {
+        if submissionFails { throw TestFailure.submission }
         submitted.append(parameterDocumentID)
     }
 }

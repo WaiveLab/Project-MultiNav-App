@@ -98,12 +98,12 @@ no MOBO implementation is included here.
 - On-route cues end with “route”; endpoint speech says “Start of route” and
   “End of route”. Detail endpoints include “from [street]” / “on [street]”.
   Detail turns say "Turn left" or "Turn right" and the center says "center of intersection".
-- The visible completion button is removed. The experimenter performs a
+- The practice overview has a **Finish practice** button. During MOBO rounds the experimenter performs a
   **three-finger swipe up on the map** to finish exploration and open the survey.
   Existing back gestures remain. A VoiceOver **Finish exploration** custom
   action is also available on the map/round header.
-- The map fits its occupied area with room for marker edges; removing the
-  completion button frees vertical space. Stroke and marker sizes are unchanged.
+- The overview has room for marker edges. Intersection layers fill the screen
+  horizontally and vertically, with the round label overlaid in the corner.
 - Local practice uses dense bursts for lines and a tap every 20 ms for points.
   For connected rounds the app plays and records the candidate published by MOBO.
 - All segments of the same type continue using the same candidate profile;
@@ -126,7 +126,7 @@ python tools/check_study_updates.py
 
 The portable check uses actual app model code for survey validation/scoring,
 local-practice isolation, remote haptic round-trip preservation, speech labels,
-and shared map transforms across all 17 overviews and 34 intersection pairs.
+and shared map transforms across practice, all 17 study maps, and 36 intersection pairs.
 It parses all app Swift sources but does not type-check SwiftUI/UIKit/Firebase
 against an iOS SDK. It does not install or update any dependency.
 

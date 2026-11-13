@@ -7,15 +7,20 @@ A vibrotactile wayifinding app that enables blind and low vision (BLV) users to 
 3. Select iPhone
 4. Build and run
 
-To test the maps, intersection layers, haptics, and surveys without a working
-Firebase/MOBO connection, enter any participant ID and tap **Test without
-Firebase or MOBO**. A visible local-test banner confirms that no study data is
-being uploaded.
+Enter a participant ID and tap **Start practice**. Every participant explores the
+same practice route using the built-in vibrations. Practice runs offline with
+no measurements or questionnaire. Tap **Finish practice** on the overview or
+swipe up with three fingers on either map view.
+
+At **Practice complete**, the researcher taps **Start MOBO study** to connect
+to Firebase and request round 1. The **MOBO study complete** screen appears
+after the final questionnaire has been saved. To test maps and questionnaires
+offline, choose **Test without Firebase or MOBO** at the practice handoff.
 
 ## Firebase and MOBO
 
-Enter a new participant ID and tap **Connect** to register it and request the
-first MOBO candidate automatically. Deploy the new registration function before
+Starting the MOBO study registers the participant ID and requests the first
+candidate automatically. Deploy the registration function before
 installing this app update; see [Participant-registration.md](docs/Participant-registration.md)
 for deployment, ID reuse behavior and device verification.
 

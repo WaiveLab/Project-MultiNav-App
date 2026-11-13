@@ -24,8 +24,8 @@ node tools/update_map_routes.cjs
 node tools/validate_maps.cjs
 ```
 
-The generator updates the 17 overviews, the 12 shared intersection bases, and
-34 route overlays (two per map). It removes the excluded overview and obsolete
+The generator updates the 17 study overviews, the fixed practice overview,
+12 shared intersection bases, and 36 route overlays (two per map). It removes the excluded overview and obsolete
 overlays for these maps. Straight-through intersections retain their overlays;
 start/end intersections have no overlay because the app does not zoom into those
 overview marker types. Local detail start/end dots mark entry/exit at the edge

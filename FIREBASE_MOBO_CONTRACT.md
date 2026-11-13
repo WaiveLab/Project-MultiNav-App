@@ -181,7 +181,10 @@ change on that deterministic document.
 
 ## Round-by-round handshake
 
-Before step 1, the phone calls the authenticated `registerParticipant` callable
+ID entry opens a fixed, offline learning map. Practice uses the default haptics
+and collects no measurements or questionnaire responses. It consumes no candidate
+or round number. When the researcher selects **Start MOBO study** after practice,
+the phone configures Firebase, signs in and calls the authenticated `registerParticipant` callable
 in `us-central1`. It creates `users/{pid}` once, causing the existing
 `registerUserOnCreate` trigger to request the first candidate from MOBO.
 Registration retries are idempotent within the same app session. Used IDs and
@@ -212,7 +215,7 @@ type maps. Equality is an optimizer decision, never an app-side linkage.
 
 ## Local app-only testing
 
-The login and Firebase waiting screens include a clearly labelled option to
+The practice handoff and Firebase waiting screens include a clearly labelled option to
 continue without Firebase or MOBO. Local test mode uses the app's complete set
 of 14 built-in per-element burst profiles, advances through the same shuffled
 17-map deck, and still displays every survey. It performs no candidate reads and

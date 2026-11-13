@@ -25,7 +25,7 @@ with tempfile.TemporaryDirectory(prefix="registration-", dir=staging) as tmp:
     copied = []
     for source in sources:
         text = source.read_text(encoding="utf-8-sig")
-        for module in ["Combine", "FirebaseAuth", "TactileMapCore", "TactileMapFeedback"]:
+        for module in ["Combine", "FirebaseCore", "FirebaseAuth", "TactileMapCore", "TactileMapFeedback"]:
             text = text.replace(f"import {module}\n", "")
         destination = directory / source.name
         destination.write_text(text, encoding="utf-8")

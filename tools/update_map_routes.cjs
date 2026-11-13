@@ -12,6 +12,8 @@ const avenues = ['Summit Avenue', 'Garden Avenue', 'Market Avenue', 'Harbor Aven
 // Start, first on-route intersection, second on-route intersection, end.
 // Straight-through intersections are vertices too; every leg joins adjacent nodes.
 const routes = {
+    // Fixed, unscored practice route along Market Avenue, then Aspen Street.
+    learning: [[750, 1000], [450, 1000], [150, 1000], [150, 1400]],
     // Photo rows 1–3: traverse the middle segment from left to right.
     map01_orchard: [[150, 200], [150, 600], [450, 600], [450, 200]],
     map02_harbor: [[150, 600], [450, 600], [750, 600], [750, 200]],

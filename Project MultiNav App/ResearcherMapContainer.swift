@@ -24,6 +24,8 @@ final class ResearcherMapController<Content: View>: UIViewController {
     init(content: Content, onComplete: @escaping () -> Void) {
         host = UIHostingController(rootView: content)
         super.init(nibName: nil, bundle: nil)
+        // MapScreen already sizes the canvas, including the screen edges in detail.
+        host.safeAreaRegions = []
         completionView.onComplete = onComplete
     }
 

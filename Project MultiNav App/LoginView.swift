@@ -5,7 +5,7 @@ import SwiftUI
 // Displays the participant login screen and starts the study session.
 struct LoginView: View {
     @EnvironmentObject var session: StudySession
-    @AppStorage("participantID") private var participantID = ""
+    @State private var participantID = ""
 
     var body: some View {
         VStack(spacing: 24) {
@@ -14,7 +14,9 @@ struct LoginView: View {
             Text("MultiNav Study")
                 .font(.largeTitle.bold())
 
-            Text("Enter your participant ID. Connect will register it and request your first vibration settings.")
+            Text(session.phase == .correctingParticipantID
+                 ? "Enter the participant ID for this study."
+                 : "Enter your participant ID to explore a practice map with the default vibrations.")
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
@@ -29,12 +31,10 @@ struct LoginView: View {
                 .onSubmit(logIn)
                 .keyboardType(.asciiCapable)
 
-            // Starts the study once authentication and ID are valid.
-            Button("Connect", action: logIn)
+            Button(session.phase == .correctingParticipantID ? "Continue" : "Start practice", action: logIn)
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .disabled(!session.isSignedIn || trimmedID.isEmpty)
-                .accessibilityHint("Registers your participant ID and requests the first study settings")
+                .disabled(trimmedID.isEmpty)
 
             if let error = session.registrationError {
                 Text(error)
@@ -43,39 +43,10 @@ struct LoginView: View {
                     .multilineTextAlignment(.center)
             }
 
-            Button("Test without Firebase or MOBO", action: startLocalTest)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .disabled(trimmedID.isEmpty)
-                .accessibilityHint("Runs the app locally without loading or uploading study data")
-
-            Text("Local testing uses the app's built-in per-element haptic values and does not save survey responses.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            // Shows a loading indicator while connecting.
-            if !session.isSignedIn && session.authError == nil {
-                ProgressView("Connecting…")
-            }
-
-            // Displays authentication errors and allows another attempt.
-            if let authError = session.authError {
-                Text(authError)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-                    .multilineTextAlignment(.center)
-
-                Button("Try again") {
-                    Task { await session.signIn() }
-                }
-            }
-
             Spacer()
         }
         .padding()
-        // Attempts to authenticate when the view first appears.
-        .task { await session.signIn() }
+        .onAppear { participantID = session.participantID }
     }
 
     // Removes accidental whitespace from the participant ID.
@@ -83,14 +54,7 @@ struct LoginView: View {
         participantID.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    // Begins the study if authentication and the participant ID are valid.
     private func logIn() {
-        guard session.isSignedIn, !trimmedID.isEmpty else { return }
         session.begin(participantID: trimmedID)
-    }
-
-    private func startLocalTest() {
-        guard !trimmedID.isEmpty else { return }
-        session.beginLocalTest(participantID: trimmedID)
     }
 }

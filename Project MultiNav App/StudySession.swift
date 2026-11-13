@@ -2,6 +2,7 @@
 
 import Combine
 import Foundation
+import FirebaseCore
 import FirebaseAuth
 import TactileMapCore
 
@@ -27,11 +28,14 @@ final class StudySession: ObservableObject {
 
     // Represents the current stage of the study.
     enum Phase: Equatable {
-        case login, waitingForParameters, exploring, survey, submitting, completed
+        case login, learning, readyForStudy, correctingParticipantID
+        case waitingForParameters, exploring, survey, submitting, completed
         case error(String)
     }
 
-    // Maps available for study rounds.
+    static let learningMap = "learning"
+
+    // Only these maps consume MOBO candidates.
     static let overviewMaps: [String] = [
         "map01_orchard", "map02_harbor", "map03_songbird", "map04_gemstone",
         "map06_melody", "map07_palette", "map08_atlas",
@@ -41,16 +45,14 @@ final class StudySession: ObservableObject {
     ]
 
     // Published values allow SwiftUI views to react to session changes.
-    @Published var phase: Phase = .login
+    @Published private(set) var phase: Phase = .login
     @Published private(set) var current: ParameterSet?
     @Published private(set) var participantID = ""
     @Published private(set) var roundNumber = 0
     @Published private(set) var currentMapName = ""
     @Published private(set) var targetName = ""
-    @Published private(set) var isSignedIn = false
     @Published private(set) var isLocalTestMode = false
     @Published private(set) var parameterStatusMessage: String?
-    @Published var authError: String?
     @Published private(set) var isRegistering = false
     @Published private(set) var registrationError: String?
     @Published private(set) var parameterWaitTimedOut = false
@@ -77,32 +79,31 @@ final class StudySession: ObservableObject {
         self.parameterWaitNanoseconds = parameterWaitNanoseconds
     }
 
-    // Signs the participant into Firebase anonymously.
-    func signIn() async {
-        guard !isSignedIn else { return }
-        do {
-            if Auth.auth().currentUser == nil {
-                _ = try await Auth.auth().signInAnonymously()
-            }
-            isSignedIn = true
-            authError = nil
-        } catch {
-            authError = "Sign-in failed: \(error.localizedDescription)"
-        }
-    }
-
-    // Initializes a study session and starts listening for parameters.
     func begin(participantID rawID: String) {
         let pid = rawID.trimmingCharacters(in: .whitespacesAndNewlines)
-        // Beginning is a one-shot transition out of the login screen. This
-        // prevents rapid repeated activations from leaving two Firestore
-        // listeners feeding the same reset session.
-        guard phase == .login, isSignedIn, !pid.isEmpty else { return }
+        guard phase == .login || phase == .correctingParticipantID else { return }
         guard Self.isValidParticipantID(pid) else {
             registrationError = "Use 1–100 letters, digits, hyphens or underscores; start with a letter or digit."
             return
         }
-        prepareSession(participantID: pid, localTestMode: false)
+        participantID = pid
+        registrationError = nil
+        if phase == .correctingParticipantID {
+            phase = .readyForStudy
+        } else {
+            currentMapName = Self.learningMap
+            phase = .learning
+        }
+    }
+
+    func finishLearning() {
+        guard phase == .learning else { return }
+        phase = .readyForStudy
+    }
+
+    func startMoboStudy() {
+        guard phase == .readyForStudy else { return }
+        prepareStudyRounds()
         connectParticipant()
     }
 
@@ -112,28 +113,31 @@ final class StudySession: ObservableObject {
     }
 
     private func connectParticipant() {
-        let repo = MoboRepo(participantID: participantID)
-        self.repo = repo
         registrationError = nil
         parameterWaitTimedOut = false
-        if roundNumber > 0 {
-            listenForParameters(using: repo)
-            return
-        }
         isRegistering = true
-        parameterStatusMessage = "Registering participant \(participantID)…"
+        parameterStatusMessage = nil
         registrationTask = Task { [weak self] in
-            guard let self else { return }
+            guard let self, !Task.isCancelled else { return }
             do {
-                try await repo.registerParticipant(sessionID: sessionID)
-                guard !Task.isCancelled, !isLocalTestMode, self.repo === repo else { return }
+                if FirebaseApp.app() == nil { FirebaseApp.configure() }
+                if Auth.auth().currentUser == nil {
+                    _ = try await Auth.auth().signInAnonymously()
+                }
+                guard !Task.isCancelled else { return }
+                let repo = MoboRepo(participantID: participantID)
+                self.repo = repo
+                if roundNumber == 0 {
+                    try await repo.registerParticipant(sessionID: sessionID)
+                    guard !Task.isCancelled else { return }
+                    parameterStatusMessage = "Participant registered. Waiting for MOBO's first vibration settings…"
+                }
                 isRegistering = false
-                parameterStatusMessage = "Participant registered. Waiting for MOBO's first vibration settings…"
                 listenForParameters(using: repo)
             } catch {
-                guard !Task.isCancelled, self.repo === repo else { return }
+                guard !Task.isCancelled else { return }
                 isRegistering = false
-                registrationError = "Could not register participant: \(error.localizedDescription)"
+                registrationError = error.localizedDescription
                 parameterStatusMessage = nil
             }
         }
@@ -172,22 +176,21 @@ final class StudySession: ObservableObject {
         connectParticipant()
     }
 
-    func returnToLogin() {
+    func changeParticipantID() {
         guard phase == .waitingForParameters, roundNumber == 0 else { return }
         endListening()
         registrationError = nil
         parameterStatusMessage = nil
-        phase = .login
+        phase = .correctingParticipantID
     }
 
     // Starts an app-only run without requiring Firebase authentication and
     // without candidate reads or result writes. This exists for interface and
     // map testing only.
-    func beginLocalTest(participantID rawID: String) {
-        let pid = rawID.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard phase == .login, !pid.isEmpty else { return }
-        prepareSession(participantID: pid, localTestMode: true)
-        activateNextLocalCandidate()
+    func beginLocalTest() {
+        guard phase == .readyForStudy else { return }
+        prepareStudyRounds()
+        continueLocally()
     }
 
     // Switches a connected run to local values while it is waiting for MOBO.
@@ -204,20 +207,10 @@ final class StudySession: ObservableObject {
         activateNextLocalCandidate()
     }
 
-    private func prepareSession(participantID: String, localTestMode: Bool) {
-        endListening()
-        self.participantID = participantID
-        isLocalTestMode = localTestMode
-
+    private func prepareStudyRounds() {
         mapDeck = Self.overviewMaps.shuffled()
         deckIndex = 0
-        roundNumber = 0
-        current = nil
-        activeParameters = nil
-        pendingParameters = nil
-        pendingResult = nil
-        observedDocumentIDs.removeAll()
-        observedCandidateIDs.removeAll()
+        currentMapName = ""
         parameterStatusMessage = nil
         registrationError = nil
         phase = .waitingForParameters
@@ -270,7 +263,7 @@ final class StudySession: ObservableObject {
             // still in progress (or its submission is being retried). It is
             // not made active before a successful submission.
             pendingParameters = published
-        case .login, .completed:
+        case .login, .learning, .readyForStudy, .correctingParticipantID, .completed:
             break
         }
     }
@@ -334,6 +327,7 @@ final class StudySession: ObservableObject {
 
     // Sets the target the participant must find.
     func overviewLoaded(targetName: String) {
+        guard phase == .exploring else { return }
         self.targetName = targetName
     }
 
@@ -455,7 +449,7 @@ final class StudySession: ObservableObject {
 
     // Changes the currently displayed overview map.
     func selectOverviewMap(_ mapName: String) {
-        guard Self.overviewMaps.contains(mapName) else {
+        guard phase == .exploring, Self.overviewMaps.contains(mapName) else {
             return
         }
 

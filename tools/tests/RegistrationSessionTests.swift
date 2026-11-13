@@ -15,9 +15,36 @@ import Foundation
             precondition(!StudySession.isValidParticipantID(pid))
         }
         let session = StudySession(parameterWaitNanoseconds: 50_000_000)
-        await session.signIn()
-        session.begin(participantID: "101")
-        session.begin(participantID: "101") // Repeated taps cannot launch a second registration.
+        let offline = StudySession()
+        offline.begin(participantID: "offline")
+        session.begin(participantID: " 101 ")
+        session.begin(participantID: "other")
+        precondition(session.participantID == "101" && session.phase == .learning)
+        session.selectOverviewMap(StudySession.overviewMaps[0])
+        precondition(session.currentMapName == offline.currentMapName && session.currentMapName == StudySession.learningMap)
+        precondition(!StudySession.overviewMaps.contains(session.currentMapName))
+        session.overviewLoaded(targetName: "Practice end")
+        session.elementEntered(name: "Practice end", typeRaw: "end")
+        session.foundTarget()
+        session.submit(subjectiveScore: 1, rawAnswers: [:])
+        session.startMoboStudy()
+        precondition(session.phase == .learning && session.roundNumber == 0 && session.current == nil)
+        precondition(session.targetName.isEmpty && session.objectiveScore == 0)
+        session.finishLearning()
+        precondition(session.phase == .readyForStudy)
+        offline.finishLearning()
+        offline.beginLocalTest()
+        precondition(offline.isLocalTestMode && offline.roundNumber == 1 && offline.phase == .exploring)
+        precondition(FirebaseApp.app() == nil && MoboRepo.instances.isEmpty)
+
+        Auth.instance.signInFails = true
+        session.startMoboStudy()
+        session.startMoboStudy()
+        try await until { session.registrationError != nil }
+        precondition(session.phase == .waitingForParameters && MoboRepo.instances.isEmpty)
+        Auth.instance.signInFails = false
+        session.retryConnection()
+        session.retryConnection()
         try await until { MoboRepo.instances.last?.continuation != nil }
         let first = MoboRepo.instances.last!
         precondition(MoboRepo.instances.count == 1 && first.registrations.count == 1)
@@ -29,6 +56,7 @@ import Foundation
         first.emit(step: 1) // Late response after timeout still starts round one.
         try await until { session.phase == .exploring }
         precondition(!session.parameterWaitTimedOut && session.roundNumber == 1)
+        var visited = Set([session.currentMapName])
         first.emit(step: 1)
         await Task.yield()
         precondition(session.roundNumber == 1)
@@ -37,17 +65,34 @@ import Foundation
         try await until { session.phase == .waitingForParameters }
         precondition(first.submitted == ["step-1"])
         session.retryConnection()
-        try await until { MoboRepo.instances.last?.continuation != nil }
+        try await until { MoboRepo.instances.last !== first && MoboRepo.instances.last?.continuation != nil }
         let next = MoboRepo.instances.last!
         precondition(first.stopped && next.registrations.isEmpty) // Later rounds only restart the listener.
-        next.emit(step: 2)
-        try await until { session.roundNumber == 2 }
-        session.endListening()
+        for step in 2...StudySession.overviewMaps.count {
+            next.emit(step: step)
+            try await until { session.phase == .exploring }
+            precondition(session.roundNumber == step && visited.insert(session.currentMapName).inserted)
+            session.foundTarget()
+            precondition(session.phase == .survey)
+            let isLast = step == StudySession.overviewMaps.count
+            next.submissionFails = isLast
+            session.submit(subjectiveScore: 1, rawAnswers: [:])
+            if isLast {
+                try await until { if case .error = session.phase { return true }; return false }
+                next.submissionFails = false
+                session.retrySubmission()
+            }
+            try await until { session.phase == (isLast ? .completed : .waitingForParameters) }
+        }
+        precondition(visited == Set(StudySession.overviewMaps))
+        precondition(first.submitted + next.submitted == (1...17).map { "step-\($0)" })
+        precondition(next.stopped)
 
         MoboRepo.registrationFails = true
         let retry = StudySession()
-        await retry.signIn()
         retry.begin(participantID: "201")
+        retry.finishLearning()
+        retry.startMoboStudy()
         try await until { retry.registrationError != nil }
         let failed = MoboRepo.instances.last!
         precondition(failed.continuation == nil && retry.current == nil)
@@ -60,16 +105,19 @@ import Foundation
 
         MoboRepo.registrationDelay = 50_000_000
         let cancelled = StudySession()
-        await cancelled.signIn()
         cancelled.begin(participantID: "301")
-        try await until { MoboRepo.instances.last?.registrations.isEmpty == false }
+        cancelled.finishLearning()
+        cancelled.startMoboStudy()
+        try await until { MoboRepo.instances.last !== retried && MoboRepo.instances.last?.registrations.isEmpty == false }
         let abandoned = MoboRepo.instances.last!
-        cancelled.returnToLogin()
-        cancelled.beginLocalTest(participantID: "local")
+        cancelled.changeParticipantID()
+        cancelled.begin(participantID: "local")
+        precondition(cancelled.phase == .readyForStudy && cancelled.participantID == "local")
+        cancelled.beginLocalTest()
         try await Task.sleep(nanoseconds: 70_000_000)
         precondition(cancelled.isLocalTestMode && cancelled.roundNumber == 1)
         precondition(abandoned.continuation == nil && abandoned.stopped)
-        precondition(Auth.auth().signs == 1) // Existing anonymous identity is reused.
-        print("Passed phone session: registration-before-listening, duplicate taps, timeout/late candidate, wrong round, submission, reconnect, retry, cancellation and local mode.")
+        precondition(Auth.auth().signs == 2) // One failed attempt, then reuse the successful identity.
+        print("Passed offline learning, MOBO handoff, all 17 submissions, final screen, retries, cancellation and local testing.")
     }
 }

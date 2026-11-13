@@ -7,28 +7,14 @@
 
 import SwiftUI
 import UIKit
-import FirebaseCore
 import TactileMapCore
 import TactileMapFeedback
-import TactileMapLogging
 import TactileMapView
-
-
-final class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-    ) -> Bool {
-        FirebaseApp.configure()
-        return true
-    }
-}
 
 
 @main
 struct MyApp: App {
 
-    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var session = StudySession()
     let hapticSettings = HapticSettings.shared
 
@@ -49,13 +35,28 @@ struct RootView: View {
 
     var body: some View {
         switch session.phase {
-        case .login:
+        case .login, .correctingParticipantID:
             LoginView()
+
+        case .readyForStudy:
+            VStack(spacing: 16) {
+                Text("Practice complete")
+                    .font(.title.bold())
+                    .accessibilityAddTraits(.isHeader)
+                Text("Start the MOBO study when the participant is ready. The app will connect to Firebase and request the vibrations for round 1.")
+                    .multilineTextAlignment(.center)
+                Button("Start MOBO study") { session.startMoboStudy() }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                Button("Test without Firebase or MOBO") { session.beginLocalTest() }
+                    .buttonStyle(.bordered)
+            }
+            .padding()
 
         case .waitingForParameters:
             WaitingView()
 
-        case .exploring:
+        case .learning, .exploring:
             NavigationStack {
                 MapScreen()
             }
@@ -77,11 +78,13 @@ struct RootView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 52))
                     .foregroundStyle(.green)
-                Text(session.isLocalTestMode ? "Local test complete" : "Study complete")
+                    .accessibilityHidden(true)
+                Text(session.isLocalTestMode ? "Local test complete" : "MOBO study complete")
                     .font(.title.bold())
+                    .accessibilityAddTraits(.isHeader)
                 Text(session.isLocalTestMode
-                     ? "You tested all \(StudySession.overviewMaps.count) map overviews. No data was uploaded."
-                     : "You completed all \(StudySession.overviewMaps.count) map overviews. Thank you for participating.")
+                     ? "You reached the end of the \(StudySession.overviewMaps.count) maps."
+                     : "All \(StudySession.overviewMaps.count) rounds are finished and your final answers have been saved. Thank you for participating.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
@@ -113,7 +116,7 @@ struct WaitingView: View {
                 ProgressView()
             }
             Text(session.isRegistering
-                 ? "Registering your participant ID…"
+                 ? "Connecting to Firebase…"
                  : session.roundNumber == 0
                     ? "Loading your first vibration settings…"
                     : "Preparing round \(session.roundNumber + 1)…")
@@ -143,7 +146,7 @@ struct WaitingView: View {
                 .disabled(session.isRegistering)
 
             if session.roundNumber == 0 {
-                Button("Use a different participant ID") { session.returnToLogin() }
+                Button("Use a different participant ID") { session.changeParticipantID() }
             }
 
             Button("Skip Firebase/MOBO and use local test values") {
@@ -211,8 +214,7 @@ struct MapScreen: View {
         config.crosswalkWidthMM = 2.8
         config.crosswalkStripeWidthMM = 1.0
         config.crosswalkStripeGapMM = 1.0
-        // Reserve room for fixed-size end markers/road caps at the cropped edge.
-        config.canvasPadding = PhysicalDimensions.mmToPoints(isZoomed ? 6 : 4) + 4
+        config.canvasPadding = isZoomed ? 0 : PhysicalDimensions.mmToPoints(4) + 4
 
         config.typeStyles[.start] = ElementStyle(
             color: endpointYellow,
@@ -289,28 +291,41 @@ struct MapScreen: View {
     
     // MARK: .json Handling
     var body: some View {
-        @AppStorage("participantID") var participantID = ""
-        
         VStack(spacing: 0) {
-            roundHeader
+            if !isZoomed {
+                HStack {
+                    roundLabel
+                    if session.phase == .learning {
+                        Spacer()
+                        Button("Finish practice", action: completeExploration)
+                            .buttonStyle(.bordered)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(.thinMaterial)
+            }
 
             if let presentation {
-                ResearcherMapContainer(onComplete: completeExploration) {
-                    TactileMapView(
-                        layers: StudyMapLayout.withCrosswalkStripes(
-                            StudyMapLayout.fittedLayers(presentation.layers)
-                        ),
-                        configuration: config,
-                        feedbackPolicy: ExplorationTouchFeedback(policy: policy),
-                        onBackGesture: { handleBackGesture() },
-                        onDoubleTap: { element in
-                            doubleTap(on: element)
-                        }
+                GeometryReader { viewport in
+                    let layers = StudyMapLayout.fittedLayers(
+                        presentation.layers, filling: presentation.isZoomed ? viewport.size : nil
                     )
-                    .accessibilityAction(named: Text("Finish exploration"), completeExploration)
+                    ResearcherMapContainer(onComplete: completeExploration) {
+                        TactileMapView(
+                            layers: StudyMapLayout.withCrosswalkStripes(layers),
+                            configuration: config,
+                            feedbackPolicy: ExplorationTouchFeedback(policy: policy),
+                            onBackGesture: { handleBackGesture() },
+                            onDoubleTap: doubleTap
+                        )
+                        .accessibilityAction(named: Text("Finish exploration"), completeExploration)
+                    }
+                    .frame(width: viewport.size.width, height: viewport.size.height)
+                    .id(presentation.layers.map(\.id))
                 }
-                .id(presentation.layers.map(\.id))
-                .ignoresSafeArea(edges: .horizontal)
+                .ignoresSafeArea(edges: isZoomed ? .all : .horizontal)
             } else {
                 Spacer()
                 Text(loadError ?? "Loading map…")
@@ -319,10 +334,22 @@ struct MapScreen: View {
                 Spacer()
             }
         }
+        .overlay(alignment: .topTrailing) {
+            if isZoomed {
+                roundLabel
+                    .padding(6)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 6))
+                    .padding(.horizontal, 8)
+                    .allowsHitTesting(false)
+            }
+        }
+        .statusBarHidden(isZoomed)
+        .persistentSystemOverlays(isZoomed ? .hidden : .automatic)
+        .toolbar(isZoomed || !showsResearcherTools ? .hidden : .visible, for: .navigationBar)
         
         //Toolbar with navigation buttons
         .toolbar {
-            if participantID == "0"{
+            if showsResearcherTools && !isZoomed {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         MapSwitcherView()
@@ -348,7 +375,7 @@ struct MapScreen: View {
             guard let presentation else { return }
             // Let the old canvas finish lifting its active touch before speech.
             do { try await Task.sleep(for: .milliseconds(250)) } catch { return }
-            guard !Task.isCancelled, session.phase == .exploring else { return }
+            guard !Task.isCancelled, session.phase == .exploring || session.phase == .learning else { return }
             let announcement = presentation.isZoomed ? "Intersection view" : "Route overview"
             if UIAccessibility.isVoiceOverRunning {
                 UIAccessibility.post(notification: .announcement, argument: announcement)
@@ -366,42 +393,44 @@ struct MapScreen: View {
         }
     }
 
-    private var roundHeader: some View {
+    private var showsResearcherTools: Bool {
+        session.phase == .exploring && session.participantID == "0"
+    }
+
+    private var roundLabel: some View {
         VStack(spacing: 4) {
             if session.isLocalTestMode {
                 Text("LOCAL TEST — NO DATA UPLOAD")
                     .font(.caption.bold())
                     .foregroundStyle(.orange)
             }
-            Text("Round \(session.roundNumber)")
+            Text(session.phase == .learning ? "Practice map" : "Round \(session.roundNumber)")
                 .font(.headline)
-            if !session.targetName.isEmpty {
-                Text("Find: \(StudyMapSpeech.label(type: "end", name: session.targetName))")
-                    .font(.title3.bold())
-            }
-            Text(session.currentMapName)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .background(.thinMaterial)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Round \(session.roundNumber). Your task: find \(StudyMapSpeech.label(type: "end", name: session.targetName))")
+        .accessibilityHint(session.phase == .learning ? "Explore the map and its intersections." : "Find the end of the route.")
         .accessibilityAction(named: Text("Finish exploration"), completeExploration)
     }
 
     private func completeExploration() {
         policy.stopAll()
-        session.foundTarget()
+        if session.phase == .learning {
+            session.finishLearning()
+        } else {
+            session.foundTarget()
+        }
     }
 
     private func loadOverview() {
         intersectionLoadError = nil
         policy.parameters = session.current ?? ParameterSet()
-        policy.onElementEntered = { [weak session] element in
-            session?.elementEntered(name: element.properties.name,
-                                    typeRaw: element.elementType.rawValue)
+        if session.phase == .learning {
+            policy.onElementEntered = nil
+        } else {
+            policy.onElementEntered = { [weak session] element in
+                session?.elementEntered(name: element.properties.name,
+                                        typeRaw: element.elementType.rawValue)
+            }
         }
         do {
             let doc = try TactileMapDocument.load(from: session.currentMapName, bundle: .main)
@@ -430,7 +459,7 @@ struct MapScreen: View {
             returnToOverview()
 
         default:
-            print("\(element) is not able to be double tapped.")
+            break
         }
     }
 

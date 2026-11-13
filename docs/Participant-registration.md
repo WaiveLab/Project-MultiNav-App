@@ -1,4 +1,4 @@
-# Phone registration on Connect
+# Phone registration after practice
 
 The iPhone app now calls the authenticated `registerParticipant` callable in
 `us-central1` before listening for its first schema-v2 candidate. The backend
@@ -54,9 +54,11 @@ Open the Xcode project on a Mac and resolve packages. `FirebaseFunctions` was
 added as another product of the existing Firebase package. The Firebase version
 requirement and lock file were not upgraded. Build and install on the iPhone.
 
-1. Enter a fresh ID such as `ios-test-001` and tap **Connect**.
-2. Expect **Registering your participant ID…**, then a message that registration
-   succeeded while MOBO prepares the first settings.
+1. Enter a fresh ID such as `ios-test-001` and tap **Start practice**. Try the
+   overview and intersections. Practice also works with the network disabled.
+2. Tap **Finish practice**, enable the network, and tap **Start MOBO study**.
+   Expect **Connecting to Firebase…**, then a registration message while MOBO
+   prepares the first settings.
 3. Confirm a single `users/ios-test-001` document exists and MOBO creates a full
    round-one candidate. The first map should open after server-confirmed values
    arrive. Cold-start delays are possible (the PC test observed about 32 seconds).
@@ -72,7 +74,7 @@ requirement and lock file were not upgraded. Build and install on the iPhone.
 
 IDs may contain 1–100 ASCII letters, digits, hyphens and underscores, starting
 with a letter or digit. The phone trims surrounding whitespace before connecting.
-Repeated Connect taps cannot start simultaneous registrations. A registration
+Repeated taps on **Start MOBO study** cannot start simultaneous registrations. A registration
 retry in the same app session retains the same session ID and is idempotent.
 
 An unused pre-registered ID may be claimed if it has no results or completed
