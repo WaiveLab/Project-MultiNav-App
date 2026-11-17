@@ -57,16 +57,26 @@ const write = (file, doc) => fs.writeFileSync(file, JSON.stringify(doc, null, 4)
 
 // The corner ring has a crossing wherever a road arm exists, and a continuous
 // sidewalk wherever that arm is absent (T junctions and outer grid corners).
-const corners = {NW: [650, 650], NE: [950, 650], SE: [950, 950], SW: [650, 950]};
-const arms = {
-    N: [['NW', [650, 90], 'West'], ['NE', [950, 90], 'East']],
-    E: [['NE', [1510, 650], 'North'], ['SE', [1510, 950], 'South']],
-    S: [['SW', [650, 1510], 'West'], ['SE', [950, 1510], 'East']],
-    W: [['NW', [90, 650], 'North'], ['SW', [90, 950], 'South']],
-};
+function sidewalkGeometry([x, y]) {
+    const fourWay = x > xs[0] && x < xs.at(-1) && y > ys[0] && y < ys.at(-1);
+    // A side T spans 710 units of street plus 150 to its outside sidewalk.
+    // A cross spans 1420 units. Match their rendered center-to-sidewalk distance.
+    const offset = fourWay ? 150 * 1420 / (710 + 150) : 150;
+    const low = 800 - offset, high = 800 + offset;
+    return {
+        corners: {NW: [low, low], NE: [high, low], SE: [high, high], SW: [low, high]},
+        arms: {
+            N: [['NW', [low, 90], 'West'], ['NE', [high, 90], 'East']],
+            E: [['NE', [1510, low], 'North'], ['SE', [1510, high], 'South']],
+            S: [['SW', [low, 1510], 'West'], ['SE', [high, 1510], 'East']],
+            W: [['NW', [90, low], 'North'], ['SW', [90, high], 'South']],
+        },
+    };
+}
 const ring = [['NW', 'NE', 'N', 'North'], ['NE', 'SE', 'E', 'East'],
     ['SW', 'SE', 'S', 'South'], ['NW', 'SW', 'W', 'West']];
 function makeBase(p) {
+    const {corners, arms} = sidewalkGeometry(p);
     const [x, y] = p, vertical = streets[xs.indexOf(x)], horizontal = avenues[ys.indexOf(y)];
     const present = {N: y > ys[0], E: x < xs.at(-1), S: y < ys.at(-1), W: x > xs[0]};
     const features = [
@@ -133,6 +143,7 @@ function makeOverview(original, vertices, points) {
 }
 const armFrom = (center, p) => p[0] < center[0] ? 'W' : p[0] > center[0] ? 'E' : p[1] < center[1] ? 'N' : 'S';
 function makeDetail(mapName, p, previous, next, base) {
+    const {corners, arms} = sidewalkGeometry(p);
     const incoming = armFrom(p, previous), outgoing = armFrom(p, next);
     const entry = {N: 'NW', E: 'NE', S: 'SE', W: 'SW'}[incoming];
     const exit = {N: 'NE', E: 'SE', S: 'SW', W: 'NW'}[outgoing];
