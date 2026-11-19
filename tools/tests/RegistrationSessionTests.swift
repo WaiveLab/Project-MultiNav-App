@@ -54,9 +54,13 @@ import Foundation
         first.emit(step: 8)
         try await until { session.parameterStatusMessage?.contains("round 8") == true }
         precondition(session.roundNumber == 0)
-        first.emit(step: 1) // Late response after timeout still starts round one.
+        var roundOneHaptics = ParameterSet.defaultHaptics
+        roundOneHaptics[.start] = BurstParameters(intensity: 0.8, sharpness: 0.4, pulseCount: 1,
+                                                 onDuration: 0.05, offDuration: 0.01)
+        first.emit(step: 1, haptics: roundOneHaptics) // Late response still starts round one.
         try await until { session.phase == .exploring }
         precondition(!session.parameterWaitTimedOut && session.roundNumber == 1)
+        precondition(session.current?.haptics == roundOneHaptics)
         var visited = Set([session.currentMapName])
         first.emit(step: 1)
         await Task.yield()

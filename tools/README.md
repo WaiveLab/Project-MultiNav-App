@@ -37,9 +37,10 @@ present in the overview grid.
 
 # Firebase candidate uploader
 
-`seed_firebase_candidate.py` creates one complete schema-version-2 candidate in
-the `parameterValues` collection. It includes all 14 independently controlled
-haptic element types, including `intersectionCenter`.
+`seed_firebase_candidate.py` exports the practice baseline as a schema-version-2
+payload with all 14 haptic element types. It can also write a candidate to
+`parameterValues` for a test participant. In the connected study, MOBO publishes
+the scheduled candidate for each round.
 
 Keep the downloaded Firebase Admin JSON key outside this repository. Preview a
 candidate first:
@@ -47,7 +48,7 @@ candidate first:
 ```powershell
 py .\tools\seed_firebase_candidate.py `
   --credentials "C:\FirebaseKeys\project-multinav-admin.json" `
-  --pid "101" `
+  --pid "test-101" `
   --round 1
 ```
 
@@ -59,7 +60,7 @@ py -m pip install firebase-admin
 
 py .\tools\seed_firebase_candidate.py `
   --credentials "C:\FirebaseKeys\project-multinav-admin.json" `
-  --pid "101" `
+  --pid "test-101" `
   --round 1 `
   --write
 ```

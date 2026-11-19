@@ -105,7 +105,7 @@ no MOBO implementation is included here.
 - The center crossing keeps its proportions. On tall screens, the vertical
   streets, sidewalks, and route endpoints extend toward the top and bottom of
   the map, with the same edge padding used on the sides.
-- The offline learning map uses PID `001`'s round-one profile for each element.
+- The offline learning map uses the bundled haptic baseline for each element.
   For connected rounds the app plays and records the candidate published by MOBO.
 - All segments of the same type continue using the same candidate profile;
   there is no distance-to-destination intensity adjustment. Physical differences

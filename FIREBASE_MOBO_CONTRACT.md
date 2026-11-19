@@ -73,10 +73,11 @@ Publish only the next expected round. Do not pre-publish all 17 candidates: the
 app intentionally listens to the newest document and will not run a candidate
 whose `phaseStep` is not exactly the next round.
 
-The example below uses the 14 exploration baseline profiles shared by local
-test rounds and `tools/seed_firebase_candidate.py`. The practice map uses a
-separate bundled snapshot from `parameterValues/001_step_1`. Each connected
-study round uses the candidate MOBO publishes for that participant and round.
+The example below illustrates the schema with the 14 baseline profiles shared
+by practice, local test rounds, and `tools/seed_firebase_candidate.py`. Each
+connected study round uses the candidate MOBO publishes for that participant
+and round. For the planned study, Round 1 receives the first scheduled Sobol
+variation from MOBO.
 The baseline uses one tap per burst for Pulse cues. A 20 Hz cue repeats every
 0.05 seconds, using a 0.04 s window and a 0.01 s rest. A 10 Hz cue repeats every
 0.10 seconds, using a 0.09 s window and a 0.01 s rest. The constant cues use dense
@@ -184,7 +185,7 @@ change on that deterministic document.
 
 ## Round-by-round handshake
 
-ID entry opens a fixed, offline learning map. Practice uses its bundled haptics
+ID entry opens a fixed, offline learning map. Practice uses the bundled baseline
 and collects no measurements or questionnaire responses. It consumes no candidate
 or round number. When the researcher selects **Start MOBO study** after practice,
 the phone configures Firebase, signs in and calls the authenticated `registerParticipant` callable

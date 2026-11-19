@@ -4,8 +4,8 @@ The iPhone app now calls the authenticated `registerParticipant` callable in
 `us-central1` before listening for its first schema-v2 candidate. The backend
 creates `users/{pid}` once. The existing deployed `registerUserOnCreate` trigger
 then asks MOBO for the first candidate, exactly as the PC tester's registration
-helper does. MOBO supplies the initial seed profiles; local practice defaults
-are never substituted into a connected round.
+helper does. The app plays the complete candidate supplied by MOBO in each
+connected round.
 
 This change requires both deployment of the new function and a rebuilt iOS app.
 The existing cloud service account in this workspace has no function create,
@@ -16,13 +16,13 @@ implementing this feature.
 
 ## Exploration baseline
 
-Local test rounds and the settings preview use the 14 exploration baseline
+Practice, local test rounds, and the settings preview use the 14 baseline
 profiles bundled in the app. To export the same `haptics` map for the schema-v2
 MOBO service, run `python tools/seed_firebase_candidate.py --pid preview --round 1`
 from the app repository. The live optimizer must use that map as its reference
 baseline and publish the scheduled candidate for each connected round with its
-own candidate ID, participant ID, and server timestamp. The learning map uses a
-separate bundled copy of `parameterValues/001_step_1`.
+own candidate ID, participant ID, and server timestamp. Round 1 in the planned
+study uses the participant's first scheduled Sobol variation.
 
 ## Deploy the registration function once
 

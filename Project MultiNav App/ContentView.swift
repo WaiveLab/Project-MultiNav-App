@@ -568,9 +568,8 @@ private final class ExplorationTouchFeedback: FeedbackPolicy {
     func stopAll() { policy.hapticEngine.stopAll() }
 }
 
-/// The round's feedback policy. Every known element type gets its own burst
-/// profile from the optimizer's atomic parameter set. Instances share a
-/// profile only when they have the same `HapticPat` element type.
+/// Plays the practice baseline or the active round's profiles. Each element
+/// gets its burst profile from its `HapticPat` element type.
 @MainActor
 class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
     
@@ -584,7 +583,7 @@ class OptimizedSpatialPolicy: DefaultFeedbackPolicy {
 
     init(studyParameters: ParameterSet?, hapticEngine: HapticEngine, audioEngine: SpatialAudioEngine) {
         isPractice = studyParameters == nil
-        parameters = studyParameters ?? .learning
+        parameters = studyParameters ?? ParameterSet()
         super.init(hapticEngine: hapticEngine, audioEngine: audioEngine)
     }
 

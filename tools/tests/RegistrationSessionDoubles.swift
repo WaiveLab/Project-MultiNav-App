@@ -55,8 +55,8 @@ enum TestFailure: Error { case authentication, registration, submission }
         AsyncStream { continuation = $0 }
     }
     func stop() { stopped = true; continuation?.finish() }
-    func emit(step: Int) {
-        let parameters = ParameterSet(haptics: ParameterSet.defaultHaptics, candidateID: "candidate-\(step)", phaseStep: step)!
+    func emit(step: Int, haptics: [HapticPat: BurstParameters] = ParameterSet.defaultHaptics) {
+        let parameters = ParameterSet(haptics: haptics, candidateID: "candidate-\(step)", phaseStep: step)!
         continuation?.yield(.parameters(PublishedParameters(documentID: "step-\(step)", values: parameters)))
     }
     func submitResult(tested: ParameterSet, parameterDocumentID: String, candidateID: String,

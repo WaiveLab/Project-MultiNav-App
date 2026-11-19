@@ -15,7 +15,7 @@ struct AudioPolicyTests {
         precondition(policy.onElementEntered == nil)
         for type in HapticPat.allCases {
             let feature = element(type)
-            let expected = ParameterSet.learning.burstParameters(for: type)
+            let expected = ParameterSet.defaultHaptics[type]!
             touch.onEnter(element: feature, touchType: .direct)
             let pattern = haptics.patterns.last!
             guard case .burst(let count, let on, let off) = pattern.mode else { preconditionFailure("Missing practice burst") }
