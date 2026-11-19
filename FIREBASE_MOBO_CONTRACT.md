@@ -77,6 +77,10 @@ The example below uses the 14 exploration baseline profiles shared by local
 test rounds and `tools/seed_firebase_candidate.py`. The practice map uses a
 separate bundled snapshot from `parameterValues/001_step_1`. Each connected
 study round uses the candidate MOBO publishes for that participant and round.
+The baseline uses one tap per burst for Pulse cues. A 20 Hz cue repeats every
+0.05 seconds, using a 0.04 s window and a 0.01 s rest. A 10 Hz cue repeats every
+0.10 seconds, using a 0.09 s window and a 0.01 s rest. The constant cues use dense
+tap trains to approximate continuous vibration.
 
 ```json
 {
@@ -87,19 +91,19 @@ study round uses the candidate MOBO publishes for that participant and round.
   "phase": "exploration",
   "phaseStep": 1,
   "haptics": {
-    "start": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.15, "offDuration": 0.01 },
-    "end": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.05, "offDuration": 0.20 },
+    "start": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
+    "end": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
     "onRoute": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "offRoute": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "onRouteIntersection": { "intensity": 0.75, "sharpness": 0.25, "pulseCount": 15, "onDuration": 0.25, "offDuration": 0.05 },
-    "offRouteIntersection": { "intensity": 0.375, "sharpness": 0.25, "pulseCount": 15, "onDuration": 0.25, "offDuration": 0.05 },
-    "street": { "intensity": 0.125, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRoute": { "intensity": 0.5, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "onRouteIntersection": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
+    "offRouteIntersection": { "intensity": 0.5, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
+    "street": { "intensity": 0.25, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "onRouteSidewalk": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "offRouteSidewalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRouteSidewalk": { "intensity": 0.5, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "onRouteCrosswalk": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "offRouteCrosswalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "intersectionCenter": { "intensity": 1.0, "sharpness": 0.15, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "landmark": { "intensity": 1.0, "sharpness": 0.15, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRouteCrosswalk": { "intensity": 0.5, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "intersectionCenter": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.09, "offDuration": 0.01 },
+    "landmark": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.09, "offDuration": 0.01 },
     "turn": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 }
   }
 }

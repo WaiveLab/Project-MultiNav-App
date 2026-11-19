@@ -26,19 +26,19 @@ SCHEMA_VERSION = 2
 # Tuple order: intensity, sharpness, pulseCount, onDuration, offDuration.
 # Match the exploration baseline in ParameterSet.defaultHaptics.
 DEFAULT_PROFILES = {
-    "start": (1.0, 0.5, 1, 0.15, 0.01),
-    "end": (1.0, 0.5, 1, 0.05, 0.20),
+    "start": (1.0, 0.5, 1, 0.04, 0.01),
+    "end": (1.0, 0.5, 1, 0.04, 0.01),
     "onRoute": (1.0, 0.5, 120, 1.0, 0.01),
-    "offRoute": (0.25, 0.25, 120, 1.0, 0.01),
-    "onRouteIntersection": (0.75, 0.25, 15, 0.25, 0.05),
-    "offRouteIntersection": (0.375, 0.25, 15, 0.25, 0.05),
-    "street": (0.125, 0.25, 120, 1.0, 0.01),
+    "offRoute": (0.5, 0.5, 120, 1.0, 0.01),
+    "onRouteIntersection": (1.0, 0.5, 1, 0.04, 0.01),
+    "offRouteIntersection": (0.5, 0.5, 1, 0.04, 0.01),
+    "street": (0.25, 0.5, 120, 1.0, 0.01),
     "onRouteSidewalk": (1.0, 0.5, 120, 1.0, 0.01),
-    "offRouteSidewalk": (0.25, 0.25, 120, 1.0, 0.01),
+    "offRouteSidewalk": (0.5, 0.5, 120, 1.0, 0.01),
     "onRouteCrosswalk": (1.0, 0.5, 120, 1.0, 0.01),
-    "offRouteCrosswalk": (0.25, 0.25, 120, 1.0, 0.01),
-    "intersectionCenter": (1.0, 0.15, 60, 1.0, 0.01),
-    "landmark": (1.0, 0.15, 60, 1.0, 0.01),
+    "offRouteCrosswalk": (0.5, 0.5, 120, 1.0, 0.01),
+    "intersectionCenter": (1.0, 0.5, 1, 0.09, 0.01),
+    "landmark": (1.0, 0.5, 1, 0.09, 0.01),
     "turn": (0.25, 0.25, 60, 1.0, 0.01),
 }
 

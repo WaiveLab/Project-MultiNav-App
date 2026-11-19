@@ -58,9 +58,16 @@ struct StudyUpdateTests {
         let seed = try JSONSerialization.jsonObject(with: Data(contentsOf: seedURL)) as! [String: Any]
         precondition(ParameterSet(document: seed)?.haptics == defaults)
         precondition(defaults == ParameterSet().haptics)
-        precondition(Set(defaults.filter { $0.value.pulseCount == 1 }.keys) == [.start, .end])
-        precondition(defaults[.start]?.onDuration == 0.15 && defaults[.start]?.offDuration == 0.01)
-        precondition(defaults[.end]?.onDuration == 0.05 && defaults[.end]?.offDuration == 0.20)
+        let pulsePeriods: [HapticPat: Double] = [
+            .start: 0.05, .end: 0.05, .onRouteIntersection: 0.05, .offRouteIntersection: 0.05,
+            .intersectionCenter: 0.10, .landmark: 0.10,
+        ]
+        precondition(Set(defaults.filter { $0.value.pulseCount == 1 }.keys) == Set(pulsePeriods.keys))
+        for (type, period) in pulsePeriods {
+            let cue = defaults[type]!
+            precondition(abs(cue.onDuration + cue.offDuration - period) < 1e-9)
+            precondition(cue.offDuration == 0.01)
+        }
         precondition(defaults[.onRoute] == defaults[.onRouteSidewalk] && defaults[.onRoute] == defaults[.onRouteCrosswalk])
         precondition(defaults[.offRoute] == defaults[.offRouteSidewalk] && defaults[.offRoute] == defaults[.offRouteCrosswalk])
         precondition(defaults[.street]!.intensity == defaults[.offRoute]!.intensity / 2)
