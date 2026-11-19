@@ -26,8 +26,8 @@ SCHEMA_VERSION = 2
 # Tuple order: intensity, sharpness, pulseCount, onDuration, offDuration.
 # Match the exploration baseline in ParameterSet.defaultHaptics.
 DEFAULT_PROFILES = {
-    "start": (1.0, 0.5, 1, 0.04, 0.01),
-    "end": (1.0, 0.5, 1, 0.04, 0.01),
+    "start": (1.0, 0.5, 1, 0.04, 0.06),
+    "end": (1.0, 0.5, 1, 0.04, 0.06),
     "onRoute": (1.0, 0.5, 120, 1.0, 0.01),
     "offRoute": (0.5, 0.5, 120, 1.0, 0.01),
     "onRouteIntersection": (1.0, 0.5, 1, 0.04, 0.01),

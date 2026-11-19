@@ -59,14 +59,15 @@ struct StudyUpdateTests {
         precondition(ParameterSet(document: seed)?.haptics == defaults)
         precondition(defaults == ParameterSet().haptics)
         let pulsePeriods: [HapticPat: Double] = [
-            .start: 0.05, .end: 0.05, .onRouteIntersection: 0.05, .offRouteIntersection: 0.05,
+            .start: 0.10, .end: 0.10, .onRouteIntersection: 0.05, .offRouteIntersection: 0.05,
             .intersectionCenter: 0.10, .landmark: 0.10,
         ]
         precondition(Set(defaults.filter { $0.value.pulseCount == 1 }.keys) == Set(pulsePeriods.keys))
         for (type, period) in pulsePeriods {
             let cue = defaults[type]!
             precondition(abs(cue.onDuration + cue.offDuration - period) < 1e-9)
-            precondition(cue.offDuration == 0.01)
+            let rest = (type == .start || type == .end) ? 0.06 : 0.01
+            precondition(cue.offDuration == rest)
         }
         precondition(defaults[.onRoute] == defaults[.onRouteSidewalk] && defaults[.onRoute] == defaults[.onRouteCrosswalk])
         precondition(defaults[.offRoute] == defaults[.offRouteSidewalk] && defaults[.offRoute] == defaults[.offRouteCrosswalk])

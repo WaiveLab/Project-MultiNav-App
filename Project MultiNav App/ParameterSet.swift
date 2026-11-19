@@ -273,9 +273,9 @@ extension ParameterSet {
     // Practice, local test rounds, and the settings preview share the baseline
     // exported by tools/seed_firebase_candidate.py. Connected rounds use their own candidate.
     static let defaultHaptics: [HapticPat: BurstParameters] = [
-        // Pulse cues prioritize the listed cadence. The burst period includes the 0.01 s rest.
-        .start: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.04, offDuration: 0.01),
-        .end: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.04, offDuration: 0.01),
+        // Start and end repeat at 10 Hz with a 0.10 s window-plus-rest period.
+        .start: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.04, offDuration: 0.06),
+        .end: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.04, offDuration: 0.06),
         .onRoute: .init(intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01),
         .offRoute: .init(intensity: 0.5, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01),
         .onRouteIntersection: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.04, offDuration: 0.01),

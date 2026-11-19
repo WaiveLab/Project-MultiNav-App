@@ -78,10 +78,11 @@ by practice, local test rounds, and `tools/seed_firebase_candidate.py`. Each
 connected study round uses the candidate MOBO publishes for that participant
 and round. For the planned study, Round 1 receives the first scheduled Sobol
 variation from MOBO.
-The baseline uses one tap per burst for Pulse cues. A 20 Hz cue repeats every
-0.05 seconds, using a 0.04 s window and a 0.01 s rest. A 10 Hz cue repeats every
-0.10 seconds, using a 0.09 s window and a 0.01 s rest. The constant cues use dense
-tap trains to approximate continuous vibration.
+The baseline uses one tap per burst for Pulse cues. Start and End repeat at
+10 Hz with a 0.04 s window and a 0.06 s rest. Center and Landmark also repeat
+at 10 Hz, with a 0.09 s window and a 0.01 s rest. The overview intersection cues
+repeat at 20 Hz with a 0.04 s window and a 0.01 s rest. The constant cues use
+dense tap trains to approximate continuous vibration.
 
 ```json
 {
@@ -92,8 +93,8 @@ tap trains to approximate continuous vibration.
   "phase": "exploration",
   "phaseStep": 1,
   "haptics": {
-    "start": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
-    "end": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
+    "start": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.06 },
+    "end": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.06 },
     "onRoute": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "offRoute": { "intensity": 0.5, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "onRouteIntersection": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.04, "offDuration": 0.01 },
