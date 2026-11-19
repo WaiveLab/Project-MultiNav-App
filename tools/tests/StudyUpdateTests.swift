@@ -58,14 +58,14 @@ struct StudyUpdateTests {
         let seed = try JSONSerialization.jsonObject(with: Data(contentsOf: seedURL)) as! [String: Any]
         precondition(ParameterSet(document: seed)?.haptics == defaults)
         precondition(defaults == ParameterSet().haptics)
-        let markers: Set<HapticPat> = [.start, .end, .turn, .landmark, .onRouteIntersection,
-                                      .offRouteIntersection, .intersectionCenter]
-        for type in HapticPat.allCases {
-            let cue = defaults[type]!
-            precondition(cue.isValid && cue.intensity == 1 && cue.sharpness == 0.5)
-            precondition(cue.pulseCount == (markers.contains(type) ? 1 : 120))
-            precondition(cue.onDuration == (markers.contains(type) ? 0.01 : 1) && cue.offDuration == 0.01)
-        }
+        precondition(Set(defaults.filter { $0.value.pulseCount == 1 }.keys) == [.start, .end])
+        precondition(defaults[.start]?.onDuration == 0.15 && defaults[.start]?.offDuration == 0.01)
+        precondition(defaults[.end]?.onDuration == 0.05 && defaults[.end]?.offDuration == 0.20)
+        precondition(defaults[.onRoute] == defaults[.onRouteSidewalk] && defaults[.onRoute] == defaults[.onRouteCrosswalk])
+        precondition(defaults[.offRoute] == defaults[.offRouteSidewalk] && defaults[.offRoute] == defaults[.offRouteCrosswalk])
+        precondition(defaults[.street]!.intensity == defaults[.offRoute]!.intensity / 2)
+        precondition(defaults[.offRouteIntersection]!.intensity == defaults[.onRouteIntersection]!.intensity / 2)
+        precondition(defaults[.intersectionCenter] == defaults[.landmark])
         // Distinct remote values must survive parsing, playback and serialization.
         var profiles: [HapticPat: BurstParameters] = [:]
         for (index, type) in HapticPat.allCases.enumerated() {

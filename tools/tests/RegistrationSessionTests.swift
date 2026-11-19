@@ -35,6 +35,7 @@ import Foundation
         offline.finishLearning()
         offline.beginLocalTest()
         precondition(offline.isLocalTestMode && offline.roundNumber == 1 && offline.phase == .exploring)
+        precondition(offline.current?.haptics == ParameterSet.defaultHaptics)
         precondition(FirebaseApp.app() == nil && MoboRepo.instances.isEmpty)
 
         Auth.instance.signInFails = true

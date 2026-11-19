@@ -73,8 +73,9 @@ Publish only the next expected round. Do not pre-publish all 17 candidates: the
 app intentionally listens to the newest document and will not run a candidate
 whose `phaseStep` is not exactly the next round.
 
-The example below uses the 14 haptic profiles from `parameterValues/001_step_1`.
-The offline learning map uses a bundled copy of those profiles. Each connected
+The example below uses the 14 exploration baseline profiles shared by local
+test rounds and `tools/seed_firebase_candidate.py`. The practice map uses a
+separate bundled snapshot from `parameterValues/001_step_1`. Each connected
 study round uses the candidate MOBO publishes for that participant and round.
 
 ```json
@@ -86,20 +87,20 @@ study round uses the candidate MOBO publishes for that participant and round.
   "phase": "exploration",
   "phaseStep": 1,
   "haptics": {
-    "start": { "intensity": 0.75, "sharpness": 1.0, "pulseCount": 10, "onDuration": 0.25, "offDuration": 0.5 },
+    "start": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.15, "offDuration": 0.01 },
+    "end": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 1, "onDuration": 0.05, "offDuration": 0.20 },
     "onRoute": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "offRoute": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
     "onRouteIntersection": { "intensity": 0.75, "sharpness": 0.25, "pulseCount": 15, "onDuration": 0.25, "offDuration": 0.05 },
-    "offRouteIntersection": { "intensity": 0.75, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRouteIntersection": { "intensity": 0.375, "sharpness": 0.25, "pulseCount": 15, "onDuration": 0.25, "offDuration": 0.05 },
+    "street": { "intensity": 0.125, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "onRouteSidewalk": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRouteSidewalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "onRouteCrosswalk": { "intensity": 1.0, "sharpness": 0.5, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "offRouteCrosswalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
+    "intersectionCenter": { "intensity": 1.0, "sharpness": 0.15, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
     "landmark": { "intensity": 1.0, "sharpness": 0.15, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "end": { "intensity": 0.75, "sharpness": 1.0, "pulseCount": 120, "onDuration": 1.0, "offDuration": 0.01 },
-    "street": { "intensity": 0.33, "sharpness": 0.33, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.15 },
-    "onRouteSidewalk": { "intensity": 0.75, "sharpness": 1.0, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "offRouteSidewalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "onRouteCrosswalk": { "intensity": 0.75, "sharpness": 1.0, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "offRouteCrosswalk": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "turn": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 },
-    "intersectionCenter": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 }
+    "turn": { "intensity": 0.25, "sharpness": 0.25, "pulseCount": 60, "onDuration": 1.0, "offDuration": 0.01 }
   }
 }
 ```
@@ -179,7 +180,7 @@ change on that deterministic document.
 
 ## Round-by-round handshake
 
-ID entry opens a fixed, offline learning map. Practice uses the default haptics
+ID entry opens a fixed, offline learning map. Practice uses its bundled haptics
 and collects no measurements or questionnaire responses. It consumes no candidate
 or round number. When the researcher selects **Start MOBO study** after practice,
 the phone configures Firebase, signs in and calls the authenticated `registerParticipant` callable

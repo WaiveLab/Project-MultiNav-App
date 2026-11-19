@@ -287,7 +287,7 @@ final class StudySession: ObservableObject {
         startRound()
     }
 
-    // Use the same starting profiles for each local practice round.
+    // Use the exploration baseline for each local test round.
     private func activateNextLocalCandidate() {
         let step = roundNumber + 1
         let candidateID = "local-\(sessionID)-round-\(step)"

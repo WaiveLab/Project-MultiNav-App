@@ -290,24 +290,24 @@ extension ParameterSet {
         .intersectionCenter: .init(intensity: 0.25, sharpness: 0.25, pulseCount: 60, onDuration: 1, offDuration: 0.01),
     ])!
 
-    // Palani, Fink & Giudice, Experiment 5 (p. 1405). The line stimulus was
-    // continuous at 250 Hz and full power. Burst playback emits transients,
-    // so use its densest train and shortest rest. Sharpness is an app choice.
-    private static let line = BurstParameters(
-        intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01
-    )
-    // One transient every 20 ms approximates the onset timing of the study's
-    // 10 ms wide-band pulse. Core Haptics determines the transient waveform.
-    private static let marker = BurstParameters(
-        intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.01, offDuration: 0.01
-    )
-
+    // Local exploration and settings preview use the same baseline exported
+    // by tools/seed_firebase_candidate.py. Connected rounds use their own candidate.
     static let defaultHaptics: [HapticPat: BurstParameters] = [
-        .onRoute: line, .offRoute: line, .street: line,
-        .onRouteSidewalk: line, .offRouteSidewalk: line,
-        .onRouteCrosswalk: line, .offRouteCrosswalk: line,
-        .start: marker, .end: marker, .turn: marker, .landmark: marker,
-        .onRouteIntersection: marker, .offRouteIntersection: marker, .intersectionCenter: marker,
+        // Entrance keeps its 0.15 s window and uses the minimum 0.01 s rest.
+        .start: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.15, offDuration: 0.01),
+        .end: .init(intensity: 1, sharpness: 0.5, pulseCount: 1, onDuration: 0.05, offDuration: 0.20),
+        .onRoute: .init(intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .offRoute: .init(intensity: 0.25, sharpness: 0.25, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .onRouteIntersection: .init(intensity: 0.75, sharpness: 0.25, pulseCount: 15, onDuration: 0.25, offDuration: 0.05),
+        .offRouteIntersection: .init(intensity: 0.375, sharpness: 0.25, pulseCount: 15, onDuration: 0.25, offDuration: 0.05),
+        .street: .init(intensity: 0.125, sharpness: 0.25, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .onRouteSidewalk: .init(intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .offRouteSidewalk: .init(intensity: 0.25, sharpness: 0.25, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .onRouteCrosswalk: .init(intensity: 1, sharpness: 0.5, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .offRouteCrosswalk: .init(intensity: 0.25, sharpness: 0.25, pulseCount: 120, onDuration: 1, offDuration: 0.01),
+        .intersectionCenter: .init(intensity: 1, sharpness: 0.15, pulseCount: 60, onDuration: 1, offDuration: 0.01),
+        .landmark: .init(intensity: 1, sharpness: 0.15, pulseCount: 60, onDuration: 1, offDuration: 0.01),
+        .turn: .init(intensity: 0.25, sharpness: 0.25, pulseCount: 60, onDuration: 1, offDuration: 0.01),
     ]
 }
 
